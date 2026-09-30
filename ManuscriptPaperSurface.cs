@@ -22,6 +22,7 @@ public sealed class ManuscriptPaperSurface : FrameworkElement
     public Brush CaretBrush { get; set; } = Brushes.LightBlue;
     public Brush HoverBrush { get; set; } = Brushes.LightGray;
     public Brush SelectionBrush { get; set; } = Brushes.LightBlue;
+    public Brush PageNumberBrush { get; set; } = Brushes.Gray;
     public event Action<ManuscriptPaperSurface,int,MouseButtonEventArgs>? CellMouseDown;
     public event Action<ManuscriptPaperSurface,int,MouseEventArgs>? CellMouseMove;
     public event Action<ManuscriptPaperSurface,MouseButtonEventArgs>? CellMouseUp;
@@ -95,7 +96,7 @@ public sealed class ManuscriptPaperSurface : FrameworkElement
             var x=left+(i%20)*cell+(cell-ft.Width)/2; var y=top+(i/20)*cell+(cell-ft.Height)/2;
             dc.DrawText(ft,new Point(x,y));
         }
-        var pageText=new FormattedText((PageIndex+1).ToString(),CultureInfo.CurrentCulture,FlowDirection.LeftToRight,typeface,Math.Max(8,10*Zoom),GridBrush,VisualTreeHelper.GetDpi(this).PixelsPerDip);
+        var pageText=new FormattedText((PageIndex+1).ToString(),CultureInfo.CurrentCulture,FlowDirection.LeftToRight,typeface,Math.Max(9,11*Zoom),PageNumberBrush,VisualTreeHelper.GetDpi(this).PixelsPerDip);
         dc.DrawText(pageText,new Point((ActualWidth-pageText.Width)/2,ActualHeight-28*Zoom));
     }
 }
