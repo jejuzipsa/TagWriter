@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.3.8
+- Replaced the native-looking submenu rendering with an explicit TagWriter MenuItem template so dropdown rows use the dark/light Surface, Hover, Text and Border resources without the white native gutter/borders seen in v0.0.3.7.
+- Aligned the top-level "관계맵" project-tree entry with the novel title and "설정 카드" roots; removed the decorative diamond that visually pushed it farther right.
+- Added Ctrl+S as an application-level Save command. It invokes the existing JSON save path, including Save As on the first save and quick overwrite afterward.
+- Bumped version to 0.0.3.8.
+
 0.0.3.7
 - Added manuscript-paper drag selection across sheet boundaries. Dragging from one sheet into the next now keeps the original text anchor and maps the pointer against all visible paper surfaces.
 - Added edge auto-scroll during manuscript-paper drag selection so selection can continue through additional sheets above or below the viewport.
