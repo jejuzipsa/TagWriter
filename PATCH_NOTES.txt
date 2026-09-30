@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.0.10
+- Double-clicking a chapter in the left project tree now opens a chapter-title editor.
+- Chapter titles remain freely editable for named/atmospheric chapter headings; scene titles remain internal and are not exposed for renaming.
+- New chapters still receive automatic sequential names. Korean-style projects create 2장, 3장, etc.; projects whose first chapter uses Chapter N create Chapter 2, Chapter 3, etc.
+- Bumped version to 0.0.0.10.
+
 0.0.0.9
 - Replaced the fixed left-tree manuscript label "원고" with the current novel/project title.
 - Double-clicking that novel title in the left project tree now opens the title editor.
