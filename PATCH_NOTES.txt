@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.0.9
+- Replaced the fixed left-tree manuscript label "원고" with the current novel/project title.
+- Double-clicking that novel title in the left project tree now opens the title editor.
+- The existing File > 소설 제목 변경 command and tree double-click use the same rename flow.
+- Bumped version to 0.0.0.9.
+
 0.0.0.8
 - Replaced the native WPF context-tab header rendering with a custom template so selected tabs use the intended subtle dark selection color instead of white.
 - Added visible selected-state feedback to the left Project, Manuscript and Mind Map activity buttons.
