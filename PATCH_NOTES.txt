@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.3.1
+- Fixed repeated Shift+Up / Shift+Down selection in manuscript-paper mode. The first selection anchor is now preserved for the whole Shift-key selection sequence instead of being recalculated from the previous selected row.
+- Repeated Shift+Down now extends the existing selection by one 20-cell manuscript row at a time; Shift+Up behaves symmetrically and can shrink/extend around the same fixed anchor.
+- Bumped version to 0.0.3.1.
+
 0.0.3.0
 - Fixed manuscript-paper page numbers being nearly invisible in Dark mode. Page numbers now use the themed Muted text brush instead of the much darker grid/border brush.
 - Slightly increased the manuscript-paper page-number size for readability while keeping it visually secondary to manuscript text.
