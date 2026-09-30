@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.4.4
+- Corrected the inline + hierarchy: the + beside a chapter now creates the next chapter (for example 1장 + creates 2장), instead of adding a scene.
+- The + beside a scene continues to insert a new scene immediately after that scene.
+- Chapter insertion preserves chapter ordering and creates Scene 1 inside the new chapter.
+- Bumped version to 0.0.4.4.
+
 0.0.4.3
 - Removed chapter/scene right-click action menus.
 - Added a PROJECT-header edit mode. Normal state shows [편집]; edit state shows [편집 영역 대신 선택 삭제/undo/완료 controls].
