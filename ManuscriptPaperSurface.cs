@@ -76,9 +76,10 @@ public sealed class ManuscriptPaperSurface : FrameworkElement
         void FillCell(int global,Brush brush,double opacity)
         {
             if(global<PageIndex*200||global>=PageIndex*200+200)return;
-            var local=global-PageIndex*200; var old=brush.Opacity; brush.Opacity=opacity;
+            var local=global-PageIndex*200;
+            dc.PushOpacity(opacity);
             dc.DrawRectangle(brush,null,new Rect(left+(local%20)*cell,top+(local/20)*cell,cell,cell));
-            brush.Opacity=old;
+            dc.Pop();
         }
         if(HoverCell>=0)FillCell(HoverCell,HoverBrush,.45);
         if(SelectionStartCell>=0&&SelectionEndCell>SelectionStartCell)
