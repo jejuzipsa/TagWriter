@@ -1,5 +1,14 @@
 TagWriter cumulative patch notes
 
+0.0.4.3
+- Removed chapter/scene right-click action menus.
+- Added a PROJECT-header edit mode. Normal state shows [편집]; edit state shows [편집 영역 대신 선택 삭제/undo/완료 controls].
+- In edit mode, chapter and scene rows show checkboxes and their inline + add controls are hidden.
+- Trash deletes all checked chapters/scenes in one operation after confirmation. Scenes inside a checked chapter are deduplicated from the deletion set.
+- Added an in-session undo stack for tree deletions; ↶ restores the most recent deleted chapter/scene set including its previous position. Multiple recent edit-mode deletions can be undone in reverse order while the app remains open.
+- 완료 exits edit mode and restores the normal + controls.
+- Bumped version to 0.0.4.3.
+
 0.0.4.2
 - Added borderless + controls beside chapter and scene rows. The + becomes bold/brighter on hover.
 - Chapter + adds a scene to that chapter; scene + inserts a scene immediately after that scene.
