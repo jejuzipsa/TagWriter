@@ -1,5 +1,14 @@
 TagWriter cumulative patch notes
 
+0.0.1.6
+- Added a bottom-bar Normal / 원고지 view switch.
+- Added a 200-character manuscript-paper preview using a real 20 columns × 10 rows grid per sheet.
+- Manuscript-paper sheets are paginated from the current scene text and displayed as vertically scrollable pages.
+- Added zoom out/in, 100%, and 화면 맞춤 controls plus current sheet count and zoom percentage.
+- 화면 맞춤 dynamically scales the paper to the available center-pane width as the window or side panels change size; manual zoom keeps its chosen scale and enables scrolling when needed.
+- Manuscript-paper mode is a non-destructive preview: the underlying manuscript text remains the same.
+- Bumped version to 0.0.1.6.
+
 0.0.1.5
 - Removed the manuscript editor's fixed 850 px MaxWidth so the writing area expands with the available center pane when side panels are collapsed or the window is widened.
 - Reduced the manuscript editor bottom margin from 36 px to 12 px.
