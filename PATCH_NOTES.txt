@@ -1,5 +1,13 @@
 TagWriter cumulative patch notes
 
+0.0.1.1
+- Fixed the project-tree selected item using the native white WPF highlight; tree selection now follows TagWriter's themed selection color.
+- Removed the inactive bottom-left gear/settings button until an actual settings screen exists.
+- Added collapsible PROJECT and CONTEXT side panels with < / > controls.
+- Collapsed panels retain only P or C plus the expand control; their content and splitter are hidden.
+- Added minimum expanded widths: 210 px for PROJECT and 260 px for CONTEXT, while preserving the user's last wider size when collapsing and reopening.
+- Bumped version to 0.0.1.1.
+
 0.0.1.0
 - Added BUILD.bat for the local GitHub Desktop workflow: Pull, double-click BUILD.bat, and the latest TagWriter is built into publish and launched automatically.
 - Corrected the patch version sequence: the tenth incremental build is now 0.0.1.0 instead of 0.0.0.10.
