@@ -67,4 +67,6 @@ public sealed class Idea {
 public sealed class ProjectSettings {
  [JsonPropertyName("theme")] public string Theme {get;set;}="dark";
  [JsonPropertyName("zoom")] public double Zoom {get;set;}=1.0;
+ [JsonPropertyName("editorFontFamily")] public string EditorFontFamily {get;set;}="Malgun Gothic";
+ [JsonPropertyName("editorFontSize")] public double EditorFontSize {get;set;}=17;
 }
