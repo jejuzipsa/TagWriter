@@ -1,5 +1,12 @@
 TagWriter cumulative patch notes
 
+0.0.3.9
+- Restored the native WPF MenuItem interaction template after the custom v0.0.3.8 template prevented top-menu items from opening/clicking. Dark/light colors remain applied through the Menu/MenuItem resources without replacing the functional menu template.
+- Changed project-tree disclosure symbols to ▶ when collapsed and ▼ when expanded.
+- Increased the three root navigation entries (novel title, 설정 카드, 관계맵) to 14 px Bold so they are clearly distinct from child entries.
+- Restored the requested ◆ prefix on 관계맵 while keeping its root alignment compensation.
+- Bumped version to 0.0.3.9.
+
 0.0.3.8
 - Replaced the native-looking submenu rendering with an explicit TagWriter MenuItem template so dropdown rows use the dark/light Surface, Hover, Text and Border resources without the white native gutter/borders seen in v0.0.3.7.
 - Aligned the top-level "관계맵" project-tree entry with the novel title and "설정 카드" roots; removed the decorative diamond that visually pushed it farther right.
