@@ -1,5 +1,12 @@
 TagWriter cumulative patch notes
 
+0.0.0.8
+- Replaced the native WPF context-tab header rendering with a custom template so selected tabs use the intended subtle dark selection color instead of white.
+- Added visible selected-state feedback to the left Project, Manuscript and Mind Map activity buttons.
+- Changed editor breadcrumb separators from long dashes to compact vertical bars: title | chapter | scene.
+- Added File > 소설 제목 변경... with a title-edit dialog; changes immediately update the window title, top project title and editor breadcrumb.
+- Bumped version to 0.0.0.8.
+
 0.0.0.7
 - Fixed startup crash caused by MainWindow XAML trying to load Assets/TagWriter.ico as a WPF packaged resource even though the ICO is used as the executable ApplicationIcon.
 - Removed the Window Icon XAML reference while retaining the executable icon setting.
