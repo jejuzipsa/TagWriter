@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.4.0
+- Increased the three root project-tree entries (novel title, 설정 카드, ◆ 관계맵) from 14 px to 15 px Bold so their hierarchy is visibly distinct from chapter/scene/card-category children.
+- Moved the CONTEXT header text to the right of the expanded right-panel collapse button, preventing the ▶ overlay button from covering the beginning of the label.
+- Bumped version to 0.0.4.0.
+
 0.0.3.9
 - Restored the native WPF MenuItem interaction template after the custom v0.0.3.8 template prevented top-menu items from opening/clicking. Dark/light colors remain applied through the Menu/MenuItem resources without replacing the functional menu template.
 - Changed project-tree disclosure symbols to ▶ when collapsed and ▼ when expanded.
