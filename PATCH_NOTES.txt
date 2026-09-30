@@ -1,5 +1,12 @@
 TagWriter cumulative patch notes
 
+0.0.0.6
+- Active context tabs now use a subtly darker theme color instead of the native white selected state.
+- Wired the left Project and Manuscript activity buttons; Manuscript restores and focuses the current scene.
+- Restored the existing TagWriter ICO to the window and executable now that folder deployment is stable.
+- Editor heading now shows project title — chapter title — scene title.
+- Bumped version to 0.0.0.6.
+
 0.0.0.5
 - Fixed the empty manuscript editor collapsing to zero height inside the ScrollViewer; the editor now fills the writing pane and accepts focus/clicks across the manuscript area.
 - Added explicit dark/light styling for context tabs, including a clearly visible selected-tab state and hover state.
