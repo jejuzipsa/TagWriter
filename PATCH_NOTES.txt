@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.2.9
+- Enlarged collapsed PROJECT/CONTEXT arrow buttons again from 34 x 34 to 38 x 38 and increased the ◀ / ▶ glyph size for clearer visibility.
+- Collapsed side strips are now 40 px wide, keeping the horizontal outside gap at about 1 px per side rather than making the strip feel padded.
+- Bumped version to 0.0.2.9.
+
 0.0.2.8
 - Fixed manuscript-paper Up/Down keyboard navigation. The hidden 1 px TextBox previously used WPF's own visual-line navigation, so Shift+Down could jump several manuscript rows unpredictably.
 - Up/Down now follow the manuscript grid itself: one key press moves exactly one 20-cell paper row.
