@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.0.3
+- Fixed a startup regression in 0.0.0.2 by removing the newly embedded/window-bound icon path from startup resources.
+- Added a startup/unhandled-exception crash log (TagWriter_crash.log) and visible error dialog for future launch failures.
+- Bumped package version to 0.0.0.3.
+
 0.0.0.2
 - Reworked the main desktop layout after reviewing the supplied novelWriter package.
 - Kept the dedicated writing-app structure while giving TagWriter its own activity rail, centered writing canvas, context inspector and visual hierarchy.
