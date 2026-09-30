@@ -1,5 +1,14 @@
 TagWriter cumulative patch notes
 
+0.0.3.7
+- Added manuscript-paper drag selection across sheet boundaries. Dragging from one sheet into the next now keeps the original text anchor and maps the pointer against all visible paper surfaces.
+- Added edge auto-scroll during manuscript-paper drag selection so selection can continue through additional sheets above or below the viewport.
+- The top File/Insert/View menu and its dropdowns now follow TagWriter dark/light theme colors instead of opening with the native white Windows menu surface.
+- Renamed the left project-tree item from "마인드맵" to "관계맵".
+- Made the project/novel title, "설정 카드", and "관계맵" top-level tree entries semi-bold.
+- Left-aligned the CONTEXT heading with the right-side tab/menu content after the collapse button moved out of the header.
+- Bumped version to 0.0.3.7.
+
 0.0.3.6
 - Hotfix: restored the complete manuscript-paper vertical keyboard-selection handler after the previous cleanup left the method incomplete.
 - Restores compilation and keeps fixed-anchor Shift+Up / Shift+Down selection.
