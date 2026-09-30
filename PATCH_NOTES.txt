@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.2.0
+- Reworked the shared hover palette: dark mode now uses the subdued Panel2 tone instead of the brighter selection blue, and light mode uses a neutral light gray. Hover is visually separate from selection.
+- Added a fully themed ToolTip template so activity-rail descriptions remain readable in both dark and light modes.
+- Replaced the full Windows font enumeration with a curated writing-font list: up to 10 common Korean-oriented fonts and 10 common Latin fonts, showing only fonts actually installed on the PC. Existing project font is retained if outside the curated list.
+- Bumped version to 0.0.2.0.
+
 0.0.1.9
 - Fixed erratic Normal-mode font-size changes by removing the editable text path and applying the selected numeric ComboBox item directly. Font sizes now increase monotonically through the preset list.
 - Expanded the font-size presets to 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 26, 28 and 32.
