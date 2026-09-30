@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.0.7
+- Fixed startup crash caused by MainWindow XAML trying to load Assets/TagWriter.ico as a WPF packaged resource even though the ICO is used as the executable ApplicationIcon.
+- Removed the Window Icon XAML reference while retaining the executable icon setting.
+- Bumped version to 0.0.0.7.
+
 0.0.0.6
 - Active context tabs now use a subtly darker theme color instead of the native white selected state.
 - Wired the left Project and Manuscript activity buttons; Manuscript restores and focuses the current scene.
