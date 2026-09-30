@@ -1,5 +1,9 @@
 TagWriter cumulative patch notes
 
+0.0.1.0
+- Corrected the patch version sequence: the tenth incremental build is now 0.0.1.0 instead of 0.0.0.10.
+- Rebuilt the same chapter-title feature under the corrected version number to produce a fresh GitHub Actions artifact.
+
 0.0.0.10
 - Double-clicking a chapter in the left project tree now opens a chapter-title editor.
 - Chapter titles remain freely editable for named/atmospheric chapter headings; scene titles remain internal and are not exposed for renaming.
