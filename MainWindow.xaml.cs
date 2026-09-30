@@ -1,7 +1,7 @@
 using Microsoft.Win32; using System.Runtime.InteropServices; using System.Text; using System.Windows; using System.Windows.Controls; using System.Windows.Interop; using System.Windows.Media; using System.Windows.Shapes; using TagWriter.Models; using TagWriter.Services;
 namespace TagWriter;
 public partial class MainWindow:Window {
- ProjectDocument _document=ProjectDocument.CreateSample(); string? _path; Scene? _scene; EntityCard? _card; bool _loading; bool _dark=true;
+ ProjectDocument _document=ProjectDocument.CreateSample(); string? _path; Scene? _scene; EntityCard? _card; bool _loading; bool _dark=true; bool _leftCollapsed=false,_rightCollapsed=false; double _leftWidth=250,_rightWidth=310;
  public MainWindow(){InitializeComponent();SourceInitialized+=(_,_)=>ApplyWindowChromeTheme();RefreshAll();SelectFirstScene();ApplyTheme(_document.Settings.Theme!="light");}
  void RefreshAll(){RefreshTree();RefreshIdeas();UpdateStatus();Title=$"{_document.Project.Title} — TagWriter";TopProjectTitle.Text=_document.Project.Title;}
  void RefreshTree(){
@@ -41,6 +41,8 @@ public partial class MainWindow:Window {
  void AddIdea_Click(object s,RoutedEventArgs e){_document.Ideas.Insert(0,new Idea{Text="새 아이디어"});RefreshIdeas();}
  void RefreshIdeas()=>IdeaList.ItemsSource=_document.Ideas.OrderByDescending(x=>x.CreatedAt).Select(x=>x.Done?$"✓ {x.Text}":x.Text).ToList();
  void UpdateStatus(string? p=null){PersistEditor();var chars=_document.Chapters.SelectMany(c=>c.Scenes).Sum(s=>s.Content.Length);var words=_document.Chapters.SelectMany(c=>c.Scenes).Sum(s=>s.Content.Split((char[]?)null,StringSplitOptions.RemoveEmptyEntries).Length);StatusText.Text=$"{(p==null?"":p+" · ")}{_document.Chapters.Count}장 · {chars:N0}자 · {words:N0}단어 · {_document.Cards.Count}카드";}
+ void LeftPanelToggle_Click(object s,RoutedEventArgs e){if(!_leftCollapsed){_leftWidth=Math.Max(LeftPanelColumn.ActualWidth,210);LeftPanelColumn.MinWidth=0;LeftPanelColumn.Width=new GridLength(52);LeftSplitterColumn.Width=new GridLength(0);LeftSplitter.Visibility=Visibility.Collapsed;ProjectTree.Visibility=Visibility.Collapsed;LeftPanelLabel.Text="P";LeftPanelToggle.Content=">";_leftCollapsed=true;}else{LeftPanelColumn.MinWidth=210;LeftPanelColumn.Width=new GridLength(Math.Max(_leftWidth,210));LeftSplitterColumn.Width=new GridLength(4);LeftSplitter.Visibility=Visibility.Visible;ProjectTree.Visibility=Visibility.Visible;LeftPanelLabel.Text="PROJECT";LeftPanelToggle.Content="<";_leftCollapsed=false;}}
+ void RightPanelToggle_Click(object s,RoutedEventArgs e){if(!_rightCollapsed){_rightWidth=Math.Max(RightPanelColumn.ActualWidth,260);RightPanelColumn.MinWidth=0;RightPanelColumn.Width=new GridLength(52);RightSplitterColumn.Width=new GridLength(0);RightSplitter.Visibility=Visibility.Collapsed;ContextTabs.Visibility=Visibility.Collapsed;RightPanelLabel.Text="C";RightPanelToggle.Content="<";_rightCollapsed=true;}else{RightPanelColumn.MinWidth=260;RightPanelColumn.Width=new GridLength(Math.Max(_rightWidth,260));RightSplitterColumn.Width=new GridLength(4);RightSplitter.Visibility=Visibility.Visible;ContextTabs.Visibility=Visibility.Visible;RightPanelLabel.Text="CONTEXT";RightPanelToggle.Content=">";_rightCollapsed=false;}}
  void ThemeToggle_Click(object s,RoutedEventArgs e)=>ApplyTheme(!_dark);
  void ApplyTheme(bool dark){
   _dark=dark;
