@@ -1,5 +1,13 @@
 TagWriter cumulative patch notes
 
+0.0.4.5
+- Added edit-mode drag-and-drop reordering for scenes and chapters in the PROJECT tree.
+- Scenes can move within their current chapter or into another chapter; their existing Scene object/ID/content moves intact and only chapter membership/order changes.
+- Chapters can be reordered by drag-and-drop.
+- The edit-mode ↶ undo button now handles both deletions and the most recent scene/chapter move.
+- Scene rows can now be double-clicked to rename their internal working title. Scene titles remain organizational metadata and are not inserted into manuscript body text.
+- Bumped version to 0.0.4.5.
+
 0.0.4.4
 - Corrected the inline + hierarchy: the + beside a chapter now creates the next chapter (for example 1장 + creates 2장), instead of adding a scene.
 - The + beside a scene continues to insert a new scene immediately after that scene.
