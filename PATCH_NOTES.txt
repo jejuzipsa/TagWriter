@@ -1,5 +1,13 @@
 TagWriter cumulative patch notes
 
+0.0.1.9
+- Fixed erratic Normal-mode font-size changes by removing the editable text path and applying the selected numeric ComboBox item directly. Font sizes now increase monotonically through the preset list.
+- Expanded the font-size presets to 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 26, 28 and 32.
+- Added a shared theme Hover brush based on the existing Dark-mode toggle hover color and applied it to regular buttons, activity buttons, tree rows, tabs and ComboBox items for consistent subdued hover feedback.
+- Shifted the CONTEXT heading clear of the left-edge collapse button so the label is no longer clipped/covered.
+- Bumped version to 0.0.1.9.
+
+
 0.0.1.8
 - Restyled the Normal-mode font and font-size selectors to use TagWriter's dark/light theme instead of the native bright Windows ComboBox background.
 - Forced both font selector dropdowns to open upward so the bottom toolbar never grows downward off-screen.
