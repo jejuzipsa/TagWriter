@@ -1,5 +1,12 @@
 TagWriter cumulative patch notes
 
+0.0.3.4
+- Changed collapsed side panels to fully disappear (0 px) instead of leaving a narrow empty strip.
+- Added independent collapsed-state arrow handles over the editor edge: left PROJECT uses ▶ at the left editor edge and right CONTEXT uses ◀ at the right editor edge, vertically centered with the window/editor area.
+- Expanded panels retain their normal top-edge collapse controls; collapsed handles appear only after the panel is hidden.
+- Reworked manuscript-paper Shift+Up / Shift+Down selection so the fixed anchor and moving selection edge are tracked without resetting the native TextBox selection. Vertical Shift selection now extends one 20-cell row at a time again.
+- Bumped version to 0.0.3.4.
+
 0.0.3.3
 - Hotfix: repaired malformed MainWindow XAML introduced while moving the right CONTEXT collapse handle into the overlay grid.
 - Restored the missing RightPanelToggle element and correctly closes the right DockPanel/Grid/Border hierarchy.
