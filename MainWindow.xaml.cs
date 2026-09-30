@@ -1,8 +1,8 @@
-using Microsoft.Win32; using System.Text; using System.Windows; using System.Windows.Controls; using System.Windows.Media; using System.Windows.Shapes; using TagWriter.Models; using TagWriter.Services;
+using Microsoft.Win32; using System.Runtime.InteropServices; using System.Text; using System.Windows; using System.Windows.Controls; using System.Windows.Interop; using System.Windows.Media; using System.Windows.Shapes; using TagWriter.Models; using TagWriter.Services;
 namespace TagWriter;
 public partial class MainWindow:Window {
  ProjectDocument _document=ProjectDocument.CreateSample(); string? _path; Scene? _scene; EntityCard? _card; bool _loading; bool _dark=true;
- public MainWindow(){InitializeComponent();RefreshAll();SelectFirstScene();ApplyTheme(true);}
+ public MainWindow(){InitializeComponent();SourceInitialized+=(_,_)=>ApplyWindowChromeTheme();RefreshAll();SelectFirstScene();ApplyTheme(_document.Settings.Theme!="light");}
  void RefreshAll(){RefreshTree();RefreshIdeas();UpdateStatus();Title=$"{_document.Project.Title} — TagWriter";TopProjectTitle.Text=_document.Project.Title;}
  void RefreshTree(){
   ProjectTree.Items.Clear(); var manuscript=new TreeViewItem{Header="원고",IsExpanded=true,Tag="manuscript"};
@@ -41,7 +41,9 @@ public partial class MainWindow:Window {
   SetBrush("EditorBg",dark?"#1D2126":"#FFFFFF"); SetBrush("Text",dark?"#E6E9ED":"#20242A");
   SetBrush("Muted",dark?"#939BA6":"#66707C"); SetBrush("Border",dark?"#343B45":"#D4D9E0");
   SetBrush("Accent",dark?"#70A9E8":"#2F72B7"); SetBrush("Selection",dark?"#304B68":"#BFD9F4");
-  ThemeGlyph.Text=dark?"☾ Dark":"☀ Light"; ThemeToggle.IsChecked=!dark; _document.Settings.Theme=dark?"dark":"light";
+  ThemeGlyph.Text=dark?"☾ Dark":"☀ Light"; ThemeGlyph.Foreground=(Brush)FindResource("Text"); ThemeToggle.Foreground=(Brush)FindResource("Text"); ThemeToggle.Background=(Brush)FindResource("Panel2"); ThemeToggle.IsChecked=!dark; _document.Settings.Theme=dark?"dark":"light"; ApplyWindowChromeTheme();
  }
+ void ApplyWindowChromeTheme(){if(!IsInitialized)return;try{var hwnd=new WindowInteropHelper(this).Handle;if(hwnd==IntPtr.Zero)return;int value=_dark?1:0;DwmSetWindowAttribute(hwnd,20,ref value,sizeof(int));}catch{}}
+ [DllImport("dwmapi.dll")] static extern int DwmSetWindowAttribute(IntPtr hwnd,int attribute,ref int value,int size);
  void SetBrush(string key,string hex)=>Application.Current.Resources[key]=new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex));
 }
