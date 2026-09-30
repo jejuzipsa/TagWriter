@@ -1,5 +1,12 @@
 TagWriter cumulative patch notes
 
+0.0.1.5
+- Removed the manuscript editor's fixed 850 px MaxWidth so the writing area expands with the available center pane when side panels are collapsed or the window is widened.
+- Reduced the manuscript editor bottom margin from 36 px to 12 px.
+- Added a theme-aware custom ScrollBar so the editor scrollbar no longer uses the bright native Windows scrollbar in dark mode.
+- Reserved a compact bottom editor toolbar strip for upcoming text presentation controls (font size, alignment, bold and installed desktop fonts).
+- Bumped version to 0.0.1.5.
+
 0.0.1.4
 - Reduced collapsed PROJECT/CONTEXT panel width from 58 px to 36 px so only a small margin remains around the 28 px expand button.
 - Centered the collapse/expand button inside the narrow collapsed strip.
