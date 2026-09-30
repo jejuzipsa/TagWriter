@@ -1,4 +1,4 @@
-TagWriter cumulative patch notes
+TagWriter cumulative patch notes\n\n0.0.1.7\n- Upgraded manuscript-paper mode from preview-only to editable input using the same Scene content as normal mode; Korean IME input, keyboard editing and paste flow through a focused text input while the paper grid re-renders.\n- Clicking a manuscript-paper cell moves the insertion caret to that cell; the active cell is highlighted.\n- Added Ctrl+mouse-wheel zoom in manuscript-paper mode and Shift+mouse-wheel horizontal scrolling. Normal wheel continues vertical page scrolling.\n- Manual wheel/button zoom leaves Fit mode; 100% restores the paper reference scale and Fit follows the available editor width.\n- Added installed Windows font selector and font-size selector to the bottom bar for Normal mode only. These controls are hidden in manuscript-paper mode.\n- Manuscript-paper typography is fixed to the grid and scales with paper zoom rather than the Normal-mode font size.\n- Persisted normal editor font family and size in project settings.\n- Bumped version to 0.0.1.7.\n\nTagWriter cumulative patch notes
 
 0.0.1.6
 - Added a bottom-bar Normal / 원고지 view switch.
