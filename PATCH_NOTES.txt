@@ -1,5 +1,14 @@
 TagWriter cumulative patch notes
 
+0.0.4.7
+- Scene 행의 + 버튼 제거. 새 Scene은 Chapter 행의 + 버튼으로 해당 Chapter 끝에 추가.
+- 왼쪽 위 활동 버튼을 전체 원고 보기로 변경.
+- 전체 원고를 연 뒤 연필 버튼을 누르면 직전에 편집하던 Scene으로 복귀.
+- PROJECT 편집 모드에서 드래그 중 드롭 위치를 Accent 삽입선으로 표시.
+- Scene/Chapter 드롭 시 대상 행의 위/아래 위치를 반영.
+- 드래그 후 새 목록 순서가 Order 값에 정상 반영되도록 순서 정규화 수정.
+- 버전 0.0.4.7.
+
 0.0.4.6
 - Fixed PROJECT-tree drag/drop by enabling the TreeView as a WPF drop target and tightened drag-effect handling.
 - Edit mode supports moving scenes within a chapter, moving scenes into another chapter, reordering chapters, and undoing the most recent move.
