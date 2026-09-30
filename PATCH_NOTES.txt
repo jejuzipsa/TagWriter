@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.2.2
+- Fixed the font/font-size ComboBox header hover using an explicit themed ToggleButton template, removing the native bright Windows hover background.
+- Enlarged the PROJECT/CONTEXT collapse/expand chevrons and buttons (20 px glyph, 30 px button) while reducing the collapsed side strip from 36 px to 32 px, leaving only about 1 px of side gap.
+- Bumped version to 0.0.2.2.
+
 0.0.2.1
 - Simplified the Normal-mode font list to eight practical writing fonts: Malgun Gothic, Batang, Noto Sans KR, Noto Serif KR, Segoe UI, Arial, Times New Roman and Georgia. Only installed fonts are shown, while an existing project font outside the list remains available for compatibility.
 - Removed the unused three-dot placeholder from the upper-right of the manuscript editor header.
