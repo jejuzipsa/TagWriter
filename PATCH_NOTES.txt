@@ -1,5 +1,14 @@
 TagWriter cumulative patch notes
 
+0.0.4.6
+- Fixed PROJECT-tree drag/drop by enabling the TreeView as a WPF drop target and tightened drag-effect handling.
+- Edit mode supports moving scenes within a chapter, moving scenes into another chapter, reordering chapters, and undoing the most recent move.
+- Added a fixed [새 챕터] button to the novel-title root row. Long novel titles wrap within the remaining title area while the button stays fixed at the right.
+- Changed chapter-row + to add a scene to that chapter, including chapters that currently contain zero scenes. Scene-row + still inserts immediately after that scene.
+- Unified project/chapter/scene rename dialogs. Enter now confirms, Esc cancels, and their native title bars follow TagWriter Dark/Light mode.
+- Returning from relationship map to a scene or the full manuscript now restores the Manuscript activity-rail selection.
+- Bumped version to 0.0.4.6.
+
 0.0.4.5
 - Added edit-mode drag-and-drop reordering for scenes and chapters in the PROJECT tree.
 - Scenes can move within their current chapter or into another chapter; their existing Scene object/ID/content moves intact and only chapter membership/order changes.
