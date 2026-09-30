@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.2.7
+- Enlarged the PROJECT/CONTEXT collapse-expand buttons from 30 x 30 to 34 x 34 for a larger click target.
+- Changed the panel direction glyphs from ASCII < / > to solid ◀ / ▶ arrows.
+- Adjusted collapsed side strips to 36 px so the 34 px button leaves only about 1 px of horizontal gap on each side.
+- Bumped version to 0.0.2.7.
+
 0.0.2.6
 - Enabled multiline input on the hidden manuscript-paper TextBox, so Enter now inserts a real newline and advances the paper layout to the next 20-cell row; repeated Enter presses preserve blank rows.
 - Fixed mouse drag selection being immediately collapsed by an extra CaretIndex assignment after TextBox.Select. Dragging directly across paper cells now keeps the selected range for copy/cut/delete.
