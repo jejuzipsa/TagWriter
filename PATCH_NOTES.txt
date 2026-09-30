@@ -1,6 +1,7 @@
 TagWriter cumulative patch notes
 
 0.0.1.0
+- Added BUILD.bat for the local GitHub Desktop workflow: Pull, double-click BUILD.bat, and the latest TagWriter is built into publish and launched automatically.
 - Corrected the patch version sequence: the tenth incremental build is now 0.0.1.0 instead of 0.0.0.10.
 - Rebuilt the same chapter-title feature under the corrected version number to produce a fresh GitHub Actions artifact.
 
