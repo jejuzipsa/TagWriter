@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.1.3
+- Removed the native WPF ToggleButton hover/pressed background from TreeView disclosure arrows. Expand/collapse arrows now keep a transparent background in dark and light themes.
+- Prevented the TreeView hover background from overriding the selected-row color, keeping selected text and disclosure arrows readable.
+- Bumped version to 0.0.1.3.
+
 0.0.1.2
 - Dimmed expanded TreeView disclosure arrows using the theme Muted brush plus reduced opacity, improving dark-mode balance while remaining theme-aware.
 - Increased collapsed side-panel width from 52 px to 58 px so the < / > toggle buttons are no longer clipped and retain a small edge gap.
