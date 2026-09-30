@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.3.6
+- Hotfix: restored the complete manuscript-paper vertical keyboard-selection handler after the previous cleanup left the method incomplete.
+- Restores compilation and keeps fixed-anchor Shift+Up / Shift+Down selection.
+- Bumped version to 0.0.3.6.
+
 0.0.3.5
 - Hotfix: removed a duplicated stale PaperInput_PreviewKeyDown method body that remained appended after the v0.0.3.4 replacement and caused the C# parser cascade beginning at MainWindow.xaml.cs line 57.
 - Keeps only the new fixed-anchor manuscript-paper Up/Down selection implementation.
