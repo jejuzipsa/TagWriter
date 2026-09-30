@@ -1,5 +1,12 @@
 TagWriter cumulative patch notes
 
+0.0.5.0
+- 전체 원고 읽기 화면을 일반 TextBox와 분리된 RichTextBox/FlowDocument 뷰어로 변경. 소설 제목 문단만 실제 중앙 정렬되고 Chapter 제목/본문은 왼쪽 정렬.
+- 전체 원고 제목은 현재 편집 글꼴을 따르며 본문보다 약간 크게 표시.
+- PROJECT TreeViewItem 템플릿이 BorderBrush/BorderThickness를 실제 ItemBorder에 전달하도록 수정. 이전 버전에서 드롭 삽입선 속성을 설정해도 화면에 렌더링되지 않던 원인 수정.
+- 드롭 위치는 대상 행의 위/아래에 4px Accent 선으로 표시. 선택 배경색과 별개로 삽입 위치를 구분 가능.
+- 버전 0.0.5.0.
+
 0.0.4.9
 - 전체 원고 맨 위에 소설 제목을 추가하고 제목 줄만 중앙 정렬. Chapter 제목과 본문은 기존처럼 왼쪽 정렬.
 - PROJECT 편집 모드의 드래그 드롭 표시를 강화. 대상 행에 Accent 3px 삽입선과 Selection 배경을 함께 표시하고 DragOver 동안 표시를 유지.
