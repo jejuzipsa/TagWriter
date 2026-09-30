@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.3.5
+- Hotfix: removed a duplicated stale PaperInput_PreviewKeyDown method body that remained appended after the v0.0.3.4 replacement and caused the C# parser cascade beginning at MainWindow.xaml.cs line 57.
+- Keeps only the new fixed-anchor manuscript-paper Up/Down selection implementation.
+- Bumped version to 0.0.3.5.
+
 0.0.3.4
 - Changed collapsed side panels to fully disappear (0 px) instead of leaving a narrow empty strip.
 - Added independent collapsed-state arrow handles over the editor edge: left PROJECT uses ▶ at the left editor edge and right CONTEXT uses ◀ at the right editor edge, vertically centered with the window/editor area.
