@@ -1,5 +1,12 @@
 TagWriter cumulative patch notes
 
+0.0.3.2
+- Moved PROJECT/CONTEXT collapse controls out of the panel header and into an overlay layer spanning the full side panel height.
+- When a side panel is collapsed, its arrow control now sits vertically centered against the editor edge and follows the window height, matching common dock/sidebar handles.
+- Reduced the handle from the oversized square button to a slimmer 28 x 42 control with a 16 px ◀ / ▶ glyph.
+- Expanded panels keep the same control at the upper inner edge so PROJECT/CONTEXT labels retain their normal header layout.
+- Bumped version to 0.0.3.2.
+
 0.0.3.1
 - Fixed repeated Shift+Up / Shift+Down selection in manuscript-paper mode. The first selection anchor is now preserved for the whole Shift-key selection sequence instead of being recalculated from the previous selected row.
 - Repeated Shift+Down now extends the existing selection by one 20-cell manuscript row at a time; Shift+Up behaves symmetrically and can shrink/extend around the same fixed anchor.
