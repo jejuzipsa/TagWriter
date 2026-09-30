@@ -54,6 +54,7 @@ public partial class MainWindow:Window {
  void PaperInput_TextChanged(object s,TextChangedEventArgs e){if(_loading||!_paperMode)return;if(_scene!=null)_scene.Content=PaperInput.Text;SchedulePaperRender();UpdateStatus();RefreshOccurrencesForScene();}
  void SchedulePaperRender(){if(_paperRenderTimer==null){RenderManuscriptPaper();return;}_paperRenderTimer.Stop();_paperRenderTimer.Start();}
  void PaperInput_SelectionChanged(object s,RoutedEventArgs e){if(_paperMode)SchedulePaperRender();}
+ void PaperInput_PreviewKeyDown(object s,KeyEventArgs e){if(!_paperMode||(e.Key!=Key.Up&&e.Key!=Key.Down))return;var text=PaperInput.Text??"";var current=PaperInput.CaretIndex;var currentDisplay=PaperDisplayIndexFromTextIndex(text,current);var targetDisplay=Math.Max(0,currentDisplay+(e.Key==Key.Down?20:-20));var target=TextIndexFromPaperDisplayIndex(text,targetDisplay);if((Keyboard.Modifiers&ModifierKeys.Shift)!=0){var anchor=PaperInput.SelectionLength==0?current:(current==PaperInput.SelectionStart?PaperInput.SelectionStart+PaperInput.SelectionLength:PaperInput.SelectionStart);PaperInput.Select(Math.Min(anchor,target),Math.Abs(target-anchor));}else PaperInput.Select(target,0);e.Handled=true;SchedulePaperRender();}
  void PaperZoomOut_Click(object s,RoutedEventArgs e)=>SetPaperZoom(_paperZoom-.1);
  void PaperZoomIn_Click(object s,RoutedEventArgs e)=>SetPaperZoom(_paperZoom+.1);
  void PaperZoom100_Click(object s,RoutedEventArgs e)=>SetPaperZoom(1);
