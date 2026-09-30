@@ -1,4 +1,24 @@
-TagWriter cumulative patch notes\n\n0.0.1.7\n- Upgraded manuscript-paper mode from preview-only to editable input using the same Scene content as normal mode; Korean IME input, keyboard editing and paste flow through a focused text input while the paper grid re-renders.\n- Clicking a manuscript-paper cell moves the insertion caret to that cell; the active cell is highlighted.\n- Added Ctrl+mouse-wheel zoom in manuscript-paper mode and Shift+mouse-wheel horizontal scrolling. Normal wheel continues vertical page scrolling.\n- Manual wheel/button zoom leaves Fit mode; 100% restores the paper reference scale and Fit follows the available editor width.\n- Added installed Windows font selector and font-size selector to the bottom bar for Normal mode only. These controls are hidden in manuscript-paper mode.\n- Manuscript-paper typography is fixed to the grid and scales with paper zoom rather than the Normal-mode font size.\n- Persisted normal editor font family and size in project settings.\n- Bumped version to 0.0.1.7.\n\nTagWriter cumulative patch notes
+TagWriter cumulative patch notes
+
+0.0.1.8
+- Restyled the Normal-mode font and font-size selectors to use TagWriter's dark/light theme instead of the native bright Windows ComboBox background.
+- Forced both font selector dropdowns to open upward so the bottom toolbar never grows downward off-screen.
+- Moved the expanded PROJECT collapse button to the panel's inner/right edge next to the editor.
+- Moved the expanded CONTEXT collapse button to the panel's inner/left edge next to the editor.
+- Collapsed side strips keep their toggle buttons centered.
+- Bumped version to 0.0.1.8.
+
+0.0.1.7
+- Upgraded manuscript-paper mode from preview-only to editable input using the same Scene content as normal mode; Korean IME input, keyboard editing and paste flow through a focused text input while the paper grid re-renders.
+- Clicking a manuscript-paper cell moves the insertion caret to that cell; the active cell is highlighted.
+- Added Ctrl+mouse-wheel zoom in manuscript-paper mode and Shift+mouse-wheel horizontal scrolling. Normal wheel continues vertical page scrolling.
+- Manual wheel/button zoom leaves Fit mode; 100% restores the paper reference scale and Fit follows the available editor width.
+- Added installed Windows font selector and font-size selector to the bottom bar for Normal mode only. These controls are hidden in manuscript-paper mode.
+- Manuscript-paper typography is fixed to the grid and scales with paper zoom rather than the Normal-mode font size.
+- Persisted normal editor font family and size in project settings.
+- Bumped version to 0.0.1.7.
+
+TagWriter cumulative patch notes
 
 0.0.1.6
 - Added a bottom-bar Normal / 원고지 view switch.
