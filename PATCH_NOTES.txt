@@ -1,5 +1,14 @@
 TagWriter cumulative patch notes
 
+0.0.2.4
+- Reworked manuscript-paper rendering to reuse lightweight custom drawing surfaces instead of rebuilding the full WPF visual tree for every typed character.
+- Coalesced rapid input redraws to the UI frame interval for smoother Korean typing.
+- Added themed per-cell hover and active-caret highlighting.
+- Added mouse drag range selection across manuscript-paper cells, with standard keyboard editing and clipboard behavior retained through the text input layer.
+- Added caret-follow scrolling between manuscript-paper sheets.
+- Kept explicit paragraph and blank-line layout in the 20 x 10 manuscript grid.
+- Bumped version to 0.0.2.4.
+
 0.0.2.3
 - Fixed activity-rail button colors after switching between Dark and Light themes. Project/Manuscript/Mind-map buttons now keep DynamicResource references and the active state is reapplied after a theme change instead of retaining dark-mode local brushes.
 - Manuscript-paper layout now preserves explicit line breaks and blank lines from Normal mode. Enter moves the following text to the next 20-cell row, and consecutive blank lines remain empty manuscript-paper rows instead of collapsing into single spaces.
