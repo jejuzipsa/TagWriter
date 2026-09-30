@@ -1,5 +1,12 @@
 TagWriter cumulative patch notes
 
+0.0.4.9
+- 전체 원고 맨 위에 소설 제목을 추가하고 제목 줄만 중앙 정렬. Chapter 제목과 본문은 기존처럼 왼쪽 정렬.
+- PROJECT 편집 모드의 드래그 드롭 표시를 강화. 대상 행에 Accent 3px 삽입선과 Selection 배경을 함께 표시하고 DragOver 동안 표시를 유지.
+- 드래그가 트리 밖으로 나가면 드롭 표시를 정리.
+- Scene 편집으로 돌아오면 문단 정렬을 왼쪽으로 복원.
+- 버전 0.0.4.9.
+
 0.0.4.8
 - Hotfix: removed a duplicated stale tail accidentally left after MoveChapter in v0.0.4.7, which caused the C# parser errors at MainWindow.xaml.cs line 42 and EOF.
 - Keeps the v0.0.4.7 full-manuscript navigation, Scene + removal, drag insertion indicator, and reordered tree behavior unchanged.
