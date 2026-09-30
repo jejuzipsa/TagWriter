@@ -7,13 +7,15 @@ echo  TagWriter - Local Build
 echo ============================================================
 echo.
 
-where dotnet >nul 2>nul
-if errorlevel 1 (
+dotnet --list-sdks > "%TEMP%\\tagwriter_sdks.txt" 2>nul
+for %%A in ("%TEMP%\\tagwriter_sdks.txt") do if %%~zA==0 (
+    del "%TEMP%\\tagwriter_sdks.txt" >nul 2>nul
     echo [ERROR] .NET 8 SDK is required.
     echo Install the .NET 8 SDK and run BUILD.bat again.
     pause
     exit /b 1
 )
+del "%TEMP%\\tagwriter_sdks.txt" >nul 2>nul
 
 echo [1/2] Building latest local source...
 if exist "publish" rmdir /s /q "publish"
