@@ -1,5 +1,13 @@
 TagWriter cumulative patch notes
 
+0.0.4.2
+- Added borderless + controls beside chapter and scene rows. The + becomes bold/brighter on hover.
+- Chapter + adds a scene to that chapter; scene + inserts a scene immediately after that scene.
+- Added right-click menus: chapters offer 씬 추가 / 챕터 추가 / 챕터 삭제; scenes offer 씬 추가 / 챕터 추가 / 씬 삭제.
+- Scene/chapter deletion now requires a Yes/No warning confirmation. Chapter deletion warns that all contained scenes are removed.
+- Explicitly set child tree rows to 13 px Normal so the 15 px Bold novel title / 설정 카드 / ◆ 관계맵 remain visually distinct.
+- Bumped version to 0.0.4.2.
+
 0.0.4.1
 - Rebuilt the top MenuItem visual template to remove the native WPF white per-item borders visible in Dark mode.
 - Dropdown menus now use one themed outer border around the popup only; individual rows have no border or separator line.
