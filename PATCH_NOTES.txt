@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.1.2
+- Dimmed expanded TreeView disclosure arrows using the theme Muted brush plus reduced opacity, improving dark-mode balance while remaining theme-aware.
+- Increased collapsed side-panel width from 52 px to 58 px so the < / > toggle buttons are no longer clipped and retain a small edge gap.
+- Collapsed PROJECT and CONTEXT headers now hide completely instead of leaving P/C text; only the expand toggle remains.
+- Bumped version to 0.0.1.2.
+
 0.0.1.1
 - Fixed the project-tree selected item using the native white WPF highlight; tree selection now follows TagWriter's themed selection color.
 - Removed the inactive bottom-left gear/settings button until an actual settings screen exists.
