@@ -3,12 +3,10 @@ namespace TagWriter;
 public partial class MainWindow:Window {
  ProjectDocument _document=ProjectDocument.CreateSample(); string? _path; Scene? _scene; EntityCard? _card; bool _loading; bool _dark=true; bool _leftCollapsed=false,_rightCollapsed=false; double _leftWidth=250,_rightWidth=310; bool _paperMode=false,_paperFit=true; double _paperZoom=1.0; const double PaperCell=34,PaperMargin=42;
  public MainWindow(){InitializeComponent();SourceInitialized+=(_,_)=>ApplyWindowChromeTheme();Loaded+=(_,_)=>InitializeEditorPreferences();RefreshAll();SelectFirstScene();ApplyTheme(_document.Settings.Theme!="light");}
- void InitializeEditorPreferences(){FontFamilyBox.ItemsSource=Fonts.SystemFontFamilies.OrderBy(f=>f.Source).ToList();FontFamilyBox.SelectedItem=Fonts.SystemFontFamilies.FirstOrDefault(f=>f.Source==_document.Settings.EditorFontFamily)??new FontFamily(_document.Settings.EditorFontFamily);FontSizeBox.ItemsSource=new double[]{12,13,14,15,16,17,18,20,22,24};FontSizeBox.Text=_document.Settings.EditorFontSize.ToString("0.#");ApplyEditorPreferences();}
+ void InitializeEditorPreferences(){FontFamilyBox.ItemsSource=Fonts.SystemFontFamilies.OrderBy(f=>f.Source).ToList();FontFamilyBox.SelectedItem=Fonts.SystemFontFamilies.FirstOrDefault(f=>f.Source==_document.Settings.EditorFontFamily)??new FontFamily(_document.Settings.EditorFontFamily);FontSizeBox.ItemsSource=new double[]{10,11,12,13,14,15,16,17,18,20,22,24,26,28,32};FontSizeBox.SelectedItem=FontSizeBox.Items.Cast<double>().OrderBy(v=>Math.Abs(v-_document.Settings.EditorFontSize)).First();ApplyEditorPreferences();}
  void ApplyEditorPreferences(){try{Editor.FontFamily=new FontFamily(_document.Settings.EditorFontFamily);}catch{Editor.FontFamily=new FontFamily("Malgun Gothic");}Editor.FontSize=Math.Clamp(_document.Settings.EditorFontSize,9,48);Editor.SetValue(TextBlock.LineHeightProperty,Math.Max(Editor.FontSize*1.7,Editor.FontSize+6));}
  void FontFamilyBox_SelectionChanged(object s,SelectionChangedEventArgs e){if(FontFamilyBox.SelectedItem is FontFamily f){_document.Settings.EditorFontFamily=f.Source;ApplyEditorPreferences();}}
- void FontSizeBox_SelectionChanged(object s,SelectionChangedEventArgs e)=>ApplyFontSizeBox();
- void FontSizeBox_LostKeyboardFocus(object s,KeyboardFocusChangedEventArgs e)=>ApplyFontSizeBox();
- void ApplyFontSizeBox(){if(double.TryParse(FontSizeBox.Text,out var size)){_document.Settings.EditorFontSize=Math.Clamp(size,9,48);ApplyEditorPreferences();}}
+ void FontSizeBox_SelectionChanged(object s,SelectionChangedEventArgs e){if(FontSizeBox.SelectedItem is double size){_document.Settings.EditorFontSize=size;ApplyEditorPreferences();}}
  void RefreshAll(){RefreshTree();RefreshIdeas();UpdateStatus();Title=$"{_document.Project.Title} — TagWriter";}
  void RefreshTree(){
   ProjectTree.Items.Clear(); var manuscript=new TreeViewItem{Header=_document.Project.Title,IsExpanded=true,Tag="manuscript"};
@@ -72,7 +70,7 @@ public partial class MainWindow:Window {
   SetBrush("Panel",dark?"#242930":"#EEF1F4"); SetBrush("Panel2",dark?"#2B3139":"#FFFFFF");
   SetBrush("EditorBg",dark?"#1D2126":"#FFFFFF"); SetBrush("Text",dark?"#E6E9ED":"#20242A");
   SetBrush("Muted",dark?"#939BA6":"#66707C"); SetBrush("Border",dark?"#343B45":"#D4D9E0");
-  SetBrush("Accent",dark?"#70A9E8":"#2F72B7"); SetBrush("Selection",dark?"#304B68":"#BFD9F4"); SetBrush("TabSelected",dark?"#1E2227":"#E1E5EA");
+  SetBrush("Accent",dark?"#70A9E8":"#2F72B7"); SetBrush("Selection",dark?"#304B68":"#BFD9F4"); SetBrush("Hover",dark?"#304B68":"#BFD9F4"); SetBrush("TabSelected",dark?"#1E2227":"#E1E5EA");
   ThemeGlyph.Text=dark?"☾ Dark":"☀ Light"; ThemeGlyph.Foreground=(Brush)FindResource("Text"); ThemeToggle.Foreground=(Brush)FindResource("Text"); ThemeToggle.Background=(Brush)FindResource("Panel2"); ThemeToggle.IsChecked=!dark; _document.Settings.Theme=dark?"dark":"light"; ApplyWindowChromeTheme();
  }
  void ApplyWindowChromeTheme(){if(!IsInitialized)return;try{var hwnd=new WindowInteropHelper(this).Handle;if(hwnd==IntPtr.Zero)return;int value=_dark?1:0;DwmSetWindowAttribute(hwnd,20,ref value,sizeof(int));}catch{}}
