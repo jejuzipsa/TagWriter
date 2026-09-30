@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.3.3
+- Hotfix: repaired malformed MainWindow XAML introduced while moving the right CONTEXT collapse handle into the overlay grid.
+- Restored the missing RightPanelToggle element and correctly closes the right DockPanel/Grid/Border hierarchy.
+- Bumped version to 0.0.3.3.
+
 0.0.3.2
 - Moved PROJECT/CONTEXT collapse controls out of the panel header and into an overlay layer spanning the full side panel height.
 - When a side panel is collapsed, its arrow control now sits vertically centered against the editor edge and follows the window height, matching common dock/sidebar handles.
