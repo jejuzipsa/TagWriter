@@ -1,5 +1,12 @@
 TagWriter cumulative patch notes
 
+0.0.0.4
+- Audited the 0.0.0.3 GitHub Actions artifact: the build succeeded and the artifact contained a 161,676,298-byte unsigned single-file Windows executable plus PDB.
+- Changed Windows packaging from self-contained single-file to ordinary self-contained folder deployment. This keeps TagWriter portable while avoiding the unusually large bundled EXE that can attract reputation/SmartScreen scrutiny and makes runtime files easier to inspect.
+- Artifact remains a single GitHub download ZIP; there is no ZIP-inside-ZIP.
+- Kept startup crash logging introduced in 0.0.0.3.
+- Bumped application/package version to 0.0.0.4.
+
 0.0.0.3
 - Fixed a startup regression in 0.0.0.2 by removing the newly embedded/window-bound icon path from startup resources.
 - Added a startup/unhandled-exception crash log (TagWriter_crash.log) and visible error dialog for future launch failures.
