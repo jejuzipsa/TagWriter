@@ -15,10 +15,10 @@ jobs:
           dotnet-version: 8.0.x
       - name: Publish Windows x64
         shell: pwsh
-        run: dotnet publish TagWriter.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish
+        run: dotnet publish TagWriter.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -o publish
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: TagWriter-0.0.0.3-win-x64
+          name: TagWriter-0.0.0.4-win-x64
           path: publish/
           if-no-files-found: error
