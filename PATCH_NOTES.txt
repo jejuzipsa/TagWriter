@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.1.4
+- Reduced collapsed PROJECT/CONTEXT panel width from 58 px to 36 px so only a small margin remains around the 28 px expand button.
+- Centered the collapse/expand button inside the narrow collapsed strip.
+- Removed the redundant centered project title from the top menu bar; the editor breadcrumb already shows novel | chapter | scene and the native window title still identifies the project.
+- Bumped version to 0.0.1.4.
+
 0.0.1.3
 - Removed the native WPF ToggleButton hover/pressed background from TreeView disclosure arrows. Expand/collapse arrows now keep a transparent background in dark and light themes.
 - Prevented the TreeView hover background from overriding the selected-row color, keeping selected text and disclosure arrows readable.
