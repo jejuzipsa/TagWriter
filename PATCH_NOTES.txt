@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.4.8
+- Hotfix: removed a duplicated stale tail accidentally left after MoveChapter in v0.0.4.7, which caused the C# parser errors at MainWindow.xaml.cs line 42 and EOF.
+- Keeps the v0.0.4.7 full-manuscript navigation, Scene + removal, drag insertion indicator, and reordered tree behavior unchanged.
+- Bumped version to 0.0.4.8.
+
 0.0.4.7
 - Scene 행의 + 버튼 제거. 새 Scene은 Chapter 행의 + 버튼으로 해당 Chapter 끝에 추가.
 - 왼쪽 위 활동 버튼을 전체 원고 보기로 변경.
