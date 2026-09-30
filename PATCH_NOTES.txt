@@ -1,5 +1,12 @@
 TagWriter cumulative patch notes
 
+0.0.4.1
+- Rebuilt the top MenuItem visual template to remove the native WPF white per-item borders visible in Dark mode.
+- Dropdown menus now use one themed outer border around the popup only; individual rows have no border or separator line.
+- Menu rows use the TagWriter Surface background and only show the shared Hover background while highlighted/open.
+- Preserved PART_Popup and IsSubmenuOpen bindings so File/Insert/View dropdown interaction remains functional.
+- Bumped version to 0.0.4.1.
+
 0.0.4.0
 - Increased the three root project-tree entries (novel title, 설정 카드, ◆ 관계맵) from 14 px to 15 px Bold so their hierarchy is visibly distinct from chapter/scene/card-category children.
 - Moved the CONTEXT header text to the right of the expanded right-panel collapse button, preventing the ▶ overlay button from covering the beginning of the label.
