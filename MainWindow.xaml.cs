@@ -1,9 +1,9 @@
 using Microsoft.Win32; using System.Text; using System.Windows; using System.Windows.Controls; using System.Windows.Media; using System.Windows.Shapes; using TagWriter.Models; using TagWriter.Services;
 namespace TagWriter;
 public partial class MainWindow:Window {
- ProjectDocument _document=ProjectDocument.CreateSample(); string? _path; Scene? _scene; EntityCard? _card; bool _loading;
- public MainWindow(){InitializeComponent();RefreshAll();SelectFirstScene();}
- void RefreshAll(){RefreshTree();RefreshIdeas();UpdateStatus();Title=$"{_document.Project.Title} — TagWriter";}
+ ProjectDocument _document=ProjectDocument.CreateSample(); string? _path; Scene? _scene; EntityCard? _card; bool _loading; bool _dark=true;
+ public MainWindow(){InitializeComponent();RefreshAll();SelectFirstScene();ApplyTheme(true);}
+ void RefreshAll(){RefreshTree();RefreshIdeas();UpdateStatus();Title=$"{_document.Project.Title} — TagWriter";TopProjectTitle.Text=_document.Project.Title;}
  void RefreshTree(){
   ProjectTree.Items.Clear(); var manuscript=new TreeViewItem{Header="원고",IsExpanded=true,Tag="manuscript"};
   foreach(var chapter in _document.Chapters.OrderBy(x=>x.Order)){var cn=new TreeViewItem{Header=chapter.Title,IsExpanded=true,Tag=chapter};foreach(var scene in chapter.Scenes.OrderBy(x=>x.Order))cn.Items.Add(new TreeViewItem{Header=scene.Title,Tag=scene});manuscript.Items.Add(cn);} ProjectTree.Items.Add(manuscript);
@@ -12,7 +12,7 @@ public partial class MainWindow:Window {
  static string TypeName(CardType t)=>t switch{CardType.Character=>"캐릭터",CardType.Location=>"장소",CardType.Item=>"물건",CardType.Event=>"사건",_=>t.ToString()};
  void SelectFirstScene(){var s=_document.Chapters.OrderBy(x=>x.Order).SelectMany(x=>x.Scenes.OrderBy(y=>y.Order)).FirstOrDefault();if(s!=null)ShowScene(s);}
  void ProjectTree_SelectedItemChanged(object s,RoutedPropertyChangedEventArgs<object> e){if(e.NewValue is not TreeViewItem i)return;if(i.Tag is Scene sc)ShowScene(sc);else if(i.Tag is EntityCard c)ShowCard(c);else if(i.Tag as string=="mindmap")ShowMindMap();}
- void ShowScene(Scene s){PersistEditor();_scene=s;_card=null;_loading=true;Editor.IsReadOnly=false;Editor.Text=s.Content;EditorTitle.Text=s.Title;_loading=false;EditorView.Visibility=Visibility.Visible;MindMapView.Visibility=Visibility.Collapsed;RefreshOccurrencesForScene();UpdateStatus();}
+ void ShowScene(Scene s){PersistEditor();_scene=s;_card=null;_loading=true;Editor.IsReadOnly=false;Editor.Text=s.Content;EditorTitle.Text=s.Title;EditorSubtitle.Text="원고 편집";_loading=false;EditorView.Visibility=Visibility.Visible;MindMapView.Visibility=Visibility.Collapsed;RefreshOccurrencesForScene();UpdateStatus();}
  void ShowCard(EntityCard c){_card=c;CardName.Text=c.Name;CardTypeText.Text=TypeName(c.Type);CardDescription.Text=c.Description;CardAliases.Text=string.Join(Environment.NewLine,c.Aliases);RefreshOccurrences(c);RefreshRelations(c);}
  void PersistEditor(){if(_scene!=null&&!_loading)_scene.Content=Editor.Text;}
  void Editor_TextChanged(object s,TextChangedEventArgs e){if(_loading||_scene==null)return;_scene.Content=Editor.Text;UpdateStatus();RefreshOccurrencesForScene();}
@@ -26,11 +26,22 @@ public partial class MainWindow:Window {
  void AddScene_Click(object s,RoutedEventArgs e){var c=_document.Chapters.FirstOrDefault(x=>x.Scenes.Contains(_scene!))??_document.Chapters.LastOrDefault();if(c==null)return;var sc=new Scene{Title=$"Scene {c.Scenes.Count+1}",Order=c.Scenes.Count+1};c.Scenes.Add(sc);RefreshTree();ShowScene(sc);}
  void AddCard_Click(object s,RoutedEventArgs e){if(s is not MenuItem i||!Enum.TryParse<CardType>(i.Tag?.ToString(),out var t))return;var c=new EntityCard{Type=t,Name=$"새 {TypeName(t)}"};_document.Cards.Add(c);_document.MindMap.Nodes.Add(new MapNode{CardId=c.Id,X=80+(_document.MindMap.Nodes.Count%4)*190,Y=80+(_document.MindMap.Nodes.Count/4)*120});RefreshTree();ShowCard(c);}
  void SaveCard_Click(object s,RoutedEventArgs e){if(_card==null)return;_card.Description=CardDescription.Text;_card.Aliases=CardAliases.Text.Split(['\r','\n'],StringSplitOptions.RemoveEmptyEntries).Select(x=>x.Trim()).Where(x=>x.Length>0).Distinct().ToList();_card.UpdatedAt=DateTimeOffset.Now;RefreshTree();RefreshOccurrences(_card);}
- void ShowAll_Click(object s,RoutedEventArgs e){PersistEditor();_scene=null;_loading=true;var b=new StringBuilder();foreach(var c in _document.Chapters.OrderBy(x=>x.Order)){b.AppendLine(c.Title).AppendLine();foreach(var sc in c.Scenes.OrderBy(x=>x.Order))b.AppendLine(sc.Content).AppendLine();b.AppendLine("────────────────────────").AppendLine();}EditorTitle.Text="전체 원고 · 읽기";Editor.Text=b.ToString();Editor.IsReadOnly=true;_loading=false;EditorView.Visibility=Visibility.Visible;MindMapView.Visibility=Visibility.Collapsed;}
+ void ShowAll_Click(object s,RoutedEventArgs e){PersistEditor();_scene=null;_loading=true;var b=new StringBuilder();foreach(var c in _document.Chapters.OrderBy(x=>x.Order)){b.AppendLine(c.Title).AppendLine();foreach(var sc in c.Scenes.OrderBy(x=>x.Order))b.AppendLine(sc.Content).AppendLine();b.AppendLine("────────────────────────").AppendLine();}EditorTitle.Text="전체 원고";EditorSubtitle.Text="연속 읽기 · 읽기 전용";Editor.Text=b.ToString();Editor.IsReadOnly=true;_loading=false;EditorView.Visibility=Visibility.Visible;MindMapView.Visibility=Visibility.Collapsed;}
  void ShowMindMap_Click(object s,RoutedEventArgs e)=>ShowMindMap();
  void ShowMindMap(){PersistEditor();Editor.IsReadOnly=false;EditorView.Visibility=Visibility.Collapsed;MindMapView.Visibility=Visibility.Visible;DrawMindMap();}
  void DrawMindMap(){MindCanvas.Children.Clear();foreach(var e in _document.MindMap.Edges){var a=_document.MindMap.Nodes.FirstOrDefault(n=>n.CardId==e.From);var b=_document.MindMap.Nodes.FirstOrDefault(n=>n.CardId==e.To);if(a==null||b==null)continue;MindCanvas.Children.Add(new Line{X1=a.X+65,Y1=a.Y+22,X2=b.X+65,Y2=b.Y+22,Stroke=(Brush)FindResource("Muted"),StrokeThickness=1.5});var l=new TextBlock{Text=e.Label,Foreground=(Brush)FindResource("Muted")};Canvas.SetLeft(l,(a.X+b.X)/2);Canvas.SetTop(l,(a.Y+b.Y)/2);MindCanvas.Children.Add(l);}foreach(var n in _document.MindMap.Nodes){var c=_document.Cards.FirstOrDefault(x=>x.Id==n.CardId);if(c==null)continue;var bt=new Button{Content=c.Name,Tag=c,MinWidth=130,Padding=new Thickness(10,6,10,6),Background=(Brush)FindResource("Panel2"),Foreground=(Brush)FindResource("Text")};bt.Click+=(_,_)=>ShowCard(c);Canvas.SetLeft(bt,n.X);Canvas.SetTop(bt,n.Y);MindCanvas.Children.Add(bt);}}
  void AddIdea_Click(object s,RoutedEventArgs e){_document.Ideas.Insert(0,new Idea{Text="새 아이디어"});RefreshIdeas();}
  void RefreshIdeas()=>IdeaList.ItemsSource=_document.Ideas.OrderByDescending(x=>x.CreatedAt).Select(x=>x.Done?$"✓ {x.Text}":x.Text).ToList();
  void UpdateStatus(string? p=null){PersistEditor();var chars=_document.Chapters.SelectMany(c=>c.Scenes).Sum(s=>s.Content.Length);var words=_document.Chapters.SelectMany(c=>c.Scenes).Sum(s=>s.Content.Split((char[]?)null,StringSplitOptions.RemoveEmptyEntries).Length);StatusText.Text=$"{(p==null?"":p+" · ")}{_document.Chapters.Count}장 · {chars:N0}자 · {words:N0}단어 · {_document.Cards.Count}카드";}
+ void ThemeToggle_Click(object s,RoutedEventArgs e)=>ApplyTheme(!_dark);
+ void ApplyTheme(bool dark){
+  _dark=dark;
+  SetBrush("Bg",dark?"#181B1F":"#E8EBEF"); SetBrush("Surface",dark?"#20242A":"#F5F6F8");
+  SetBrush("Panel",dark?"#242930":"#EEF1F4"); SetBrush("Panel2",dark?"#2B3139":"#FFFFFF");
+  SetBrush("EditorBg",dark?"#1D2126":"#FFFFFF"); SetBrush("Text",dark?"#E6E9ED":"#20242A");
+  SetBrush("Muted",dark?"#939BA6":"#66707C"); SetBrush("Border",dark?"#343B45":"#D4D9E0");
+  SetBrush("Accent",dark?"#70A9E8":"#2F72B7"); SetBrush("Selection",dark?"#304B68":"#BFD9F4");
+  ThemeGlyph.Text=dark?"☾ Dark":"☀ Light"; ThemeToggle.IsChecked=!dark; _document.Settings.Theme=dark?"dark":"light";
+ }
+ void SetBrush(string key,string hex)=>Application.Current.Resources[key]=new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex));
 }

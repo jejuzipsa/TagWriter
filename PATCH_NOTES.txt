@@ -1,0 +1,14 @@
+TagWriter cumulative patch notes
+
+0.0.0.2
+- Reworked the main desktop layout after reviewing the supplied novelWriter package.
+- Kept the dedicated writing-app structure while giving TagWriter its own activity rail, centered writing canvas, context inspector and visual hierarchy.
+- Improved dark-theme contrast, typography, panel separation and editor readability.
+- Added a compact dark/light switch in the upper-right corner and a light palette.
+- Refined the status bar and editor header.
+- Removed nested ZIP packaging from GitHub Actions artifacts.
+- Bumped application/package version to 0.0.0.2.
+
+0.0.0.1
+- Initial .NET 8 WPF prototype.
+- Added chapter/scene structure, setting cards, aliases, occurrence lookup, basic mind-map data, ideas and single-JSON project storage.

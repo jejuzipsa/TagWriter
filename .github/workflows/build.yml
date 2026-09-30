@@ -1,43 +1,24 @@
 name: Build TagWriter
-
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
-
 permissions:
   contents: read
-
 jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup .NET 8
-        uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-
       - name: Publish Windows x64
         shell: pwsh
         run: dotnet publish TagWriter.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish
-
-      - name: Read version and package
-        id: package
-        shell: pwsh
-        run: |
-          [xml]$project = Get-Content TagWriter.csproj
-          $version = $project.Project.PropertyGroup.Version
-          $name = "TagWriter-$version-win-x64"
-          Compress-Archive -Path publish\* -DestinationPath "$name.zip" -Force
-          "name=$name" >> $env:GITHUB_OUTPUT
-          "zip=$name.zip" >> $env:GITHUB_OUTPUT
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.package.outputs.name }}
-          path: ${{ steps.package.outputs.zip }}
+          name: TagWriter-0.0.0.2-win-x64
+          path: publish/
           if-no-files-found: error
