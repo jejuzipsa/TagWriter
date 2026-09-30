@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.2.6
+- Enabled multiline input on the hidden manuscript-paper TextBox, so Enter now inserts a real newline and advances the paper layout to the next 20-cell row; repeated Enter presses preserve blank rows.
+- Fixed mouse drag selection being immediately collapsed by an extra CaretIndex assignment after TextBox.Select. Dragging directly across paper cells now keeps the selected range for copy/cut/delete.
+- Made manuscript-paper mouse hover clearly visible by using the themed Accent brush at low opacity instead of the dark-mode Hover brush, which was effectively the same color as the paper surface.
+- Bumped version to 0.0.2.6.
+
 0.0.2.5
 - Fixed manuscript-paper mode crashing when drawing hover/caret/selection cells. Theme brushes returned by WPF resources can be frozen/read-only, so the paper renderer no longer changes Brush.Opacity directly and now applies drawing opacity through DrawingContext.PushOpacity/Pop.
 - Prevents the repeated TagWriter error dialogs triggered by the same render exception.
