@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.2.5
+- Fixed manuscript-paper mode crashing when drawing hover/caret/selection cells. Theme brushes returned by WPF resources can be frozen/read-only, so the paper renderer no longer changes Brush.Opacity directly and now applies drawing opacity through DrawingContext.PushOpacity/Pop.
+- Prevents the repeated TagWriter error dialogs triggered by the same render exception.
+- Bumped version to 0.0.2.5.
+
 0.0.2.4
 - Reworked manuscript-paper rendering to reuse lightweight custom drawing surfaces instead of rebuilding the full WPF visual tree for every typed character.
 - Coalesced rapid input redraws to the UI frame interval for smoother Korean typing.
