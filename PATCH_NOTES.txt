@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.2.8
+- Fixed manuscript-paper Up/Down keyboard navigation. The hidden 1 px TextBox previously used WPF's own visual-line navigation, so Shift+Down could jump several manuscript rows unpredictably.
+- Up/Down now follow the manuscript grid itself: one key press moves exactly one 20-cell paper row.
+- Shift+Up/Shift+Down now extend or shrink the selection by exactly one manuscript row while preserving the opposite selection anchor.
+- Bumped version to 0.0.2.8.
+
 0.0.2.7
 - Enlarged the PROJECT/CONTEXT collapse-expand buttons from 30 x 30 to 34 x 34 for a larger click target.
 - Changed the panel direction glyphs from ASCII < / > to solid ◀ / ▶ arrows.
