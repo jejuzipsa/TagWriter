@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.2.1
+- Simplified the Normal-mode font list to eight practical writing fonts: Malgun Gothic, Batang, Noto Sans KR, Noto Serif KR, Segoe UI, Arial, Times New Roman and Georgia. Only installed fonts are shown, while an existing project font outside the list remains available for compatibility.
+- Removed the unused three-dot placeholder from the upper-right of the manuscript editor header.
+- Bumped version to 0.0.2.1.
+
 0.0.2.0
 - Reworked the shared hover palette: dark mode now uses the subdued Panel2 tone instead of the brighter selection blue, and light mode uses a neutral light gray. Hover is visually separate from selection.
 - Added a fully themed ToolTip template so activity-rail descriptions remain readable in both dark and light modes.
