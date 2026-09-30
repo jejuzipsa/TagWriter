@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.3.0
+- Fixed manuscript-paper page numbers being nearly invisible in Dark mode. Page numbers now use the themed Muted text brush instead of the much darker grid/border brush.
+- Slightly increased the manuscript-paper page-number size for readability while keeping it visually secondary to manuscript text.
+- Bumped version to 0.0.3.0.
+
 0.0.2.9
 - Enlarged collapsed PROJECT/CONTEXT arrow buttons again from 34 x 34 to 38 x 38 and increased the ◀ / ▶ glyph size for clearer visibility.
 - Collapsed side strips are now 40 px wide, keeping the horizontal outside gap at about 1 px per side rather than making the strip feel padded.
