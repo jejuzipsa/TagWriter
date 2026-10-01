@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.7.6
+NEXT CHAT HANDOFF — TagWriter 0.0.7.7
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -87,6 +87,7 @@ IMPLEMENTED — CARD DATA / CHARACTER
   - 메모 (multiline)
   - 태그 (additional aliases only)
 - Character name itself is always an automatic/default tag. The user does not have to repeat the name in the tag field.
+- Additional tags/aliases are entered in one field separated by commas (example: `민수, 김민수, 민수 씨`). Line breaks are also accepted for compatibility/paste, but the editor displays aliases comma-separated.
 - If the character name changes, the automatic name tag changes with it; manually entered additional tags remain.
 - Internal linking must continue to use the card's stable ID, not the visible name/alias.
 
@@ -226,6 +227,12 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.7.7
+- Changed additional-tag/alias entry to comma-separated input instead of one tag per line.
+- Card creation/edit fields now show examples as ", 로 구분" and existing aliases are displayed as "태그1, 태그2, 태그3".
+- Parser accepts commas as the primary delimiter while still accepting CR/LF for compatibility and pasted legacy text.
+- Bumped version to 0.0.7.7.
 
 0.0.7.6
 - Reworked crash logging so logs no longer depend on the executable folder being writable.
