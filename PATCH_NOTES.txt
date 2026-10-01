@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.8.7
+NEXT CHAT HANDOFF — TagWriter 0.0.8.8
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,18 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.8.8
+- Redesigned the startup chooser to match the TagWriter editor theme and the user's reference layout.
+- The top area now shows the TagWriter book icon, a clean TagWriter title/subtitle, and a prominent "새 소설 작성" action.
+- Recent documents now appear as a scrollable list, each row showing the project title and its full JSON path.
+- Recent-document history is now an unlimited path list in AppSettings; the legacy single recentProjectPath is still read for migration.
+- Only recent files that still exist at their recorded path are shown.
+- Visible recent documents are sorted by the actual file last-modified timestamp, newest first.
+- The list has no artificial item count limit; the right-side vertical scrollbar appears automatically when needed.
+- Opening or successfully saving a project adds its normalized path to recentProjectPaths without duplicates.
+- Startup version text is shown at the bottom-right.
+- Bumped version to 0.0.8.8.
 
 0.0.8.7
 - Fixed DOCX export corruption by replacing the hand-built minimal ZIP/XML writer with DocumentFormat.OpenXml 3.5.1.

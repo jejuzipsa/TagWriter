@@ -247,7 +247,16 @@ public partial class MainWindow:Window {
   try{_document=await ProjectStore.LoadAsync(path);_path=path;_scene=null;_card=null;_idea=null;RefreshAll();InitializeTypingSoundPreferences();InitializeRelationshipSnapshots();SelectFirstScene();_lastAutoSaveAt=DateTimeOffset.Now;RememberRecentProject(path);return true;}
   catch(Exception ex){MessageBox.Show(ex.Message,"열기 실패");return false;}
  }
- void RememberRecentProject(string path){_appSettings.RecentProjectPath=path;AppSettingsStore.Save(_appSettings);}
+ void RememberRecentProject(string path){
+  if(string.IsNullOrWhiteSpace(path))return;
+  string normalized;
+  try{normalized=Path.GetFullPath(path);}catch{normalized=path;}
+  _appSettings.RecentProjectPath=normalized;
+  _appSettings.RecentProjectPaths??=[];
+  _appSettings.RecentProjectPaths.RemoveAll(p=>string.Equals(p,normalized,StringComparison.OrdinalIgnoreCase));
+  _appSettings.RecentProjectPaths.Add(normalized);
+  AppSettingsStore.Save(_appSettings);
+ }
  void SaveCommand_Executed(object s,ExecutedRoutedEventArgs e)=>SaveProject_Click(s,e);
  async void SaveProject_Click(object s,RoutedEventArgs e)=>await SaveProjectCoreAsync(false);
  async Task<bool> SaveProjectCoreAsync(bool automatic){

@@ -27,7 +27,12 @@ public partial class App : Application
         var settings = AppSettingsStore.Load();
         ApplyStartupTheme(!string.Equals(settings.Theme, "light", StringComparison.OrdinalIgnoreCase));
 
-        var chooser = new StartupWindow(settings.RecentProjectPath);
+        var recentPaths=new List<string>();
+        if(settings.RecentProjectPaths!=null)recentPaths.AddRange(settings.RecentProjectPaths);
+        if(!string.IsNullOrWhiteSpace(settings.RecentProjectPath)&&!recentPaths.Contains(settings.RecentProjectPath,StringComparer.OrdinalIgnoreCase))
+            recentPaths.Add(settings.RecentProjectPath);
+
+        var chooser = new StartupWindow(recentPaths);
         if (chooser.ShowDialog() != true)
         {
             Shutdown();

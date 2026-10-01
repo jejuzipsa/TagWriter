@@ -1,37 +1,136 @@
 <Window x:Class="TagWriter.StartupWindow"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
- Title="TagWriter" Width="560" Height="300" ResizeMode="NoResize"
- WindowStartupLocation="CenterScreen" Background="{DynamicResource Bg}" Foreground="{DynamicResource Text}">
- <Grid Margin="28">
+ Title="TagWriter" Width="760" Height="560" ResizeMode="NoResize"
+ WindowStartupLocation="CenterScreen"
+ Background="{DynamicResource Bg}" Foreground="{DynamicResource Text}"
+ FontFamily="Segoe UI Variable Text, Malgun Gothic">
+ <Window.Resources>
+  <Style x:Key="RecentDocumentButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+   <Setter Property="Background" Value="Transparent"/>
+   <Setter Property="BorderBrush" Value="{DynamicResource Border}"/>
+   <Setter Property="BorderThickness" Value="0,0,0,1"/>
+   <Setter Property="Padding" Value="14,10"/>
+   <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+   <Setter Property="VerticalContentAlignment" Value="Center"/>
+   <Setter Property="Template">
+    <Setter.Value>
+     <ControlTemplate TargetType="Button">
+      <Border x:Name="RowBorder"
+              Background="{TemplateBinding Background}"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}"
+              Padding="{TemplateBinding Padding}">
+       <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+      </Border>
+      <ControlTemplate.Triggers>
+       <Trigger Property="IsMouseOver" Value="True">
+        <Setter TargetName="RowBorder" Property="Background" Value="{DynamicResource Hover}"/>
+       </Trigger>
+       <Trigger Property="IsPressed" Value="True">
+        <Setter TargetName="RowBorder" Property="Background" Value="{DynamicResource Selection}"/>
+       </Trigger>
+      </ControlTemplate.Triggers>
+     </ControlTemplate>
+    </Setter.Value>
+   </Setter>
+  </Style>
+ </Window.Resources>
+
+ <Grid Margin="28,24,28,18">
   <Grid.RowDefinitions>
-   <RowDefinition Height="Auto"/>
-   <RowDefinition Height="18"/>
+   <RowDefinition Height="150"/>
+   <RowDefinition Height="14"/>
    <RowDefinition Height="*"/>
+   <RowDefinition Height="12"/>
+   <RowDefinition Height="Auto"/>
   </Grid.RowDefinitions>
-  <StackPanel>
-   <TextBlock Text="TagWriter" FontSize="24" FontWeight="SemiBold"/>
-   <TextBlock Text="시작할 문서를 선택해 주세요." Foreground="{DynamicResource Muted}" Margin="0,6,0,0"/>
-  </StackPanel>
-  <Grid Grid.Row="2">
+
+  <Grid Grid.Row="0">
    <Grid.ColumnDefinitions>
+    <ColumnDefinition Width="150"/>
     <ColumnDefinition Width="*"/>
-    <ColumnDefinition Width="14"/>
-    <ColumnDefinition Width="*"/>
+    <ColumnDefinition Width="205"/>
    </Grid.ColumnDefinitions>
-   <Button x:Name="RecentButton" Grid.Column="0" Padding="18" Click="RecentButton_Click">
+
+   <Border Width="128" Height="128"
+           HorizontalAlignment="Left" VerticalAlignment="Center"
+           Background="Transparent">
+    <Image Source="/Assets/TagWriter.ico" Stretch="Uniform"/>
+   </Border>
+
+   <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,16,0">
+    <TextBlock Text="TagWriter." FontSize="33" FontWeight="SemiBold"/>
+    <TextBlock Text="소설 집필 프로젝트"
+               Margin="2,8,0,0"
+               FontSize="12"
+               Foreground="{DynamicResource Muted}"/>
+   </StackPanel>
+
+   <Button Grid.Column="2"
+           Width="190" Height="68"
+           HorizontalAlignment="Right" VerticalAlignment="Center"
+           Click="NewButton_Click">
     <StackPanel>
-     <TextBlock Text="최근 문서" FontSize="17" FontWeight="SemiBold"/>
-     <TextBlock x:Name="RecentNameText" Margin="0,10,0,0" TextWrapping="Wrap"/>
-     <TextBlock x:Name="RecentPathText" Margin="0,4,0,0" FontSize="10" Foreground="{DynamicResource Muted}" TextWrapping="Wrap"/>
-    </StackPanel>
-   </Button>
-   <Button Grid.Column="2" Padding="18" Click="NewButton_Click">
-    <StackPanel>
-     <TextBlock Text="새 문서" FontSize="17" FontWeight="SemiBold"/>
-     <TextBlock Text="빈 프로젝트로 시작" Margin="0,10,0,0" Foreground="{DynamicResource Muted}"/>
+     <TextBlock Text="새 소설 작성"
+                FontSize="17" FontWeight="SemiBold"
+                HorizontalAlignment="Center"/>
+     <TextBlock Text="새 프로젝트 시작"
+                FontSize="10"
+                Foreground="{DynamicResource Muted}"
+                Margin="0,4,0,0"
+                HorizontalAlignment="Center"/>
     </StackPanel>
    </Button>
   </Grid>
+
+  <Border Grid.Row="2"
+          Background="{DynamicResource Panel}"
+          BorderBrush="{DynamicResource Border}"
+          BorderThickness="1"
+          CornerRadius="3">
+   <DockPanel>
+    <Border DockPanel.Dock="Top"
+            Height="43"
+            Background="{DynamicResource Surface}"
+            BorderBrush="{DynamicResource Border}"
+            BorderThickness="0,0,0,1"
+            Padding="14,0">
+     <Grid>
+      <TextBlock Text="최근 문서"
+                 FontSize="13"
+                 FontWeight="SemiBold"
+                 VerticalAlignment="Center"/>
+      <TextBlock x:Name="RecentCountText"
+                 HorizontalAlignment="Right"
+                 VerticalAlignment="Center"
+                 FontSize="10"
+                 Foreground="{DynamicResource Muted}"/>
+     </Grid>
+    </Border>
+
+    <Grid>
+     <ScrollViewer x:Name="RecentScrollViewer"
+                   VerticalScrollBarVisibility="Auto"
+                   HorizontalScrollBarVisibility="Disabled"
+                   Padding="0">
+      <StackPanel x:Name="RecentDocumentsHost"/>
+     </ScrollViewer>
+     <TextBlock x:Name="EmptyRecentText"
+                Text="최근 문서가 없습니다."
+                Visibility="Collapsed"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Foreground="{DynamicResource Muted}"
+                FontSize="12"/>
+    </Grid>
+   </DockPanel>
+  </Border>
+
+  <TextBlock x:Name="VersionText"
+             Grid.Row="4"
+             HorizontalAlignment="Right"
+             Foreground="{DynamicResource Muted}"
+             FontSize="10"/>
  </Grid>
 </Window>

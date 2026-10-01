@@ -14,6 +14,7 @@ public sealed class AppSettings {
  [JsonPropertyName("typingSoundMode")] public string TypingSoundMode {get;set;}="typewriter";
  [JsonPropertyName("autoSaveMinutes")] public int AutoSaveMinutes {get;set;}=10;
  [JsonPropertyName("recentProjectPath")] public string RecentProjectPath {get;set;}="";
+ [JsonPropertyName("recentProjectPaths")] public List<string> RecentProjectPaths {get;set;}=[];
  [JsonPropertyName("windowLeft")] public double? WindowLeft {get;set;}
  [JsonPropertyName("windowTop")] public double? WindowTop {get;set;}
  [JsonPropertyName("windowWidth")] public double WindowWidth {get;set;}=1460;

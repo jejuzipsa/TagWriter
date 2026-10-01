@@ -1,38 +1,100 @@
 using System.IO;
+using System.Reflection;
+using System.Text.Json;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using TagWriter.Services;
 
 namespace TagWriter;
 
 public partial class StartupWindow : Window
 {
-    readonly string? _recentPath;
-
     public bool CreateNew { get; private set; }
     public string? ProjectPath { get; private set; }
 
-    public StartupWindow(string? recentPath)
+    public StartupWindow(IEnumerable<string> recentPaths)
     {
         InitializeComponent();
-        _recentPath = string.IsNullOrWhiteSpace(recentPath) ? null : recentPath;
+        BuildRecentDocuments(recentPaths ?? []);
+        VersionText.Text = $"ver. {Assembly.GetExecutingAssembly().GetName().Version}";
+    }
 
-        if (_recentPath != null && File.Exists(_recentPath))
+    void BuildRecentDocuments(IEnumerable<string> recentPaths)
+    {
+        var items = recentPaths
+            .Where(path => !string.IsNullOrWhiteSpace(path) && File.Exists(path))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Select(path => new RecentDocument(
+                path,
+                GetDisplayName(path),
+                File.GetLastWriteTimeUtc(path)))
+            .OrderByDescending(item => item.ModifiedUtc)
+            .ToList();
+
+        RecentCountText.Text = items.Count == 0 ? "" : $"{items.Count}개";
+        EmptyRecentText.Visibility = items.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+        RecentScrollViewer.Visibility = items.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+
+        foreach (var item in items)
         {
-            RecentNameText.Text = Path.GetFileNameWithoutExtension(_recentPath);
-            RecentPathText.Text = _recentPath;
-            RecentButton.IsEnabled = true;
-        }
-        else
-        {
-            RecentNameText.Text = "최근 문서 없음";
-            RecentPathText.Text = "저장된 최근 문서가 현재 위치에 없습니다.";
-            RecentButton.IsEnabled = false;
+            var title = new TextBlock
+            {
+                Text = item.Name,
+                FontSize = 13,
+                FontWeight = FontWeights.SemiBold,
+                TextTrimming = TextTrimming.CharacterEllipsis
+            };
+
+            var path = new TextBlock
+            {
+                Text = item.Path,
+                FontSize = 10,
+                Foreground = (System.Windows.Media.Brush)FindResource("Muted"),
+                Margin = new Thickness(0, 4, 0, 0),
+                TextTrimming = TextTrimming.CharacterEllipsis
+            };
+
+            var text = new StackPanel();
+            text.Children.Add(title);
+            text.Children.Add(path);
+
+            var button = new Button
+            {
+                Content = text,
+                Tag = item.Path,
+                ToolTip = item.Path,
+                Style = (Style)FindResource("RecentDocumentButtonStyle")
+            };
+
+            button.Click += RecentDocument_Click;
+            RecentDocumentsHost.Children.Add(button);
         }
     }
 
-    void RecentButton_Click(object sender, RoutedEventArgs e)
+    static string GetDisplayName(string path)
     {
-        ProjectPath = _recentPath;
+        try
+        {
+            using var json = JsonDocument.Parse(File.ReadAllText(path));
+            if (json.RootElement.TryGetProperty("project", out var project) &&
+                project.TryGetProperty("title", out var title))
+            {
+                var value = title.GetString();
+                if (!string.IsNullOrWhiteSpace(value)) return value;
+            }
+        }
+        catch
+        {
+        }
+
+        return Path.GetFileNameWithoutExtension(path);
+    }
+
+    void RecentDocument_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button { Tag: string path } || !File.Exists(path)) return;
+        ProjectPath = path;
         CreateNew = false;
         DialogResult = true;
     }
@@ -43,4 +105,6 @@ public partial class StartupWindow : Window
         CreateNew = true;
         DialogResult = true;
     }
+
+    sealed record RecentDocument(string Path, string Name, DateTime ModifiedUtc);
 }
