@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.8.1
+NEXT CHAT HANDOFF — TagWriter 0.0.8.2
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,14 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.8.2
+- Refined the PROJECT tree visual hierarchy.
+- Branches that actually contain children continue to use the normal TreeView expand/collapse glyphs (▶ / ▼).
+- Leaf content rows such as Scenes, saved cards and idea memos now show a muted "-" prefix.
+- Branch-capable rows that are currently empty show a muted "◆" placeholder, including empty chapters, empty card categories and an empty idea-memo branch.
+- Once an empty branch receives its first child, ◆ disappears and the normal TreeView expand/collapse arrow takes over automatically.
+- Bumped version to 0.0.8.2.
 
 0.0.8.1
 - Fixed the top-bar automatic-save ComboBox using Windows default light/system selection colors in Dark mode.
