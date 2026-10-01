@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.7.1
+NEXT CHAT HANDOFF — TagWriter 0.0.7.2
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -6,6 +6,12 @@ Purpose
 - Current code at 0.0.7.0 still uses the old generic EntityCard model, generic Card tab, simple occurrence scan, and simple mind-map rendering unless noted otherwise. The standalone 관계 and 아이디어 메모 tab headers have been removed from the right CONTEXT panel, and the redundant 관계맵 entry has been removed from the PROJECT tree.
 
 CURRENTLY IMPLEMENTED / VERIFIED
+- 0.0.7.2 Normal-mode inline tag interaction is implemented:
+  - Replaced the Normal manuscript TextBox with an editable RichTextBox while continuing to store plain Scene text in project JSON.
+  - Character and Location canonical names plus additional aliases are detected after typing settles and rendered inline with category color, semibold weight, underline and a subtle category-tinted background.
+  - Clicking a rendered tag opens/selects its stable-ID card in PROJECT/CONTEXT; hovering a tag uses a hand cursor.
+  - Tag formatting is presentation only and is rebuilt from plain text/card data, so the manuscript itself does not contain markup.
+  - 원고지 mode keeps the plain paper renderer and does not show or accept inline tag interaction.
 - 0.0.7.1 card/tag foundation is implemented:
   - Replaced the generic description/aliases card data with the approved typed schema: Character has name, age, birthday, age-reference date, auto-calculated birth year, family, education, memo and additional tags; Location/Event have name, memo and additional tags.
   - Character/Location/Event category rows now have borderless + controls in PROJECT; Item keeps its category but creation/editing is intentionally deferred because its fields/color/automatic behavior are still undecided.
@@ -206,6 +212,13 @@ RECOMMENDED NEXT IMPLEMENTATION ORDER
 8. Design Item fields/color/automatic behavior separately before implementing Item-specific logic.
 
 ============================================================
+
+0.0.7.2
+- Added clickable inline Character/Location tags to Normal manuscript mode using a rich-text editing surface backed by the same plain Scene content.
+- Tag matches now use the approved category colors, bold/underline treatment and subtle background; click opens the stable-ID card and selects it in PROJECT.
+- Added delayed tag reformatting after edits to avoid rebuilding tag presentation on every immediate keystroke.
+- Kept 원고지 mode free of inline tag styling/click behavior.
+- Bumped version to 0.0.7.2.
 
 0.0.7.1
 - Refactored card data/UI to the approved Character/Location/Event schemas and deferred Item-specific decisions.
