@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.8.2
+NEXT CHAT HANDOFF — TagWriter 0.0.8.3
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,14 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.8.3
+- PROJECT tree column alignment refined.
+- "-" and "◆" prefixes now use the reserved expander slot instead of adding indentation.
+- Top-level headings align to one column; second-level branch headings align to one column.
+- Scene/card/idea leaf rows are pulled left by one expander-slot width.
+- Edit-mode checkbox placement remains aligned.
+- Bumped version to 0.0.8.3.
 
 0.0.8.2
 - Refined the PROJECT tree visual hierarchy.
