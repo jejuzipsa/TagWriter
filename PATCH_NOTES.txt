@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.5.3
+- Hotfix: corrected the final two invalid two-argument Thickness constructors in the print format dialog (Cancel/Next button padding).
+- Audited MainWindow.xaml.cs and confirmed no remaining two-argument Thickness constructor calls.
+- Bumped version to 0.0.5.3.
+
 0.0.5.2
 - Hotfix: corrected invalid two-argument Thickness constructors introduced by the print preview UI.
 - Removed the duplicate System.Windows.Media using directive warning.
