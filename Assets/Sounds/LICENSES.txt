@@ -1,0 +1,16 @@
+TagWriter typing sound assets
+
+TYPEWRITER
+Source files supplied by the project owner from BigSoundBank.com:
+- Typewriter 8, ID 2841
+- Typewriter space, ID 2843
+The embedded metadata in the supplied WAV files identifies:
+CC0 / WTFPL / Public domain.
+TagWriter uses short key-strike excerpts from Typewriter 8 plus the dedicated space recording.
+
+KEYBOARD
+Source: Keyboard Soundpack #1 by unicae_games / inconsequentialist.
+The supplied pack readme states: "Free to use however you like."
+Keyboard: Cherry KC 1000.
+Recorded with Shure SM7B; post-processed with Izotope Neutron 2.
+TagWriter uses two single-key recordings from the pack.
