@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.7.2
+NEXT CHAT HANDOFF — TagWriter 0.0.7.3
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -6,6 +6,16 @@ Purpose
 - Current code at 0.0.7.0 still uses the old generic EntityCard model, generic Card tab, simple occurrence scan, and simple mind-map rendering unless noted otherwise. The standalone 관계 and 아이디어 메모 tab headers have been removed from the right CONTEXT panel, and the redundant 관계맵 entry has been removed from the PROJECT tree.
 
 CURRENTLY IMPLEMENTED / VERIFIED
+- 0.0.7.3 relationship-map workspace is implemented:
+  - Added a dedicated 미배치 노드 tray on the left side of the relationship-map workspace.
+  - New/missing card nodes are kept unplaced instead of being scattered automatically.
+  - Drag from 미배치 노드 to the canvas to place a node; drag a placed node again to reposition it.
+  - Drop a placed node back onto the 미배치 노드 tray to remove it from the visible map without deleting its card or relationships.
+  - Placed X/Y coordinates and user-positioned state are stored in project JSON.
+  - Relationship lines render only when both endpoint nodes are placed; relationship data remains intact while either endpoint is unplaced.
+  - Node size grows from 70 px toward a hard 125 px cap based on UNIQUE connected-card count; repeat frequency does not inflate node size.
+  - Manual relationship lines use the approved purple styling; automatic lines use the approved slate styling and Strength can affect auto-line thickness/opacity.
+  - Category node text/borders use the approved Character/Location/Event colors; Item remains neutral because its color is still undecided.
 - 0.0.7.2 Normal-mode inline tag interaction is implemented:
   - Replaced the Normal manuscript TextBox with an editable RichTextBox while continuing to store plain Scene text in project JSON.
   - Character and Location canonical names plus additional aliases are detected after typing settles and rendered inline with category color, semibold weight, underline and a subtle category-tinted background.
@@ -64,7 +74,7 @@ PENDING — LEFT PROJECT / CARD NAVIGATION
 - Pressing [수정] converts the same CONTEXT detail area into editable controls; do not open another edit popup for an existing card.
 - New-card creation uses a popup; existing-card editing happens in the right CONTEXT panel.
 
-PENDING — CARD DATA / CHARACTER
+IMPLEMENTED — CARD DATA / CHARACTER
 - Replace the current generic description/aliases-only card UI with type-specific fields.
 - Character creation popup fields:
   - 이름
@@ -80,7 +90,7 @@ PENDING — CARD DATA / CHARACTER
 - If the character name changes, the automatic name tag changes with it; manually entered additional tags remain.
 - Internal linking must continue to use the card's stable ID, not the visible name/alias.
 
-PENDING — CARD DATA / LOCATION
+IMPLEMENTED — CARD DATA / LOCATION
 - Location card fields:
   - 이름
   - 메모 (multiline)
@@ -91,7 +101,7 @@ PENDING — CARD DATA / LOCATION
 - Intended uses include Google Maps/Street View, reference photos, YouTube/video references, blogs/wiki/reference pages.
 - Prefer the same URL-link behavior for memo fields on other card types as well.
 
-PENDING — CARD DATA / EVENT
+IMPLEMENTED — CARD DATA / EVENT
 - Rename "사건" card/category wording to "이벤트".
 - Event card fields:
   - 이름
@@ -122,7 +132,7 @@ PENDING — TAG COLOR SYSTEM
 - For manuscript tag highlighting, prefer the category text color plus a subtle low-opacity background rather than an aggressive solid highlight.
 - Event tags are not highlighted automatically in manuscript text.
 
-PENDING — MANUSCRIPT AUTO TAGGING
+IMPLEMENTED — MANUSCRIPT AUTO TAGGING
 - Character and Location names are automatic tags and their additional aliases are also manuscript-detection terms.
 - Event must be excluded from the automatic occurrence/tag scanner.
 - Current code still scans all cards; this must be changed during the card/tag refactor.
@@ -157,7 +167,7 @@ PENDING — AUTOMATIC VS MANUAL RELATIONSHIPS
 - Event has no automatic relationships; manual only.
 - Item automatic relationship behavior remains undecided.
 
-PENDING — RELATIONSHIP MAP NODE WORKSPACE
+IMPLEMENTED — RELATIONSHIP MAP NODE WORKSPACE
 - Current map is still simple fixed-position buttons and does NOT yet implement the approved workspace behavior.
 - Split the relationship-map screen so the far-left side contains a dedicated "미배치 노드" tray/section.
 - Newly created card nodes are added to the unplaced tray, arranged vertically from the top downward; new nodes append below existing ones.
@@ -171,13 +181,13 @@ PENDING — RELATIONSHIP MAP NODE WORKSPACE
   - an unplaced node can still have relationships,
   - its lines simply are not drawn until both relevant nodes are placed.
 
-PENDING — RELATIONSHIP MAP NODE SIZE
+IMPLEMENTED — RELATIONSHIP MAP NODE SIZE
 - Node size grows with the number of UNIQUE connected nodes.
 - Suggested base size is about 70 px and maximum size about 125 px; keep a hard maximum so a central character cannot consume the whole graph.
 - Repeated co-occurrence with the same one node affects the relationship line, not the node's overall size.
 - Category/node colors should follow the same character/location/event color system above; item color remains undecided.
 
-PENDING — CONNECTED TAGS AT BOTTOM OF CARD
+IMPLEMENTED — CONNECTED TAGS AT BOTTOM OF CARD
 - When a Character/Location/etc. card has map relationships, show a read-only "연결된 태그" section at the very bottom of the card detail view.
 - This section is generated from relationship data and cannot be directly edited as a normal card field.
 - Display each connected card using the connected card's canonical name and category color.
@@ -212,6 +222,14 @@ RECOMMENDED NEXT IMPLEMENTATION ORDER
 8. Design Item fields/color/automatic behavior separately before implementing Item-specific logic.
 
 ============================================================
+
+0.0.7.3
+- Rebuilt the relationship-map workspace with a persistent 미배치 노드 tray and drag/drop placement.
+- Added free repositioning of placed nodes and drag-back-to-unplaced behavior without deleting cards/relationships.
+- Persisted placed/user-positioned node state and X/Y coordinates in project JSON.
+- Added unique-connection-based node sizing with the approved 70–125 px range/cap.
+- Added approved automatic slate vs manual purple relationship-line styling; auto Strength is presentation-ready but automatic relationship generation/weighting remains pending until its exact formula is decided.
+- Bumped version to 0.0.7.3.
 
 0.0.7.2
 - Added clickable inline Character/Location tags to Normal manuscript mode using a rich-text editing surface backed by the same plain Scene content.
