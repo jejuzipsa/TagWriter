@@ -1,5 +1,12 @@
 TagWriter cumulative patch notes
 
+0.0.6.4
+- Repacked the user-supplied BigSoundBank Typewriter key (ID 2842) sample as a verified Base64 asset so the repository preserves the complete WAV data reliably.
+- TagWriter reconstructs the key WAV into its local app-data sound cache before playback.
+- Keeps the dedicated Typewriter space (ID 2843) sound and leaves Keyboard mode unchanged.
+- Removes the temporary direct key.wav asset used during the first 0.0.6.3 replacement attempt.
+- Bumped version to 0.0.6.4.
+
 0.0.6.3
 - Replaced the typewriter-mode normal key sound with the user-supplied BigSoundBank "Typewriter key" recording (ID 2842).
 - The source recording was trimmed to the actual key-strike region for immediate playback; the typewriter Space sound remains the dedicated ID 2843 recording.
