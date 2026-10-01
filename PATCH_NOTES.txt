@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.9.0
+NEXT CHAT HANDOFF — TagWriter 0.0.9.1
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,13 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.9.1
+- Fixed the startup-logo blur caused by enlarging the application ICO inside the 128 px hero slot.
+- Added a dedicated 128x128 PNG startup logo resource based on the supplied TagWriter artwork and render it at native size.
+- Startup window now receives the saved application theme explicitly and applies the matching Windows title-bar theme through DWM.
+- If the last saved theme is Dark, startup content and title bar both open Dark; if Light, both open Light.
+- Bumped version to 0.0.9.1.
 
 0.0.9.0
 - Changed the in-editor New flow to the requested two-step behavior.

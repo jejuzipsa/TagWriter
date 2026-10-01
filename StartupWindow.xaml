@@ -56,7 +56,7 @@
    <Border Width="128" Height="128"
            HorizontalAlignment="Left" VerticalAlignment="Center"
            Background="Transparent">
-    <Image Source="/Assets/TagWriter.ico" Stretch="Uniform"/>
+    <Image Source="/Assets/TagWriterStart.png" Stretch="None" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"/>
    </Border>
 
    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,16,0">

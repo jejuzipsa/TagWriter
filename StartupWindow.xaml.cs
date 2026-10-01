@@ -1,5 +1,7 @@
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,15 +12,36 @@ namespace TagWriter;
 
 public partial class StartupWindow : Window
 {
+    readonly bool _dark;
+
     public bool CreateNew { get; private set; }
     public string? ProjectPath { get; private set; }
 
-    public StartupWindow(IEnumerable<string> recentPaths)
+    public StartupWindow(IEnumerable<string> recentPaths, bool dark)
     {
+        _dark = dark;
         InitializeComponent();
+        SourceInitialized += (_, _) => ApplyWindowChromeTheme();
         BuildRecentDocuments(recentPaths ?? []);
         VersionText.Text = $"ver. {Assembly.GetExecutingAssembly().GetName().Version}";
     }
+
+    void ApplyWindowChromeTheme()
+    {
+        try
+        {
+            var hwnd = new WindowInteropHelper(this).Handle;
+            if (hwnd == IntPtr.Zero) return;
+            var value = _dark ? 1 : 0;
+            DwmSetWindowAttribute(hwnd, 20, ref value, sizeof(int));
+        }
+        catch
+        {
+        }
+    }
+
+    [DllImport("dwmapi.dll")]
+    static extern int DwmSetWindowAttribute(IntPtr hwnd, int attribute, ref int value, int size);
 
     void BuildRecentDocuments(IEnumerable<string> recentPaths)
     {

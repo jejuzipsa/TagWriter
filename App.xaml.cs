@@ -25,14 +25,15 @@ public partial class App : Application
         ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
         var settings = AppSettingsStore.Load();
-        ApplyStartupTheme(!string.Equals(settings.Theme, "light", StringComparison.OrdinalIgnoreCase));
+        var dark = !string.Equals(settings.Theme, "light", StringComparison.OrdinalIgnoreCase);
+        ApplyStartupTheme(dark);
 
         var recentPaths=new List<string>();
         if(settings.RecentProjectPaths!=null)recentPaths.AddRange(settings.RecentProjectPaths);
         if(!string.IsNullOrWhiteSpace(settings.RecentProjectPath)&&!recentPaths.Contains(settings.RecentProjectPath,StringComparer.OrdinalIgnoreCase))
             recentPaths.Add(settings.RecentProjectPath);
 
-        var chooser = new StartupWindow(recentPaths);
+        var chooser = new StartupWindow(recentPaths, dark);
         if (chooser.ShowDialog() != true)
         {
             Shutdown();
