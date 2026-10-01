@@ -9,7 +9,6 @@ public sealed class ProjectDocument {
  [JsonPropertyName("cards")] public List<EntityCard> Cards {get;set;}=[];
  [JsonPropertyName("mindmap")] public MindMap MindMap {get;set;}=new();
  [JsonPropertyName("ideas")] public List<Idea> Ideas {get;set;}=[];
- [JsonPropertyName("settings")] public ProjectSettings Settings {get;set;}=new();
  public static ProjectDocument CreateSample()=>new(){Project=new(){Title="새 소설"},Chapters=[new(){Id="chapter_001",Title="1장",Order=1,Scenes=[new(){Id="scene_001",Title="Scene 1",Order=1}]}]};
 }
 public sealed class ProjectInfo {
@@ -63,13 +62,4 @@ public sealed class Idea {
  [JsonPropertyName("done")] public bool Done {get;set;}
  [JsonPropertyName("createdAt")] public DateTimeOffset CreatedAt {get;set;}=DateTimeOffset.Now;
  [JsonPropertyName("updatedAt")] public DateTimeOffset UpdatedAt {get;set;}=DateTimeOffset.Now;
-}
-public sealed class ProjectSettings {
- [JsonPropertyName("theme")] public string Theme {get;set;}="dark";
- [JsonPropertyName("zoom")] public double Zoom {get;set;}=1.0;
- [JsonPropertyName("editorFontFamily")] public string EditorFontFamily {get;set;}="Malgun Gothic";
- [JsonPropertyName("editorFontSize")] public double EditorFontSize {get;set;}=17;
- [JsonPropertyName("typewriterSoundEnabled")] public bool TypewriterSoundEnabled {get;set;}=false;
- [JsonPropertyName("typewriterVolume")] public double TypewriterVolume {get;set;}=35;
- [JsonPropertyName("typingSoundMode")] public string TypingSoundMode {get;set;}="typewriter";
 }
