@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.8.4
+NEXT CHAT HANDOFF — TagWriter 0.0.8.5
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,17 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.8.5
+- Added a startup chooser before the main editor opens.
+- Startup offers "최근 문서" when the remembered project still exists at the same path, or "새 문서"; a missing recent file disables the recent-document choice.
+- The most recently opened or successfully saved TagWriter project path is persisted in AppSettings.
+- Added a separator below the three main activity icons and new left-rail New / Save / Load / Export actions.
+- Export uses a compact modal with three large choices: HWPX, DOCX and PDF. Choosing a format immediately opens that format's Save dialog.
+- Added direct DOCX export using a minimal Open XML package and direct HWPX export using the minimal HWPX ZIP/XML package structure.
+- Added direct PDF export without an external package by paginating the normal manuscript view and writing each rendered page into a PDF image page; Korean rendering is preserved, though exported PDF body text is image-based rather than selectable text.
+- Existing Print action remains at the bottom of the activity rail.
+- Bumped version to 0.0.8.5.
 
 0.0.8.4
 - Reduced manuscript inline-tag visual intensity so tags do not dominate the writing surface.

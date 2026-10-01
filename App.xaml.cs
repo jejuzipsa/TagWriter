@@ -2,6 +2,8 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Threading;
+using System.Windows.Media;
+using TagWriter.Services;
 
 namespace TagWriter;
 
@@ -15,6 +17,50 @@ public partial class App : Application
         DispatcherUnhandledException += OnDispatcherUnhandledException;
         AppDomain.CurrentDomain.UnhandledException += OnDomainUnhandledException;
         TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+    }
+
+    protected override async void OnStartup(StartupEventArgs e)
+    {
+        base.OnStartup(e);
+        ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
+        var settings = AppSettingsStore.Load();
+        ApplyStartupTheme(!string.Equals(settings.Theme, "light", StringComparison.OrdinalIgnoreCase));
+
+        var chooser = new StartupWindow(settings.RecentProjectPath);
+        if (chooser.ShowDialog() != true)
+        {
+            Shutdown();
+            return;
+        }
+
+        var main = new MainWindow();
+        MainWindow = main;
+
+        if (!chooser.CreateNew && !string.IsNullOrWhiteSpace(chooser.ProjectPath))
+            await main.LoadProjectFromPathAsync(chooser.ProjectPath!);
+
+        main.Show();
+        ShutdownMode = ShutdownMode.OnMainWindowClose;
+    }
+
+    static void ApplyStartupTheme(bool dark)
+    {
+        void Set(string key, string hex) => Current.Resources[key] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex));
+        Set("Bg", dark ? "#181B1F" : "#E8EBEF");
+        Set("Surface", dark ? "#20242A" : "#F5F6F8");
+        Set("Panel", dark ? "#242930" : "#EEF1F4");
+        Set("Panel2", dark ? "#2B3139" : "#FFFFFF");
+        Set("EditorBg", dark ? "#1D2126" : "#FFFFFF");
+        Set("Text", dark ? "#E6E9ED" : "#20242A");
+        Set("Muted", dark ? "#939BA6" : "#66707C");
+        Set("Border", dark ? "#343B45" : "#D4D9E0");
+        Set("Accent", dark ? "#70A9E8" : "#2F72B7");
+        Set("Selection", dark ? "#304B68" : "#BFD9F4");
+        Set("Hover", dark ? "#2B3139" : "#E1E5EA");
+        Set("ToolTipBg", dark ? "#242930" : "#FFFFFF");
+        Set("ToolTipText", dark ? "#E6E9ED" : "#20242A");
+        Set("TabSelected", dark ? "#1E2227" : "#E1E5EA");
     }
 
     public static string CrashLogPath => _crashLogPath ??= BuildCrashLogPath();
