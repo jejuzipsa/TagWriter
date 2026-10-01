@@ -3,7 +3,7 @@ NEXT CHAT HANDOFF — TagWriter 0.0.7.4
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
 - This section is a handoff specification. Items marked PENDING are discussed/approved but NOT implemented yet.
-- Current code at 0.0.7.0 still uses the old generic EntityCard model, generic Card tab, simple occurrence scan, and simple mind-map rendering unless noted otherwise. The standalone 관계 and 아이디어 메모 tab headers have been removed from the right CONTEXT panel, and the redundant 관계맵 entry has been removed from the PROJECT tree.
+- Current code at 0.0.7.4 now has typed Character/Location/Event cards, Normal-mode clickable Character/Location tags, occurrence navigation, connected-tag display, and the drag/drop relationship-map workspace. The remaining undecided work is listed separately below.
 
 CURRENTLY IMPLEMENTED / VERIFIED
 - 0.0.7.3 relationship-map workspace is implemented:
@@ -18,7 +18,7 @@ CURRENTLY IMPLEMENTED / VERIFIED
   - Category node text/borders use the approved Character/Location/Event colors; Item remains neutral because its color is still undecided.
 - 0.0.7.2 Normal-mode inline tag interaction is implemented:
   - Replaced the Normal manuscript TextBox with an editable RichTextBox while continuing to store plain Scene text in project JSON.
-  - Character and Location canonical names plus additional aliases are detected after typing settles and rendered inline with category color, semibold weight, underline and a subtle category-tinted background.
+  - Character and Location canonical names plus additional aliases are detected after typing settles and rendered inline with category color, Bold weight, underline and a subtle category-tinted background.
   - Clicking a rendered tag opens/selects its stable-ID card in PROJECT/CONTEXT; hovering a tag uses a hand cursor.
   - Tag formatting is presentation only and is rebuilt from plain text/card data, so the manuscript itself does not contain markup.
   - 원고지 mode keeps the plain paper renderer and does not show or accept inline tag interaction.
@@ -56,8 +56,8 @@ CURRENTLY IMPLEMENTED / VERIFIED
 - Global app settings split from novel JSON remains implemented from 0.0.6.7.
 - The 0.0.6.8 code build at commit b95d0cfc6eb6e27cb054d4a7bef3a840dd4b6eea completed successfully in GitHub Actions run 36877334633.
 
-PENDING — LEFT PROJECT / CARD NAVIGATION
-- Remove the old dedicated right-side "카드" tab/section after the new card inspector is ready.
+IMPLEMENTED — LEFT PROJECT / CARD NAVIGATION
+- Replaced the old generic right-side 카드 editor with the typed read-only/edit inspector. The current 등장 / 카드 CONTEXT split is retained because 등장 is now the occurrence navigator and 카드 is the selected-card inspector.
 - Under "설정 카드", keep the four categories:
   - 캐릭터
   - 장소
@@ -116,7 +116,7 @@ PENDING — ITEM
 - Item remains a card type, but its detailed fields, manuscript auto-tagging behavior, and final category color have NOT been decided yet.
 - Do not invent these decisions in the next implementation. Confirm them when the item card is designed.
 
-PENDING — TAG COLOR SYSTEM
+IMPLEMENTED — TAG COLOR SYSTEM (ITEM COLOR UNDECIDED)
 - Use separate dark/light colors so tags stay legible in both themes.
 - Character / 인물:
   - Dark: #60A5FA
@@ -202,24 +202,26 @@ IMPLEMENTED — CONNECTED TAGS AT BOTTOM OF CARD
   - optional tooltip "자동 관계" / "수동 관계"
 - Do not replace the target card color with the relationship color; target tag color still represents the target card type.
 
-KNOWN CURRENT CODE THAT MUST BE REPLACED DURING THIS WORK
-- MainWindow.xaml still contains the old right-side <TabItem Header="카드"> with generic description/alias editors.
-- MainWindow.xaml.cs still has generic AddCard_Click / SaveCard_Click.
-- AddCard_Click currently creates a MapNode immediately with a generated X/Y position; this conflicts with the planned unplaced-node tray.
-- The occurrence scanner currently searches every card type, including Event; Event must be excluded.
-- DrawMindMap currently renders all edges with the same Muted color/thickness and does not distinguish automatic/manual relationships.
-- Mind-map nodes are not yet drag-movable and their positions/sizes are not driven by the approved workspace/connection rules.
-- EntityCard currently stores only type/name/description/aliases; it has not yet been expanded into the type-specific card schema described above.
+REMAINING UNDECIDED / NOT IMPLEMENTED
+- Item card:
+  - detailed fields
+  - final category/tag/node color
+  - manuscript automatic-tagging behavior
+  - automatic relationship behavior
+  These remain intentionally unimplemented because the decisions were never finalized.
+- Automatic relationship generation:
+  - co-occurrence detection structure is agreed (same sentence > same paragraph > same scene, repeated scenes accumulate),
+  - but the exact weighting/strength formula is still undecided,
+  - so TagWriter does not yet create/update automatic relationship edges from manuscript co-occurrence.
+- Manual relationship authoring:
+  - manual edges and their purple rendering/labels are supported by the data/rendering layer,
+  - but the exact user interaction for creating/editing a manual connection on the relationship-map screen has not been finalized.
+- Everything else from the previous handoff plan has now been implemented through 0.0.7.4.
 
-RECOMMENDED NEXT IMPLEMENTATION ORDER
-1. Refactor card model + left tree categories/+ buttons + new-card popups + right CONTEXT read-only/edit mode.
-2. Implement Character and Location first, including automatic name tags and memo URL links.
-3. Rename Event and enforce Event = manual-map-only / no manuscript auto-tagging.
-4. Rework manuscript tag detection and occurrence data around stable card IDs.
-5. Add automatic co-occurrence relationship generation and manual relationship styling.
-6. Rebuild relationship map with unplaced-node tray, drag/drop, persistent positions, node-size growth/cap.
-7. Add read-only connected-tag navigation to the bottom of cards.
-8. Design Item fields/color/automatic behavior separately before implementing Item-specific logic.
+RECOMMENDED NEXT DECISIONS
+1. Decide Item fields, Item color, and whether Item participates in manuscript auto-tagging/automatic relationships.
+2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
+3. Decide the manual relationship creation/edit interaction (for example: connect mode, node-to-node drag, or a small relationship dialog). Do not implement one arbitrarily before that choice is made.
 
 ============================================================
 
