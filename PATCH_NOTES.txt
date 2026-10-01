@@ -1,3 +1,182 @@
+NEXT CHAT HANDOFF — TagWriter 0.0.6.8
+============================================================
+Purpose
+- The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
+- This section is a handoff specification. Items marked PENDING are discussed/approved but NOT implemented yet.
+- Current code at 0.0.6.8 still uses the old generic EntityCard model, generic Card tab, simple occurrence scan, and simple mind-map rendering unless noted otherwise.
+
+CURRENTLY IMPLEMENTED / VERIFIED
+- 0.0.6.8 Idea Memo move is implemented:
+  - Left PROJECT tree has "아이디어 메모" directly below 관계맵.
+  - 아이디어 메모 has a + button.
+  - + opens a simple dialog with 제목 + 메모 only.
+  - New entries default to 메모 1, 메모 2, etc. and append downward in creation order.
+  - Clicking a memo expands CONTEXT if needed and shows the selected memo on the right.
+  - Project Idea data is title + memo + timestamps.
+- Global app settings split from novel JSON remains implemented from 0.0.6.7.
+- The 0.0.6.8 code build at commit b95d0cfc6eb6e27cb054d4a7bef3a840dd4b6eea completed successfully in GitHub Actions run 36877334633.
+
+PENDING — LEFT PROJECT / CARD NAVIGATION
+- Remove the old dedicated right-side "카드" tab/section after the new card inspector is ready.
+- Under "설정 카드", keep the four categories:
+  - 캐릭터
+  - 장소
+  - 물건
+  - 이벤트 (rename current "사건" wording to "이벤트")
+- Add a + button beside each category name in the left PROJECT tree.
+- Clicking a category + opens that card type's creation popup.
+- Saved cards appear as child items beneath their category.
+- Clicking a saved card in the left tree:
+  - automatically expands the right CONTEXT panel if it is collapsed,
+  - loads that card's read-only detail view,
+  - selects/highlights the matching tree item.
+- Card detail view has a [수정] button at the upper-right opposite the card name.
+- Pressing [수정] converts the same CONTEXT detail area into editable controls; do not open another edit popup for an existing card.
+- New-card creation uses a popup; existing-card editing happens in the right CONTEXT panel.
+
+PENDING — CARD DATA / CHARACTER
+- Replace the current generic description/aliases-only card UI with type-specific fields.
+- Character creation popup fields:
+  - 이름
+  - 나이
+  - 생일
+  - 나이 기준일 (the in-story date on which the displayed current age is based)
+  - 출생년 (automatically calculated from age + birthday + age-reference date)
+  - 가족 (free text; examples: "부X 모O 형3, 누나1" or "김철수(형)")
+  - 학력 (free text; examples: "고졸", "서울대")
+  - 메모 (multiline)
+  - 태그 (additional aliases only)
+- Character name itself is always an automatic/default tag. The user does not have to repeat the name in the tag field.
+- If the character name changes, the automatic name tag changes with it; manually entered additional tags remain.
+- Internal linking must continue to use the card's stable ID, not the visible name/alias.
+
+PENDING — CARD DATA / LOCATION
+- Location card fields:
+  - 이름
+  - 메모 (multiline)
+  - 태그 (additional aliases only)
+- Location name itself is an automatic/default tag.
+- URLs written inside memo text should be recognized in the read-only card view and rendered as clickable links.
+- Clicking a memo URL opens it in the Windows default external browser (Chrome if Chrome is the user's default), not an embedded TagWriter browser.
+- Intended uses include Google Maps/Street View, reference photos, YouTube/video references, blogs/wiki/reference pages.
+- Prefer the same URL-link behavior for memo fields on other card types as well.
+
+PENDING — CARD DATA / EVENT
+- Rename "사건" card/category wording to "이벤트".
+- Event card fields:
+  - 이름
+  - 메모 (multiline)
+  - 태그
+- Event cards are NOT manuscript auto-tagging targets.
+- Event cards do NOT create automatic character/location/item relationships from manuscript co-occurrence.
+- Event nodes still appear as available relationship-map nodes and can be connected manually.
+- Event name/tags are therefore for card lookup/identification and manual relationship-map use, not automatic manuscript detection.
+
+PENDING — ITEM
+- Item remains a card type, but its detailed fields, manuscript auto-tagging behavior, and final category color have NOT been decided yet.
+- Do not invent these decisions in the next implementation. Confirm them when the item card is designed.
+
+PENDING — TAG COLOR SYSTEM
+- Use separate dark/light colors so tags stay legible in both themes.
+- Character / 인물:
+  - Dark: #60A5FA
+  - Light: #2563EB
+- Location / 장소:
+  - Dark: #F87171
+  - Light: #DC2626
+- Event / 이벤트:
+  - Dark: #FBBF24
+  - Light: #B45309
+- Item color: undecided.
+- Automatic name tags and manually entered additional tags use the same color for that card type.
+- For manuscript tag highlighting, prefer the category text color plus a subtle low-opacity background rather than an aggressive solid highlight.
+- Event tags are not highlighted automatically in manuscript text.
+
+PENDING — MANUSCRIPT AUTO TAGGING
+- Character and Location names are automatic tags and their additional aliases are also manuscript-detection terms.
+- Event must be excluded from the automatic occurrence/tag scanner.
+- Current code still scans all cards; this must be changed during the card/tag refactor.
+- Relationship/tag identity always resolves to the stable card ID even when the manuscript matched an alias.
+- When showing a relationship or linked tag in UI, display the card's canonical name, not the alias that happened to match.
+
+PENDING — AUTOMATIC VS MANUAL RELATIONSHIPS
+- Default relationship generation should be automatic from manuscript co-occurrence rather than requiring "related tags" fields inside cards.
+- Intended automatic strength hierarchy:
+  - same sentence = strongest local relation signal
+  - same paragraph = medium relation signal
+  - same scene = weaker relation signal
+  - repeated co-occurrence across scenes accumulates relationship strength
+- Exact numeric weighting formula is not fixed yet.
+- Node size should NOT grow simply because the same pair occurs many times; node size is based on the count of unique connected nodes.
+- Automatic relationship line style/color:
+  - Dark: #94A3B8
+  - Light: #64748B
+  - visually quieter/thinner; frequency/strength may increase line thickness and opacity
+- Manual relationship line style/color:
+  - Dark: #C084FC
+  - Light: #7C3AED
+  - more prominent solid line, slightly thicker than automatic
+  - may carry a user-entered relationship label such as 남매, 근무지, etc.
+- Keep color meaning fixed; represent automatic strength with thickness/opacity rather than changing to unrelated colors.
+- Event has no automatic relationships; manual only.
+- Item automatic relationship behavior remains undecided.
+
+PENDING — RELATIONSHIP MAP NODE WORKSPACE
+- Current map is still simple fixed-position buttons and does NOT yet implement the approved workspace behavior.
+- Split the relationship-map screen so the far-left side contains a dedicated "미배치 노드" tray/section.
+- Newly created card nodes are added to the unplaced tray, arranged vertically from the top downward; new nodes append below existing ones.
+- Do NOT immediately scatter new nodes across the graph as the current code does.
+- Drag a node from the unplaced tray into the main relationship-map canvas to place/use it.
+- Placed nodes can be freely dragged around the main map.
+- Persist placed node X/Y coordinates in the novel/project JSON so reopening the project keeps the user's layout.
+- Once a user has manually positioned a node, later automatic layout should not move it.
+- A "return to unplaced" action is desirable so removing a node from the visible map does not delete the card.
+- Relationship data exists independently of placement:
+  - an unplaced node can still have relationships,
+  - its lines simply are not drawn until both relevant nodes are placed.
+
+PENDING — RELATIONSHIP MAP NODE SIZE
+- Node size grows with the number of UNIQUE connected nodes.
+- Suggested base size is about 70 px and maximum size about 125 px; keep a hard maximum so a central character cannot consume the whole graph.
+- Repeated co-occurrence with the same one node affects the relationship line, not the node's overall size.
+- Category/node colors should follow the same character/location/event color system above; item color remains undecided.
+
+PENDING — CONNECTED TAGS AT BOTTOM OF CARD
+- When a Character/Location/etc. card has map relationships, show a read-only "연결된 태그" section at the very bottom of the card detail view.
+- This section is generated from relationship data and cannot be directly edited as a normal card field.
+- Display each connected card using the connected card's canonical name and category color.
+- Clicking a connected tag navigates directly to that card:
+  - loads that card into right CONTEXT,
+  - expands CONTEXT if collapsed,
+  - selects the matching card in the left PROJECT tree.
+- A relationship should appear here even if the connected node is still in the map's unplaced-node tray.
+- Automatic/manual relationship type can be indicated subtly:
+  - automatic: small slate indicator
+  - manual: small purple indicator
+  - optional tooltip "자동 관계" / "수동 관계"
+- Do not replace the target card color with the relationship color; target tag color still represents the target card type.
+
+KNOWN CURRENT CODE THAT MUST BE REPLACED DURING THIS WORK
+- MainWindow.xaml still contains the old right-side <TabItem Header="카드"> with generic description/alias editors.
+- MainWindow.xaml.cs still has generic AddCard_Click / SaveCard_Click.
+- AddCard_Click currently creates a MapNode immediately with a generated X/Y position; this conflicts with the planned unplaced-node tray.
+- The occurrence scanner currently searches every card type, including Event; Event must be excluded.
+- DrawMindMap currently renders all edges with the same Muted color/thickness and does not distinguish automatic/manual relationships.
+- Mind-map nodes are not yet drag-movable and their positions/sizes are not driven by the approved workspace/connection rules.
+- EntityCard currently stores only type/name/description/aliases; it has not yet been expanded into the type-specific card schema described above.
+
+RECOMMENDED NEXT IMPLEMENTATION ORDER
+1. Refactor card model + left tree categories/+ buttons + new-card popups + right CONTEXT read-only/edit mode.
+2. Implement Character and Location first, including automatic name tags and memo URL links.
+3. Rename Event and enforce Event = manual-map-only / no manuscript auto-tagging.
+4. Rework manuscript tag detection and occurrence data around stable card IDs.
+5. Add automatic co-occurrence relationship generation and manual relationship styling.
+6. Rebuild relationship map with unplaced-node tray, drag/drop, persistent positions, node-size growth/cap.
+7. Add read-only connected-tag navigation to the bottom of cards.
+8. Design Item fields/color/automatic behavior separately before implementing Item-specific logic.
+
+============================================================
+
 0.0.6.8
 - Moved the Ideas section out of the right-side list and into the left PROJECT tree, directly below 관계맵.
 - Renamed the feature to "아이디어 메모".
