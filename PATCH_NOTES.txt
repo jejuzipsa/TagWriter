@@ -1,5 +1,13 @@
 TagWriter cumulative patch notes
 
+0.0.5.7
+- 원고지 인쇄 미리보기 기본 용지를 A4 가로 비율로 변경하고 미리보기 창도 가로형에 맞게 확대.
+- 원고지 실제 인쇄/Print to PDF에서 PrintDialog 기본 방향을 Landscape로 설정.
+- 원고지 실제 출력은 FlowDocument 자동 줄바꿈 대신 FixedDocument 페이지를 사용해 20×10 격자를 한 페이지에 고정 배치.
+- 각 200자 원고지 페이지가 독립된 물리 페이지가 되며 페이지 번호도 해당 페이지 하단 중앙에 고정.
+- 전체 원고 인쇄는 기존 세로 방향 FlowDocument 방식을 유지.
+- 버전 0.0.5.7.
+
 0.0.5.6
 - Replaced the ambiguous square print glyph with a clear monochrome printer vector icon matching the supplied reference.
 - The printer icon follows the activity button foreground color in both Dark and Light mode.
