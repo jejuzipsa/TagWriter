@@ -1,5 +1,16 @@
 TagWriter cumulative patch notes
 
+0.0.6.0
+- Replaced the synthesized metallic typing effect with real recorded sound assets selected by the user.
+- Added a two-position top toolbar selector: 타자기 <switch> 키보드. The selected side is highlighted and both normal manuscript and manuscript-paper editors use that sound set.
+- Typewriter mode uses eight short key-strike excerpts derived from BigSoundBank Typewriter 8 (ID 2841), plus the dedicated Typewriter space (ID 2843) sample for Space.
+- Keyboard mode uses eight distinct single-key recordings from the supplied Keyboard Soundpack #1, mapped across physical keyboard regions.
+- Removed carriage-return/bell playback. Enter, Backspace and Delete now use ordinary key-strike sounds.
+- Replaced the old sound on/off switch with a clickable speaker icon: click to mute/unmute while preserving the volume slider value.
+- Kept the previous JSON keys for sound enabled/volume compatibility and added typingSoundMode for typewriter/keyboard selection.
+- Audio assets are copied into published builds from Assets/Sounds; the old procedural TypewriterSoundFactory is no longer used.
+- Bumped version to 0.0.6.0.
+
 0.0.5.9
 - Hotfix: added the missing System.IO import to TypewriterSoundFactory so Path, Directory, File, FileInfo, and BinaryWriter resolve during build.
 - No functional changes to the typewriter sound feature.
