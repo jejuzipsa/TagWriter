@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.7.8
+NEXT CHAT HANDOFF — TagWriter 0.0.7.9
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,13 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.7.9
+- Reworked RichTextBox manuscript-offset -> TextPointer mapping again after multi-line testing showed that line breaks can exist as WPF document structure rather than Text-context characters.
+- The mapper now walks actual RichTextBox insertion/caret positions and measures the normalized visible text between adjacent positions, so paragraph/LineBreak structure and blank lines contribute to the logical manuscript offset correctly.
+- Pointer-to-offset, editor text and caret-offset paths now share the same CRLF/LF normalization helper.
+- This specifically fixes later-line aliases such as "원진" being highlighted several characters to the right after preceding line breaks/blank lines.
+- Bumped version to 0.0.7.9.
 
 0.0.7.8
 - Fixed multi-line inline-tag formatting drift caused by RichTextBox CRLF vs stored LF offset differences.
