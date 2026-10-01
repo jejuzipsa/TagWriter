@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.6.6
+- Hotfix: fixed the Typewriter Enter sound looping continuously after a single Enter press.
+- Cause: the MediaEnded handler moved the MediaPlayer position back to zero while the player was still in the playing state, which could restart the clip repeatedly.
+- MediaEnded now explicitly stops the player before clearing the single-shot playback state.
+- Bumped version to 0.0.6.6.
+
 0.0.6.5
 - Added a dedicated Typewriter-mode Enter sound from the user-supplied Freesound "Typewriter Carriage Return" (ramsamba, ID 318686).
 - Trimmed out the long carriage-slide/찌이익 portion and kept only the short final mechanical 철커덕 impact (about 0.14 s), with tiny edge fades to avoid clicks.
