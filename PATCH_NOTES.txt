@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.5.6
+- Replaced the ambiguous square print glyph with a clear monochrome printer vector icon matching the supplied reference.
+- The printer icon follows the activity button foreground color in both Dark and Light mode.
+- Includes the v0.0.5.5 print fixes: white paper/black text output and explicit Normal/Paper print-mode handling.
+- Bumped version to 0.0.5.6.
+
 0.0.5.5
 - Print output is now theme-independent: white paper, black text, gray borders/lines in both preview and actual printer/PDF output.
 - Replaced the ambiguous bool print-mode flow with explicit PrintMode.Normal / PrintMode.Paper, so preview and actual output use the same selected mode.
