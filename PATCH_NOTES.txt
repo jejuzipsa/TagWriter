@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.8.6
+NEXT CHAT HANDOFF — TagWriter 0.0.8.7
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,16 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.8.7
+- Fixed DOCX export corruption by replacing the hand-built minimal ZIP/XML writer with DocumentFormat.OpenXml 3.5.1.
+- DOCX packages are now created through the official Open XML SDK with a real MainDocumentPart, body paragraphs, fonts, page size and margins.
+- Replaced the synthetic HWPX package generator with a template-based exporter.
+- HWPX now starts from a known-valid blank HWPX structure (MIT-licensed template assets from imsebeom/hwpx-skills), preserving full header/style data plus container.rdf, manifest.xml, settings.xml and version.xml.
+- TagWriter only appends the exported manuscript paragraphs to the valid section0.xml template and regenerates Preview/PrvText.txt.
+- HWPX writer keeps mimetype as the first ZIP entry with no compression and validates required package entries after writing.
+- Added the HWPX template MIT license notice under Assets/HwpxTemplate/LICENSE.txt.
+- Bumped version to 0.0.8.7.
 
 0.0.8.6
 - Improved the left activity rail hit targets and hover help.

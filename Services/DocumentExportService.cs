@@ -1,19 +1,21 @@
 using System.IO;
 using System.IO.Compression;
-using System.Security;
 using System.Text;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Xml;
+using System.Xml.Linq;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using W = DocumentFormat.OpenXml.Wordprocessing;
 using TagWriter.Models;
 
 namespace TagWriter.Services;
 
 public static class DocumentExportService
 {
-    static string Esc(string? value) => SecurityElement.Escape(value ?? "") ?? "";
-
     static List<(string Text, bool Bold, int Level)> Paragraphs(ProjectDocument document)
     {
         var list = new List<(string, bool, int)>
@@ -31,10 +33,141 @@ public static class DocumentExportService
                 list.Add(("", false, 2));
             }
         }
+
         return list;
     }
 
-    static async Task WriteEntryAsync(ZipArchive zip, string name, string content, CompressionLevel level = CompressionLevel.Optimal)
+    public static Task ExportDocxAsync(string path, ProjectDocument document)
+    {
+        if (File.Exists(path)) File.Delete(path);
+
+        using var word = WordprocessingDocument.Create(path, WordprocessingDocumentType.Document);
+        var main = word.AddMainDocumentPart();
+        main.Document = new W.Document();
+        var body = main.Document.AppendChild(new W.Body());
+
+        foreach (var item in Paragraphs(document))
+        {
+            var paragraph = new W.Paragraph();
+            var paragraphProps = new W.ParagraphProperties(
+                new W.SpacingBetweenLines
+                {
+                    After = item.Level == 0 ? "260" : item.Level == 1 ? "180" : "80",
+                    Line = "300",
+                    LineRule = W.LineSpacingRuleValues.Auto
+                });
+            paragraph.Append(paragraphProps);
+
+            var runProps = new W.RunProperties(
+                new W.RunFonts
+                {
+                    Ascii = "Malgun Gothic",
+                    HighAnsi = "Malgun Gothic",
+                    EastAsia = "맑은 고딕"
+                },
+                new W.FontSize { Val = item.Level == 0 ? "32" : item.Level == 1 ? "27" : "22" },
+                new W.FontSizeComplexScript { Val = item.Level == 0 ? "32" : item.Level == 1 ? "27" : "22" });
+
+            if (item.Bold) runProps.Append(new W.Bold());
+
+            var run = new W.Run(runProps, new W.Text(item.Text ?? "") { Space = SpaceProcessingModeValues.Preserve });
+            paragraph.Append(run);
+            body.Append(paragraph);
+        }
+
+        body.Append(new W.SectionProperties(
+            new W.PageSize { Width = 11906, Height = 16838 },
+            new W.PageMargin { Top = 1440, Right = 1440, Bottom = 1440, Left = 1440, Header = 720, Footer = 720, Gutter = 0 }));
+
+        main.Document.Save();
+        return Task.CompletedTask;
+    }
+
+    public static async Task ExportHwpxAsync(string path, ProjectDocument document)
+    {
+        var templateRoot = Path.Combine(AppContext.BaseDirectory, "Assets", "HwpxTemplate");
+        var sectionTemplate = Path.Combine(templateRoot, "Contents", "section0.xml");
+        if (!File.Exists(sectionTemplate))
+            throw new FileNotFoundException("HWPX 기본 템플릿을 찾을 수 없습니다.", sectionTemplate);
+
+        if (File.Exists(path)) File.Delete(path);
+
+        await using var fs = File.Create(path);
+        using (var zip = new ZipArchive(fs, ZipArchiveMode.Create, false, Encoding.UTF8))
+        {
+            await WriteTextEntryAsync(zip, "mimetype", "application/hwp+zip", CompressionLevel.NoCompression);
+
+            await CopyTemplateEntryAsync(zip, templateRoot, "version.xml");
+            await CopyTemplateEntryAsync(zip, templateRoot, "settings.xml");
+            await CopyTemplateEntryAsync(zip, templateRoot, "META-INF/container.xml");
+            await CopyTemplateEntryAsync(zip, templateRoot, "META-INF/container.rdf");
+            await CopyTemplateEntryAsync(zip, templateRoot, "META-INF/manifest.xml");
+            await CopyTemplateEntryAsync(zip, templateRoot, "Contents/content.hpf");
+            await CopyTemplateEntryAsync(zip, templateRoot, "Contents/header.xml");
+
+            var sectionXml = BuildHwpxSection(sectionTemplate, document);
+            await WriteTextEntryAsync(zip, "Contents/section0.xml", sectionXml);
+
+            var preview = string.Join(Environment.NewLine, Paragraphs(document).Select(x => x.Text));
+            await WriteTextEntryAsync(zip, "Preview/PrvText.txt", preview);
+        }
+
+        ValidateHwpxPackage(path);
+    }
+
+    static string BuildHwpxSection(string templatePath, ProjectDocument document)
+    {
+        var doc = XDocument.Load(templatePath, LoadOptions.PreserveWhitespace);
+        var root = doc.Root ?? throw new InvalidDataException("HWPX section 템플릿이 올바르지 않습니다.");
+        XNamespace hp = "http://www.hancom.co.kr/hwpml/2011/paragraph";
+
+        uint id = 1000000000;
+        foreach (var item in Paragraphs(document))
+        {
+            var t = new XElement(hp + "t", item.Text ?? "");
+            if (!string.IsNullOrEmpty(item.Text))
+                t.SetAttributeValue(XNamespace.Xml + "space", "preserve");
+
+            var p = new XElement(hp + "p",
+                new XAttribute("id", id++),
+                new XAttribute("paraPrIDRef", "0"),
+                new XAttribute("styleIDRef", "0"),
+                new XAttribute("pageBreak", "0"),
+                new XAttribute("columnBreak", "0"),
+                new XAttribute("merged", "0"),
+                new XElement(hp + "run",
+                    new XAttribute("charPrIDRef", "0"),
+                    t));
+
+            root.Add(p);
+        }
+
+        using var sw = new Utf8StringWriter();
+        using var writer = XmlWriter.Create(sw, new XmlWriterSettings
+        {
+            OmitXmlDeclaration = false,
+            Encoding = new UTF8Encoding(false),
+            Indent = true,
+            NewLineChars = "\n"
+        });
+        doc.Save(writer);
+        writer.Flush();
+        return sw.ToString();
+    }
+
+    static async Task CopyTemplateEntryAsync(ZipArchive zip, string templateRoot, string relativePath)
+    {
+        var diskPath = Path.Combine(templateRoot, relativePath.Replace('/', Path.DirectorySeparatorChar));
+        if (!File.Exists(diskPath))
+            throw new FileNotFoundException($"HWPX 템플릿 파일이 없습니다: {relativePath}", diskPath);
+
+        var entry = zip.CreateEntry(relativePath, CompressionLevel.Optimal);
+        await using var input = File.OpenRead(diskPath);
+        await using var output = entry.Open();
+        await input.CopyToAsync(output);
+    }
+
+    static async Task WriteTextEntryAsync(ZipArchive zip, string name, string content, CompressionLevel level = CompressionLevel.Optimal)
     {
         var entry = zip.CreateEntry(name, level);
         await using var stream = entry.Open();
@@ -42,70 +175,41 @@ public static class DocumentExportService
         await writer.WriteAsync(content);
     }
 
-    public static async Task ExportDocxAsync(string path, ProjectDocument document)
+    static void ValidateHwpxPackage(string path)
     {
-        if (File.Exists(path)) File.Delete(path);
-        await using var fs = File.Create(path);
-        using var zip = new ZipArchive(fs, ZipArchiveMode.Create, false, Encoding.UTF8);
+        using var zip = ZipFile.OpenRead(path);
+        var entries = zip.Entries.Select(e => e.FullName).ToList();
 
-        const string contentTypes = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Types xmlns=\"http://schemas.openxmlformats.org/package/2006/content-types\"><Default Extension=\"rels\" ContentType=\"application/vnd.openxmlformats-package.relationships+xml\"/><Default Extension=\"xml\" ContentType=\"application/xml\"/><Override PartName=\"/word/document.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml\"/></Types>";
-        const string rels = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\"><Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument\" Target=\"word/document.xml\"/></Relationships>";
+        string[] required =
+        [
+            "mimetype",
+            "version.xml",
+            "settings.xml",
+            "META-INF/container.xml",
+            "META-INF/container.rdf",
+            "META-INF/manifest.xml",
+            "Contents/content.hpf",
+            "Contents/header.xml",
+            "Contents/section0.xml",
+            "Preview/PrvText.txt"
+        ];
 
-        var body = new StringBuilder();
-        foreach (var p in Paragraphs(document))
-        {
-            var size = p.Level == 0 ? "32" : p.Level == 1 ? "27" : "22";
-            body.Append("<w:p><w:pPr><w:spacing w:after=\"")
-                .Append(p.Level == 0 ? "260" : p.Level == 1 ? "180" : "80")
-                .Append("\"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii=\"Malgun Gothic\" w:eastAsia=\"맑은 고딕\"/>")
-                .Append("<w:sz w:val=\"").Append(size).Append("\"/><w:szCs w:val=\"").Append(size).Append("\"/>");
-            if (p.Bold) body.Append("<w:b/>");
-            body.Append("</w:rPr><w:t xml:space=\"preserve\">").Append(Esc(p.Text)).Append("</w:t></w:r></w:p>");
-        }
+        foreach (var name in required)
+            if (!entries.Contains(name, StringComparer.Ordinal))
+                throw new InvalidDataException($"HWPX 필수 항목이 없습니다: {name}");
 
-        var doc = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><w:document xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"><w:body>"
-            + body
-            + "<w:sectPr><w:pgSz w:w=\"11906\" w:h=\"16838\"/><w:pgMar w:top=\"1440\" w:right=\"1440\" w:bottom=\"1440\" w:left=\"1440\"/></w:sectPr></w:body></w:document>";
+        if (!string.Equals(zip.Entries.FirstOrDefault()?.FullName, "mimetype", StringComparison.Ordinal))
+            throw new InvalidDataException("HWPX mimetype 항목은 ZIP의 첫 번째 항목이어야 합니다.");
 
-        await WriteEntryAsync(zip, "[Content_Types].xml", contentTypes);
-        await WriteEntryAsync(zip, "_rels/.rels", rels);
-        await WriteEntryAsync(zip, "word/document.xml", doc);
+        var mime = zip.GetEntry("mimetype") ?? throw new InvalidDataException("HWPX mimetype 항목이 없습니다.");
+        using var reader = new StreamReader(mime.Open(), Encoding.UTF8, false);
+        if (!string.Equals(reader.ReadToEnd(), "application/hwp+zip", StringComparison.Ordinal))
+            throw new InvalidDataException("HWPX mimetype 값이 올바르지 않습니다.");
     }
 
-    public static async Task ExportHwpxAsync(string path, ProjectDocument document)
+    sealed class Utf8StringWriter : StringWriter
     {
-        if (File.Exists(path)) File.Delete(path);
-        await using var fs = File.Create(path);
-        using var zip = new ZipArchive(fs, ZipArchiveMode.Create, false, Encoding.UTF8);
-
-        await WriteEntryAsync(zip, "mimetype", "application/hwp+zip", CompressionLevel.NoCompression);
-
-        const string container = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><ocf:container xmlns:ocf=\"urn:oasis:names:tc:opendocument:xmlns:container\"><ocf:rootfiles><ocf:rootfile full-path=\"Contents/content.hpf\" media-type=\"application/hwpml-package+xml\"/></ocf:rootfiles></ocf:container>";
-        var content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><opf:package xmlns:opf=\"http://www.idpf.org/2007/opf\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" version=\"1.0\"><opf:metadata><dc:title>"
-            + Esc(document.Project.Title)
-            + "</dc:title><dc:creator>" + Esc(document.Project.Author) + "</dc:creator><dc:date>" + DateTime.Now.ToString("yyyy-MM-dd") + "</dc:date><dc:language>ko-KR</dc:language></opf:metadata><opf:manifest><opf:item id=\"header\" href=\"header.xml\" media-type=\"application/xml\"/><opf:item id=\"section0\" href=\"section0.xml\" media-type=\"application/xml\"/><opf:item id=\"settings\" href=\"settings.xml\" media-type=\"application/xml\"/></opf:manifest><opf:spine><opf:itemref idref=\"section0\"/></opf:spine></opf:package>";
-
-        const string header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><hh:head xmlns:hh=\"http://www.hancom.co.kr/hwpml/2011/head\"><hh:beginNum page=\"1\" footnote=\"1\" endnote=\"1\" pic=\"1\" tbl=\"1\" equation=\"1\"/><hh:refList><hh:fontfaces><hh:fontface lang=\"HANGUL\"><hh:font name=\"맑은 고딕\" type=\"TTF\"/></hh:fontface></hh:fontfaces><hh:borderFills><hh:borderFill id=\"0\"/></hh:borderFills><hh:charProperties><hh:charPr id=\"0\" height=\"1100\" textColor=\"#000000\"/><hh:charPr id=\"1\" height=\"1300\" textColor=\"#000000\"><hh:bold/></hh:charPr></hh:charProperties><hh:paraProperties><hh:paraPr id=\"0\" align=\"LEFT\"/></hh:paraProperties><hh:styles><hh:style id=\"0\" type=\"PARA\" name=\"바탕글\" paraPrIDRef=\"0\" charPrIDRef=\"0\"/></hh:styles><hh:bullets/><hh:numberings/></hh:refList></hh:head>";
-
-        var section = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?><hs:sec xmlns:hs=\"http://www.hancom.co.kr/hwpml/2011/section\" xmlns:hp=\"http://www.hancom.co.kr/hwpml/2011/paragraph\">");
-        var id = 0;
-        foreach (var p in Paragraphs(document))
-        {
-            section.Append("<hp:p id=\"").Append(id++).Append("\" paraPrIDRef=\"0\" styleIDRef=\"0\"><hp:run charPrIDRef=\"")
-                .Append(p.Bold ? "1" : "0").Append("\"><hp:t>").Append(Esc(p.Text)).Append("</hp:t></hp:run></hp:p>");
-        }
-        section.Append("</hs:sec>");
-
-        const string settings = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><ha:HWPApplicationSetting xmlns:ha=\"http://www.hancom.co.kr/hwpml/2011/app\"/>";
-        const string version = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><ha:HCFVersion xmlns:ha=\"http://www.hancom.co.kr/hwpml/2011/app\" targetApplication=\"WORDPROC\" major=\"5\" minor=\"1\" micro=\"0\" buildNumber=\"0\" os=\"Windows\"/>";
-
-        await WriteEntryAsync(zip, "META-INF/container.xml", container);
-        await WriteEntryAsync(zip, "Contents/content.hpf", content);
-        await WriteEntryAsync(zip, "Contents/header.xml", header);
-        await WriteEntryAsync(zip, "Contents/section0.xml", section.ToString());
-        await WriteEntryAsync(zip, "Contents/settings.xml", settings);
-        await WriteEntryAsync(zip, "version.xml", version);
-        await WriteEntryAsync(zip, "Preview/PrvText.txt", string.Join(Environment.NewLine, Paragraphs(document).Select(x => x.Text)));
+        public override Encoding Encoding => new UTF8Encoding(false);
     }
 
     public static void ExportPdf(string path, FlowDocument document)
@@ -150,12 +254,20 @@ public static class DocumentExportService
     {
         using var stream = File.Create(path);
         var offsets = new List<long> { 0 };
+
         void Text(string value)
         {
             var bytes = Encoding.ASCII.GetBytes(value);
             stream.Write(bytes, 0, bytes.Length);
         }
-        void StartObj(int n) { while (offsets.Count <= n) offsets.Add(0); offsets[n] = stream.Position; Text($"{n} 0 obj\n"); }
+
+        void StartObj(int n)
+        {
+            while (offsets.Count <= n) offsets.Add(0);
+            offsets[n] = stream.Position;
+            Text($"{n} 0 obj\n");
+        }
+
         void EndObj() => Text("endobj\n");
 
         Text("%PDF-1.4\n%TagWriter\n");
