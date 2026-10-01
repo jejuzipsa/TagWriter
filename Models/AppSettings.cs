@@ -12,6 +12,7 @@ public sealed class AppSettings {
  [JsonPropertyName("typingSoundEnabled")] public bool TypingSoundEnabled {get;set;}=false;
  [JsonPropertyName("typingVolume")] public double TypingVolume {get;set;}=35;
  [JsonPropertyName("typingSoundMode")] public string TypingSoundMode {get;set;}="typewriter";
+ [JsonPropertyName("autoSaveMinutes")] public int AutoSaveMinutes {get;set;}=10;
  [JsonPropertyName("windowLeft")] public double? WindowLeft {get;set;}
  [JsonPropertyName("windowTop")] public double? WindowTop {get;set;}
  [JsonPropertyName("windowWidth")] public double WindowWidth {get;set;}=1460;

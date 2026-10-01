@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.7.9
+NEXT CHAT HANDOFF — TagWriter 0.0.8.0
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,21 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.8.0
+- Changed automatic manuscript tagging to completed-sentence semantics.
+- Character/Location tags are shown and counted in occurrences only inside sentences that end with '.', '?', '!' or '…'.
+- Removing the sentence-ending punctuation makes that sentence incomplete again; its inline tag styling and occurrence entries disappear on the next formatting refresh.
+- Automatic relationship tracking now uses the same completed-sentence tag hits. A pair receives one automatic contribution for each completed sentence in which both tagged cards occur; repeated completed sentences accumulate Strength.
+- Relationship organization no longer runs continuously while typing. MainWindow keeps the latest editor-input time and a 1-second idle checker; the current dirty Scene is finalized after 10 seconds with no typing.
+- When moving to a different Scene, a dirty previous Scene is finalized after about 10 seconds independently of continued typing in the new Scene.
+- Manual save (Ctrl+S or Save) forces relationship finalization before writing the project file. Automatic save does not force an in-progress Scene relationship recalculation.
+- Manual relationship authoring remains: click the first node, then Ctrl+click the second node to toggle the manual connection on/off.
+- Added automatic save control to the top bar immediately left of the typewriter/keyboard controls.
+- Automatic save interval choices: 10, 5, 3, or 1 minute. Default is 10 minutes; the selected interval persists in AppSettings.
+- Automatic save runs only after the project has a real save path; it does not open a Save As dialog by itself.
+- Fixed PersistEditor so Paper mode saves the current PaperInput text instead of overwriting it with stale hidden RichTextBox text.
+- Bumped version to 0.0.8.0.
 
 0.0.7.9
 - Reworked RichTextBox manuscript-offset -> TextPointer mapping again after multi-line testing showed that line breaks can exist as WPF document structure rather than Text-context characters.
