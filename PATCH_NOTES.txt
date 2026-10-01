@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.8.3
+NEXT CHAT HANDOFF — TagWriter 0.0.8.4
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,15 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.8.4
+- Reduced manuscript inline-tag visual intensity so tags do not dominate the writing surface.
+- Added a separate InlineTagBrush palette instead of reusing the stronger card/map category colors.
+- Dark mode inline tags use low-saturation, light-near-text blue/red/gold tones; Light mode uses darker, muted near-text variants.
+- Inline tag weight changed from Bold to SemiBold.
+- Inline tag background tint opacity was reduced substantially while keeping underline/click affordance.
+- Card inspector, PROJECT tree and relationship-map category colors remain unchanged.
+- Bumped version to 0.0.8.4.
 
 0.0.8.3
 - PROJECT tree column alignment refined.
