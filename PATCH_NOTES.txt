@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.5.2
+- Hotfix: corrected invalid two-argument Thickness constructors introduced by the print preview UI.
+- Removed the duplicate System.Windows.Media using directive warning.
+- No functional print-flow changes.
+- Bumped version to 0.0.5.2.
+
 0.0.5.1
 - Added printer button at the bottom of the left activity rail.
 - Added Ctrl+P shortcut.
