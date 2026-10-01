@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.7.0
+NEXT CHAT HANDOFF — TagWriter 0.0.7.1
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -6,6 +6,19 @@ Purpose
 - Current code at 0.0.7.0 still uses the old generic EntityCard model, generic Card tab, simple occurrence scan, and simple mind-map rendering unless noted otherwise. The standalone 관계 and 아이디어 메모 tab headers have been removed from the right CONTEXT panel, and the redundant 관계맵 entry has been removed from the PROJECT tree.
 
 CURRENTLY IMPLEMENTED / VERIFIED
+- 0.0.7.1 card/tag foundation is implemented:
+  - Replaced the generic description/aliases card data with the approved typed schema: Character has name, age, birthday, age-reference date, auto-calculated birth year, family, education, memo and additional tags; Location/Event have name, memo and additional tags.
+  - Character/Location/Event category rows now have borderless + controls in PROJECT; Item keeps its category but creation/editing is intentionally deferred because its fields/color/automatic behavior are still undecided.
+  - Renamed 사건 wording to 이벤트.
+  - New cards open a type-specific creation popup. Existing cards open read-only in CONTEXT and switch in-place to edit controls with [수정].
+  - Card names are implicit/default tags; aliases remain additional tags and stable card IDs remain the internal identity.
+  - Memo URLs render as clickable links in read-only card detail and open through the Windows default external browser.
+  - Event is excluded from manuscript occurrence scanning. Item is also excluded until its behavior is decided.
+  - 등장 now lists actual occurrences as chapter | scene | current line with the source line below it and an [이동] button.
+  - [이동] opens the scene and selects/scrolls to the matching text in Normal mode. It is disabled in manuscript-paper mode.
+  - Connected relationship tags are shown read-only at the bottom of the card detail, using target-card colors plus a subtle auto/manual relation indicator.
+  - Added approved Character/Location/Event dark/light tag colors. Item deliberately remains neutral/undecided.
+  - New cards create an unplaced relationship-map node record; placement UI follows in the map workspace step.
 - 0.0.7.0 PROJECT tree cleanup is implemented:
   - Removed the redundant 관계맵 entry from the left PROJECT tree; relationship-map navigation remains available from the dedicated far-left activity icon (and existing View command).
   - PROJECT edit mode now shows selectable checkboxes for saved setting cards and idea memos as well as chapters/scenes.
@@ -193,6 +206,14 @@ RECOMMENDED NEXT IMPLEMENTATION ORDER
 8. Design Item fields/color/automatic behavior separately before implementing Item-specific logic.
 
 ============================================================
+
+0.0.7.1
+- Refactored card data/UI to the approved Character/Location/Event schemas and deferred Item-specific decisions.
+- Added category + creation controls, in-place card edit mode, automatic name tags, clickable memo URLs, category tag colors and connected-tag navigation.
+- Renamed 사건 to 이벤트 and excluded Event from manuscript auto occurrence detection.
+- Rebuilt 등장 as occurrence rows with chapter/scene/current-line metadata and [이동] navigation; navigation is disabled in 원고지 mode.
+- New cards now create unplaced map-node records instead of being scattered immediately.
+- Bumped version to 0.0.7.1.
 
 0.0.7.0
 - Removed the redundant 관계맵 entry from the PROJECT tree while keeping the dedicated far-left relationship-map activity icon and existing View command.

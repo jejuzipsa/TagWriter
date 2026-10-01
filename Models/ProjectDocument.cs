@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 namespace TagWriter.Models;
 public sealed class ProjectDocument {
  [JsonPropertyName("format")] public string Format {get;set;}="tagwriter";
- [JsonPropertyName("formatVersion")] public int FormatVersion {get;set;}=1;
+ [JsonPropertyName("formatVersion")] public int FormatVersion {get;set;}=2;
  [JsonPropertyName("revision")] public long Revision {get;set;}=1;
  [JsonPropertyName("project")] public ProjectInfo Project {get;set;}=new();
  [JsonPropertyName("chapters")] public List<Chapter> Chapters {get;set;}=[];
@@ -34,7 +34,13 @@ public sealed class EntityCard {
  [JsonPropertyName("id")] public string Id {get;set;}=Guid.NewGuid().ToString("N");
  [JsonPropertyName("type")] public CardType Type {get;set;}
  [JsonPropertyName("name")] public string Name {get;set;}="";
- [JsonPropertyName("description")] public string Description {get;set;}="";
+ [JsonPropertyName("age")] public int? Age {get;set;}
+ [JsonPropertyName("birthday")] public string Birthday {get;set;}="";
+ [JsonPropertyName("ageReferenceDate")] public string AgeReferenceDate {get;set;}="";
+ [JsonPropertyName("birthYear")] public int? BirthYear {get;set;}
+ [JsonPropertyName("family")] public string Family {get;set;}="";
+ [JsonPropertyName("education")] public string Education {get;set;}="";
+ [JsonPropertyName("memo")] public string Memo {get;set;}="";
  [JsonPropertyName("aliases")] public List<string> Aliases {get;set;}=[];
  [JsonPropertyName("updatedAt")] public DateTimeOffset UpdatedAt {get;set;}=DateTimeOffset.Now;
 }
@@ -44,6 +50,8 @@ public sealed class MindMap {
 }
 public sealed class MapNode {
  [JsonPropertyName("cardId")] public string CardId {get;set;}="";
+ [JsonPropertyName("placed")] public bool Placed {get;set;}
+ [JsonPropertyName("userPositioned")] public bool UserPositioned {get;set;}
  [JsonPropertyName("x")] public double X {get;set;}
  [JsonPropertyName("y")] public double Y {get;set;}
 }
@@ -54,6 +62,7 @@ public sealed class MapEdge {
  [JsonPropertyName("label")] public string Label {get;set;}="";
  [JsonPropertyName("source")] public string Source {get;set;}="manual";
  [JsonPropertyName("userEdited")] public bool UserEdited {get;set;}
+ [JsonPropertyName("strength")] public double Strength {get;set;}=1;
 }
 public sealed class Idea {
  [JsonPropertyName("id")] public string Id {get;set;}=Guid.NewGuid().ToString("N");
