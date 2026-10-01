@@ -1,5 +1,15 @@
 TagWriter cumulative patch notes
 
+0.0.6.7
+- Split TagWriter program preferences from novel/project data.
+- Added global app settings stored at %LocalAppData%\TagWriter\settings.json.
+- Global settings now persist across every novel: Dark/Light theme, Normal/Paper writing mode, Normal-mode font family and size, manuscript-paper zoom/Fit state, Typewriter/Keyboard sound mode, sound enabled/muted state, typing volume, main-window position/size/maximized state, and PROJECT/CONTEXT panel widths/collapsed states.
+- These settings are restored when TagWriter starts and are captured automatically when the main window closes.
+- Removed ProjectSettings from ProjectDocument entirely. Newly saved novel JSON now contains only project/novel data (project metadata, chapters, scenes/body text, cards/tags/aliases, relationship-map data and ideas) plus TagWriter file-format metadata; UI/user-preference settings are no longer written into novel files.
+- No legacy project-settings compatibility layer was kept because there are no existing project files to preserve.
+- Lowered the dedicated Typewriter Enter clack to 70% of the master typing-sound volume while keeping normal key/Space volume unchanged.
+- Bumped version to 0.0.6.7.
+
 0.0.6.6
 - Hotfix: fixed the Typewriter Enter sound looping continuously after a single Enter press.
 - Cause: the MediaEnded handler moved the MediaPlayer position back to zero while the player was still in the playing state, which could restart the clip repeatedly.
