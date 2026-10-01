@@ -57,9 +57,8 @@ public sealed class MapEdge {
 }
 public sealed class Idea {
  [JsonPropertyName("id")] public string Id {get;set;}=Guid.NewGuid().ToString("N");
- [JsonPropertyName("text")] public string Text {get;set;}="";
- [JsonPropertyName("links")] public List<string> Links {get;set;}=[];
- [JsonPropertyName("done")] public bool Done {get;set;}
+ [JsonPropertyName("title")] public string Title {get;set;}="";
+ [JsonPropertyName("memo")] public string Memo {get;set;}="";
  [JsonPropertyName("createdAt")] public DateTimeOffset CreatedAt {get;set;}=DateTimeOffset.Now;
  [JsonPropertyName("updatedAt")] public DateTimeOffset UpdatedAt {get;set;}=DateTimeOffset.Now;
 }
