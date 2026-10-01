@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.7.5
+NEXT CHAT HANDOFF — TagWriter 0.0.7.6
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -226,6 +226,14 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.7.6
+- Reworked crash logging so logs no longer depend on the executable folder being writable.
+- Crash log location is now %LocalAppData%\\TagWriter\\Logs\\TagWriter_crash.log, with %TEMP% as a fallback.
+- Added coverage for WPF DispatcherUnhandledException, AppDomain.UnhandledException, and TaskScheduler.UnobservedTaskException.
+- Crash records append instead of overwriting and include timestamp, source, app version, OS, process architecture, base directory and full exception/stack trace.
+- The WPF crash dialog now shows the exact crash-log path.
+- Bumped version to 0.0.7.6.
 
 0.0.7.5
 - Added manual relationship toggle interaction on relationship-map nodes.
