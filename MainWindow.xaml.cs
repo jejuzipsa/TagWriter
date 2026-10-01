@@ -1,4 +1,4 @@
-using Microsoft.Win32; using System.IO; using System.Windows.Input; using System.Windows.Documents; using System.Windows.Markup; using System.Printing; using System.Windows.Xps; using System.Windows.Media; using System.Windows.Threading; using System.Runtime.InteropServices; using System.Text; using System.Text.RegularExpressions; using System.Diagnostics; using System.Windows; using System.Windows.Controls; using System.Windows.Interop; using System.Windows.Shapes; using TagWriter.Models; using TagWriter.Services;
+using Microsoft.Win32; using System.Windows.Input; using System.Windows.Documents; using System.Windows.Markup; using System.Printing; using System.Windows.Xps; using System.Windows.Media; using System.Windows.Threading; using System.Runtime.InteropServices; using System.Text; using System.Text.RegularExpressions; using System.Diagnostics; using System.Windows; using System.Windows.Controls; using System.Windows.Interop; using System.Windows.Shapes; using TagWriter.Models; using TagWriter.Services;
 namespace TagWriter;
 public partial class MainWindow:Window {
  readonly AppSettings _appSettings=AppSettingsStore.Load();
@@ -242,24 +242,32 @@ public partial class MainWindow:Window {
  void RenameProject(){if(ShowRenameDialog("소설 제목 변경",_document.Project.Title,out var title)){_document.Project.Title=title;_document.Project.UpdatedAt=DateTimeOffset.Now;RefreshAll();if(_scene!=null)ShowScene(_scene);}}
  bool ShowRenameDialog(string caption,string current,out string result){result=current;var dlg=new Window{Title=caption,Owner=this,WindowStartupLocation=WindowStartupLocation.CenterOwner,ResizeMode=ResizeMode.NoResize,SizeToContent=SizeToContent.WidthAndHeight,Background=(Brush)FindResource("Panel"),Foreground=(Brush)FindResource("Text")};var box=new TextBox{Text=current,MinWidth=320,Margin=new Thickness(16,16,16,10),Padding=new Thickness(8,6,8,6)};var ok=new Button{Content="확인",MinWidth=72,Margin=new Thickness(6,0,16,16),HorizontalAlignment=HorizontalAlignment.Right,IsDefault=true};var cancel=new Button{Content="취소",MinWidth=72,Margin=new Thickness(6,0,0,16),HorizontalAlignment=HorizontalAlignment.Right,IsCancel=true,Visibility=Visibility.Collapsed};var panel=new DockPanel();DockPanel.SetDock(ok,Dock.Bottom);panel.Children.Add(ok);panel.Children.Add(cancel);panel.Children.Add(box);dlg.Content=panel;dlg.SourceInitialized+=(_,_)=>ApplyWindowChromeTheme(dlg);string? accepted=null;ok.Click+=(_,_)=>{var value=box.Text.Trim();if(value.Length==0)return;accepted=value;dlg.DialogResult=true;};box.KeyDown+=(_,e)=>{if(e.Key==Key.Escape){dlg.DialogResult=false;e.Handled=true;}};dlg.Loaded+=(_,_)=>{box.Focus();box.SelectAll();};var acceptedDialog=dlg.ShowDialog()==true&&accepted!=null;if(acceptedDialog)result=accepted!;return acceptedDialog;}
  async void NewProject_Click(object s,RoutedEventArgs e){
-  var dlg=new Window{Title="새 소설",Owner=this,WindowStartupLocation=WindowStartupLocation.CenterOwner,Width=420,Height=190,ResizeMode=ResizeMode.NoResize,Background=(Brush)FindResource("Panel"),Foreground=(Brush)FindResource("Text")};
-  var root=new Grid{Margin=new Thickness(22)};
-  root.RowDefinitions.Add(new RowDefinition{Height=GridLength.Auto});
-  root.RowDefinitions.Add(new RowDefinition{Height=new GridLength(1,GridUnitType.Star)});
-  root.RowDefinitions.Add(new RowDefinition{Height=GridLength.Auto});
-  root.Children.Add(new TextBlock{Text="현재 문서를 저장하고 새 소설을 시작할까요?",FontSize=16,FontWeight=FontWeights.SemiBold,TextWrapping=TextWrapping.Wrap});
-  var note=new TextBlock{Text="확인을 누르면 현재 프로젝트를 먼저 저장합니다. 저장을 취소하면 새 소설 전환도 취소됩니다.",Foreground=(Brush)FindResource("Muted"),FontSize=11,TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,10,0,0),VerticalAlignment=VerticalAlignment.Top};
-  Grid.SetRow(note,1);root.Children.Add(note);
-  var buttons=new StackPanel{Orientation=Orientation.Horizontal,HorizontalAlignment=HorizontalAlignment.Right};
-  var cancel=new Button{Content="취소",Padding=new Thickness(14,6,14,6),Margin=new Thickness(0,0,7,0),IsCancel=true};
-  var ok=new Button{Content="확인",Padding=new Thickness(16,6,16,6),IsDefault=true};
-  cancel.Click+=(_,_)=>dlg.DialogResult=false;ok.Click+=(_,_)=>dlg.DialogResult=true;
-  buttons.Children.Add(cancel);buttons.Children.Add(ok);Grid.SetRow(buttons,2);root.Children.Add(buttons);
-  dlg.Content=root;dlg.SourceInitialized+=(_,_)=>ApplyWindowChromeTheme(dlg);
-  if(dlg.ShowDialog()!=true)return;
-  if(!await SaveProjectCoreAsync(false))return;
+  if(!ShowNewProjectConfirm())return;
+
+  if(_path!=null){
+   if(!await SaveProjectCoreAsync(false))return;
+  }else{
+   if(!ShowUnsavedNewProjectConfirm())return;
+  }
+
   _document=ProjectDocument.CreateSample();_path=null;_scene=null;_card=null;_idea=null;
   RefreshAll();InitializeTypingSoundPreferences();InitializeRelationshipSnapshots();SelectFirstScene();_lastAutoSaveAt=DateTimeOffset.Now;UpdateStatus("새 소설");
+ }
+ bool ShowNewProjectConfirm()=>ShowConfirmDialog("새 소설","새 소설을 작성하시겠습니까?","확인","취소");
+ bool ShowUnsavedNewProjectConfirm()=>ShowConfirmDialog("새 소설","저장하지 않았습니다.\n계속 진행 하시겠습니까?","예","아니요");
+ bool ShowConfirmDialog(string title,string message,string acceptText,string cancelText){
+  var dlg=new Window{Title=title,Owner=this,WindowStartupLocation=WindowStartupLocation.CenterOwner,Width=390,Height=155,ResizeMode=ResizeMode.NoResize,Background=(Brush)FindResource("Panel"),Foreground=(Brush)FindResource("Text")};
+  var root=new Grid{Margin=new Thickness(22)};
+  root.RowDefinitions.Add(new RowDefinition{Height=new GridLength(1,GridUnitType.Star)});
+  root.RowDefinitions.Add(new RowDefinition{Height=GridLength.Auto});
+  root.Children.Add(new TextBlock{Text=message,FontSize=15,FontWeight=FontWeights.SemiBold,TextWrapping=TextWrapping.Wrap,VerticalAlignment=VerticalAlignment.Center});
+  var buttons=new StackPanel{Orientation=Orientation.Horizontal,HorizontalAlignment=HorizontalAlignment.Right};
+  var cancel=new Button{Content=cancelText,Padding=new Thickness(14,6,14,6),Margin=new Thickness(0,0,7,0),IsCancel=true};
+  var ok=new Button{Content=acceptText,Padding=new Thickness(16,6,16,6),IsDefault=true};
+  cancel.Click+=(_,_)=>dlg.DialogResult=false;ok.Click+=(_,_)=>dlg.DialogResult=true;
+  buttons.Children.Add(cancel);buttons.Children.Add(ok);Grid.SetRow(buttons,1);root.Children.Add(buttons);
+  dlg.Content=root;dlg.SourceInitialized+=(_,_)=>ApplyWindowChromeTheme(dlg);
+  return dlg.ShowDialog()==true;
  }
  async void OpenProject_Click(object s,RoutedEventArgs e){var d=new OpenFileDialog{Filter="TagWriter JSON (*.json)|*.json|JSON (*.json)|*.json"};if(d.ShowDialog()!=true)return;await LoadProjectFromPathAsync(d.FileName);}
  public async Task<bool> LoadProjectFromPathAsync(string path){
@@ -269,7 +277,7 @@ public partial class MainWindow:Window {
  void RememberRecentProject(string path){
   if(string.IsNullOrWhiteSpace(path))return;
   string normalized;
-  try{normalized=Path.GetFullPath(path);}catch{normalized=path;}
+  try{normalized=System.IO.Path.GetFullPath(path);}catch{normalized=path;}
   _appSettings.RecentProjectPath=normalized;
   _appSettings.RecentProjectPaths??=[];
   _appSettings.RecentProjectPaths.RemoveAll(p=>string.Equals(p,normalized,StringComparison.OrdinalIgnoreCase));

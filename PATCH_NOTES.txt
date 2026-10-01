@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.8.9
+NEXT CHAT HANDOFF — TagWriter 0.0.9.0
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,16 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.9.0
+- Changed the in-editor New flow to the requested two-step behavior.
+- First prompt: "새 소설을 작성하시겠습니까?" with 확인 / 취소.
+- If the current project already has a save path, 확인 saves directly to that file and then creates the new project.
+- If the current project has no save path, no Save As dialog is forced. Instead a second prompt says "저장하지 않았습니다. 계속 진행 하시겠습니까?" with 예 / 아니요.
+- 예 creates the new project without saving; 아니요 cancels the New action.
+- If saving an existing project fails, the New action is cancelled.
+- Fixed the current build failure caused by ambiguous Path references between System.IO.Path and System.Windows.Shapes.Path.
+- Bumped version to 0.0.9.0.
 
 0.0.8.9
 - Added a confirmation guard to the in-editor New action.
