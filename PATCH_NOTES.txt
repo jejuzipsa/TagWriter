@@ -1,11 +1,17 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.6.9
+NEXT CHAT HANDOFF — TagWriter 0.0.7.0
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
 - This section is a handoff specification. Items marked PENDING are discussed/approved but NOT implemented yet.
-- Current code at 0.0.6.9 still uses the old generic EntityCard model, generic Card tab, simple occurrence scan, and simple mind-map rendering unless noted otherwise. The standalone 관계 and 아이디어 메모 tab headers have been removed from the right CONTEXT panel.
+- Current code at 0.0.7.0 still uses the old generic EntityCard model, generic Card tab, simple occurrence scan, and simple mind-map rendering unless noted otherwise. The standalone 관계 and 아이디어 메모 tab headers have been removed from the right CONTEXT panel, and the redundant 관계맵 entry has been removed from the PROJECT tree.
 
 CURRENTLY IMPLEMENTED / VERIFIED
+- 0.0.7.0 PROJECT tree cleanup is implemented:
+  - Removed the redundant 관계맵 entry from the left PROJECT tree; relationship-map navigation remains available from the dedicated far-left activity icon (and existing View command).
+  - PROJECT edit mode now shows selectable checkboxes for saved setting cards and idea memos as well as chapters/scenes.
+  - Deleting a card also removes its relationship-map node/edges; Undo restores the card and its removed relationship-map data.
+  - Deleting an idea memo is supported and Undo restores it.
+  - Restyled the 아이디어 메모 + control to the same borderless tree + style used beside chapter rows; it is hidden while PROJECT edit mode is active.
 - 0.0.6.9 CONTEXT cleanup is implemented:
   - Removed the standalone 관계 tab from the right CONTEXT panel.
   - Removed the standalone 아이디어 메모 tab header; selecting an idea memo now shows its detail directly in the CONTEXT body without adding another tab.
@@ -187,6 +193,13 @@ RECOMMENDED NEXT IMPLEMENTATION ORDER
 8. Design Item fields/color/automatic behavior separately before implementing Item-specific logic.
 
 ============================================================
+
+0.0.7.0
+- Removed the redundant 관계맵 entry from the PROJECT tree while keeping the dedicated far-left relationship-map activity icon and existing View command.
+- Extended PROJECT [편집] selection/deletion to setting cards and idea memos, including Undo support.
+- Card deletion now cleans up matching relationship-map nodes and edges; Undo restores those map records together with the card.
+- Changed the 아이디어 메모 + control to the same borderless hover style used by the chapter-row + buttons, and hide it during PROJECT edit mode.
+- Bumped version to 0.0.7.0.
 
 0.0.6.9
 - Removed the standalone 관계 tab from the right CONTEXT panel.
