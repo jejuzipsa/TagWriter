@@ -2,11 +2,11 @@ TagWriter typing sound assets
 
 TYPEWRITER
 Source files supplied by the project owner from BigSoundBank.com:
-- Typewriter 8, ID 2841
+- Typewriter key, ID 2842
 - Typewriter space, ID 2843
 The embedded metadata in the supplied WAV files identifies:
 CC0 / WTFPL / Public domain.
-TagWriter uses short key-strike excerpts from Typewriter 8 plus the dedicated space recording.
+TagWriter uses the supplied Typewriter key recording for normal key presses and the dedicated Typewriter space recording for Space.
 
 KEYBOARD
 Source: Keyboard Soundpack #1 by unicae_games / inconsequentialist.
