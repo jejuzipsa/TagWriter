@@ -1,3 +1,12 @@
+0.0.6.8
+- Moved the Ideas section out of the right-side list and into the left PROJECT tree, directly below 관계맵.
+- Renamed the feature to "아이디어 메모".
+- Added a + button to the 아이디어 메모 tree header. It opens a compact creation dialog with only 제목 and 메모 fields.
+- New memos default to 메모 1, 메모 2, etc. and are appended downward in creation order under 아이디어 메모.
+- Clicking an idea memo in the left tree automatically expands the CONTEXT panel when collapsed and shows that memo's title/body in the right-side 아이디어 메모 detail tab.
+- Simplified the project Idea data model to title + memo + timestamps; removed the old text/links/done fields because there are no legacy project files to preserve.
+- Bumped version to 0.0.6.8.
+
 TagWriter cumulative patch notes
 
 0.0.6.7
