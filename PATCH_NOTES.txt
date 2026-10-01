@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.8.5
+NEXT CHAT HANDOFF — TagWriter 0.0.8.6
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,15 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.8.6
+- Improved the left activity rail hit targets and hover help.
+- Activity buttons are slightly taller (40 px) while retaining the same narrow rail width, so the full button rectangle is easier to hit.
+- Main activity glyphs and New / Save / Load / Export / Print visuals were increased by about 20%.
+- Activity-button tooltips now appear immediately when the pointer enters the button rectangle, not after the normal Windows tooltip delay.
+- Activity tooltips are placed to the right of the rail with a small offset, remain visible longer, and use larger 13 px text with more padding.
+- Global tooltip text/padding was enlarged for readability.
+- Bumped version to 0.0.8.6.
 
 0.0.8.5
 - Added a startup chooser before the main editor opens.
