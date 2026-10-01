@@ -8,6 +8,12 @@ The embedded metadata in the supplied WAV files identifies:
 CC0 / WTFPL / Public domain.
 TagWriter uses the supplied Typewriter key recording for normal key presses and the dedicated Typewriter space recording for Space.
 
+TYPEWRITER ENTER
+Source: Freesound
+- "Typewriter Carriage Return" by ramsamba, sound ID 318686
+- License: CC0
+TagWriter uses only the short final mechanical clack from the supplied recording; the preceding carriage-slide sound is omitted.
+
 KEYBOARD
 Source: Keyboard Soundpack #1 by unicae_games / inconsequentialist.
 The supplied pack readme states: "Free to use however you like."
