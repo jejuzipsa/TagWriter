@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.7.3
+NEXT CHAT HANDOFF — TagWriter 0.0.7.4
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -222,6 +222,11 @@ RECOMMENDED NEXT IMPLEMENTATION ORDER
 8. Design Item fields/color/automatic behavior separately before implementing Item-specific logic.
 
 ============================================================
+
+0.0.7.4
+- Hotfix: fixed two C# CS0819 build errors in the relationship-map workspace by using explicit double declarations for grouped node-size variables.
+- Changed Normal-mode inline tag emphasis from SemiBold to Bold to match the agreed clickable-tag appearance.
+- Bumped version to 0.0.7.4.
 
 0.0.7.3
 - Rebuilt the relationship-map workspace with a persistent 미배치 노드 tray and drag/drop placement.
