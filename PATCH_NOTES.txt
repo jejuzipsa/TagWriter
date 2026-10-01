@@ -1,5 +1,13 @@
 TagWriter cumulative patch notes
 
+0.0.5.5
+- Print output is now theme-independent: white paper, black text, gray borders/lines in both preview and actual printer/PDF output.
+- Replaced the ambiguous bool print-mode flow with explicit PrintMode.Normal / PrintMode.Paper, so preview and actual output use the same selected mode.
+- Normal print preview now renders on a white paper page with centered novel title and real gray chapter separators.
+- Manuscript-paper preview and output use white 20×10 grids with black text and gray cell borders.
+- Printer page size now follows the selected printer's printable area before pagination.
+- Bumped version to 0.0.5.5.
+
 0.0.5.4
 - Fixed print mode selection inversion: 전체 원고 now opens the normal manuscript preview, and 원고지 opens the manuscript-paper preview.
 - Applied TagWriter Dark/Light native title-bar theming to both the print-format selection dialog and the print-preview window.
