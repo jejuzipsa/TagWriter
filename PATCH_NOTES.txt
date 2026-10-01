@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.6.2
+- Hotfix: corrected the remaining New Project / Open Project calls from the removed InitializeTypewriterPreferences method to InitializeTypingSoundPreferences.
+- Resolves CS0103 build errors at MainWindow.xaml.cs lines 82-83.
+- No typing-sound behavior changes.
+- Bumped version to 0.0.6.2.
+
 0.0.6.1
 - Hotfix: fixed the muted-speaker XAML icon so its two Path shapes are wrapped in one Grid child inside the Viewbox.
 - Resolves MC3089: Viewbox can contain only one child.
