@@ -71,4 +71,5 @@ public sealed class ProjectSettings {
  [JsonPropertyName("editorFontSize")] public double EditorFontSize {get;set;}=17;
  [JsonPropertyName("typewriterSoundEnabled")] public bool TypewriterSoundEnabled {get;set;}=false;
  [JsonPropertyName("typewriterVolume")] public double TypewriterVolume {get;set;}=35;
+ [JsonPropertyName("typingSoundMode")] public string TypingSoundMode {get;set;}="typewriter";
 }
