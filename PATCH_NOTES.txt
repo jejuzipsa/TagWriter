@@ -1,5 +1,13 @@
 TagWriter cumulative patch notes
 
+0.0.6.5
+- Added a dedicated Typewriter-mode Enter sound from the user-supplied Freesound "Typewriter Carriage Return" (ramsamba, ID 318686).
+- Trimmed out the long carriage-slide/찌이익 portion and kept only the short final mechanical 철커덕 impact (about 0.14 s), with tiny edge fades to avoid clicks.
+- Typewriter Enter now uses a dedicated single-shot MediaPlayer: while the Enter sound is already playing, additional Enter presses do not stack another copy.
+- Enter key auto-repeat does not retrigger the sound. Text line breaks continue to work normally.
+- Keyboard mode Enter behavior remains unchanged.
+- Updated sound asset notices and bumped version to 0.0.6.5.
+
 0.0.6.4
 - Repacked the user-supplied BigSoundBank Typewriter key (ID 2842) sample as a verified Base64 asset so the repository preserves the complete WAV data reliably.
 - TagWriter reconstructs the key WAV into its local app-data sound cache before playback.
