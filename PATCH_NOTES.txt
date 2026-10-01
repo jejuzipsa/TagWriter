@@ -1,5 +1,15 @@
 TagWriter cumulative patch notes
 
+0.0.5.8
+- Added a global typewriter-sound control to the empty top-right toolbar area: [타자기] switch, volume icon, and volume slider.
+- Typewriter sound works in both normal manuscript mode and manuscript-paper mode.
+- Added per-key-position sound mapping. Physical keyboard regions use eight slightly different key sounds, so Korean IME keys such as D(ㅇ) and P(ㅔ) do not sound identical.
+- Space, Backspace/Delete, and Enter use separate mechanical sounds; Enter includes a carriage-return/bell style effect.
+- Added a small playback pool so rapid typing can overlap instead of constantly cutting off the previous keystroke.
+- Typewriter enabled state and volume are saved in the project JSON settings.
+- Added local bundled WAV assets under Assets/Sounds so typing sound works offline with no network dependency.
+- Bumped version to 0.0.5.8.
+
 0.0.5.7
 - 원고지 인쇄 미리보기 기본 용지를 A4 가로 비율로 변경하고 미리보기 창도 가로형에 맞게 확대.
 - 원고지 실제 인쇄/Print to PDF에서 PrintDialog 기본 방향을 Landscape로 설정.
