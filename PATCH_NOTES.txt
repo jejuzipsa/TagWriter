@@ -103,6 +103,12 @@ PENDING — MANUSCRIPT AUTO TAGGING
 - Current code still scans all cards; this must be changed during the card/tag refactor.
 - Relationship/tag identity always resolves to the stable card ID even when the manuscript matched an alias.
 - When showing a relationship or linked tag in UI, display the card's canonical name, not the alias that happened to match.
+- In Normal manuscript mode only, detected Character/Location tags should be rendered as clickable inline text with category color, bold weight, and underline.
+- Clicking a tagged name/alias selects the matching card and shows that card in CONTEXT.
+- The 등장 view for the selected card should list every matching occurrence as chapter | scene | current line number, followed by the matching sentence/line text.
+- Each occurrence row uses a text button labeled [이동] (not an arrow icon). Clicking [이동] opens the matching scene, scrolls to the occurrence, and moves focus/caret to that location; a brief highlight may be used so the destination is obvious.
+- Do not persist raw line numbers as identity. Resolve navigation from stable card ID + scene ID + current text position/offset and calculate the displayed line number from the current manuscript text.
+- Manuscript-paper mode must NOT enable inline tag styling, tag clicking, or occurrence-jump interaction. Tag interaction is a Normal-mode feature only.
 
 PENDING — AUTOMATIC VS MANUAL RELATIONSHIPS
 - Default relationship generation should be automatic from manuscript co-occurrence rather than requiring "related tags" fields inside cards.
