@@ -7,7 +7,7 @@ TagWriter cumulative patch notes
 - Space, Backspace/Delete, and Enter use separate mechanical sounds; Enter includes a carriage-return/bell style effect.
 - Added a small playback pool so rapid typing can overlap instead of constantly cutting off the previous keystroke.
 - Typewriter enabled state and volume are saved in the project JSON settings.
-- Added local bundled WAV assets under Assets/Sounds so typing sound works offline with no network dependency.
+- Added a locally generated offline typewriter sound set. TagWriter creates its key/space/backspace/carriage-return WAVs on first use, so there is no network or external audio-file dependency.
 - Bumped version to 0.0.5.8.
 
 0.0.5.7
