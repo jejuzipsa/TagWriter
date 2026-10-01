@@ -1,11 +1,16 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.6.8
+NEXT CHAT HANDOFF — TagWriter 0.0.6.9
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
 - This section is a handoff specification. Items marked PENDING are discussed/approved but NOT implemented yet.
-- Current code at 0.0.6.8 still uses the old generic EntityCard model, generic Card tab, simple occurrence scan, and simple mind-map rendering unless noted otherwise.
+- Current code at 0.0.6.9 still uses the old generic EntityCard model, generic Card tab, simple occurrence scan, and simple mind-map rendering unless noted otherwise. The standalone 관계 and 아이디어 메모 tab headers have been removed from the right CONTEXT panel.
 
 CURRENTLY IMPLEMENTED / VERIFIED
+- 0.0.6.9 CONTEXT cleanup is implemented:
+  - Removed the standalone 관계 tab from the right CONTEXT panel.
+  - Removed the standalone 아이디어 메모 tab header; selecting an idea memo now shows its detail directly in the CONTEXT body without adding another tab.
+  - Collapsing/reopening CONTEXT preserves whether the normal tabs or idea-memo detail was being shown.
+  - No left PROJECT tree structure was changed by this patch.
 - 0.0.6.8 Idea Memo move is implemented:
   - Left PROJECT tree has "아이디어 메모" directly below 관계맵.
   - 아이디어 메모 has a + button.
@@ -176,6 +181,13 @@ RECOMMENDED NEXT IMPLEMENTATION ORDER
 8. Design Item fields/color/automatic behavior separately before implementing Item-specific logic.
 
 ============================================================
+
+0.0.6.9
+- Removed the standalone 관계 tab from the right CONTEXT panel.
+- Removed the 아이디어 메모 tab header. Idea memo selection now swaps the CONTEXT body directly to the memo detail view while keeping 등장/카드 as the normal tab set.
+- CONTEXT collapse/expand now preserves the idea-memo detail state without restoring the removed tab header.
+- Left PROJECT navigation was intentionally left unchanged in this patch.
+- Bumped version to 0.0.6.9.
 
 0.0.6.8
 - Moved the Ideas section out of the right-side list and into the left PROJECT tree, directly below 관계맵.
