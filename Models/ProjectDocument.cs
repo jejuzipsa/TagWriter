@@ -69,4 +69,6 @@ public sealed class ProjectSettings {
  [JsonPropertyName("zoom")] public double Zoom {get;set;}=1.0;
  [JsonPropertyName("editorFontFamily")] public string EditorFontFamily {get;set;}="Malgun Gothic";
  [JsonPropertyName("editorFontSize")] public double EditorFontSize {get;set;}=17;
+ [JsonPropertyName("typewriterSoundEnabled")] public bool TypewriterSoundEnabled {get;set;}=false;
+ [JsonPropertyName("typewriterVolume")] public double TypewriterVolume {get;set;}=35;
 }
