@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.7.4
+NEXT CHAT HANDOFF — TagWriter 0.0.7.5
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -213,17 +213,27 @@ REMAINING UNDECIDED / NOT IMPLEMENTED
   - co-occurrence detection structure is agreed (same sentence > same paragraph > same scene, repeated scenes accumulate),
   - but the exact weighting/strength formula is still undecided,
   - so TagWriter does not yet create/update automatic relationship edges from manuscript co-occurrence.
-- Manual relationship authoring:
-  - manual edges and their purple rendering/labels are supported by the data/rendering layer,
-  - but the exact user interaction for creating/editing a manual connection on the relationship-map screen has not been finalized.
+- Manual relationship authoring is implemented:
+  - click the first node to make it the relationship anchor,
+  - hold Ctrl and click a second node to toggle a manual relationship,
+  - if no manual edge exists, create one; if that manual edge already exists, remove it,
+  - the current anchor is shown with a thicker purple border,
+  - automatic edges are not deleted by this manual toggle.
 - Everything else from the previous handoff plan has now been implemented through 0.0.7.4.
 
 RECOMMENDED NEXT DECISIONS
 1. Decide Item fields, Item color, and whether Item participates in manuscript auto-tagging/automatic relationships.
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
-3. Decide the manual relationship creation/edit interaction (for example: connect mode, node-to-node drag, or a small relationship dialog). Do not implement one arbitrarily before that choice is made.
 
 ============================================================
+
+0.0.7.5
+- Added manual relationship toggle interaction on relationship-map nodes.
+- Click one node to set the relationship anchor, then Ctrl+click a second node to connect them.
+- Repeating the same interaction for an already manually connected pair removes that manual connection.
+- The active anchor node is highlighted with a thicker purple border.
+- Manual toggle only creates/removes manual edges and does not remove future automatic co-occurrence edges.
+- Bumped version to 0.0.7.5.
 
 0.0.7.4
 - Hotfix: fixed two C# CS0819 build errors in the relationship-map workspace by using explicit double declarations for grouped node-size variables.
