@@ -1,5 +1,11 @@
 TagWriter cumulative patch notes
 
+0.0.6.1
+- Hotfix: fixed the muted-speaker XAML icon so its two Path shapes are wrapped in one Grid child inside the Viewbox.
+- Resolves MC3089: Viewbox can contain only one child.
+- No typing-sound behavior changes.
+- Bumped version to 0.0.6.1.
+
 0.0.6.0
 - Replaced the synthesized metallic typing effect with real recorded sound assets selected by the user.
 - Added a two-position top toolbar selector: 타자기 <switch> 키보드. The selected side is highlighted and both normal manuscript and manuscript-paper editors use that sound set.
