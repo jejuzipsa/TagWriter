@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.9.2
+NEXT CHAT HANDOFF — TagWriter 0.0.9.3
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,15 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.9.3
+- Replaced the broken/cropped startup PNG resource with the full original 512x512 TagWriter book artwork.
+- Startup logo now uses Uniform scaling inside the 128x128 slot, so the entire book is visible without clipping.
+- Increased startup "TagWriter." title size slightly and changed the subtitle to "태그로 적는 소설" with a slightly larger font.
+- Changed the startup new-project button label to "New Novel." including the period.
+- Added an "전체 삭제" button beside "최근 문서".
+- 전체 삭제 clears only the stored recent-document history; it never deletes the actual project JSON files.
+- Bumped version to 0.0.9.3.
 
 0.0.9.2
 - Simplified the card inspector "연결된 태그" relationship indicator.

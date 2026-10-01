@@ -114,6 +114,20 @@ public partial class StartupWindow : Window
         return Path.GetFileNameWithoutExtension(path);
     }
 
+    void ClearRecent_Click(object sender, RoutedEventArgs e)
+    {
+        var settings = AppSettingsStore.Load();
+        settings.RecentProjectPath = "";
+        settings.RecentProjectPaths ??= [];
+        settings.RecentProjectPaths.Clear();
+        AppSettingsStore.Save(settings);
+
+        RecentDocumentsHost.Children.Clear();
+        RecentCountText.Text = "";
+        RecentScrollViewer.Visibility = Visibility.Collapsed;
+        EmptyRecentText.Visibility = Visibility.Visible;
+    }
+
     void RecentDocument_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button { Tag: string path } || !File.Exists(path)) return;

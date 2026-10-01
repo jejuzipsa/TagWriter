@@ -56,14 +56,14 @@
    <Border Width="128" Height="128"
            HorizontalAlignment="Left" VerticalAlignment="Center"
            Background="Transparent">
-    <Image Source="/Assets/TagWriterStart.png" Stretch="None" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"/>
+    <Image Source="/Assets/TagWriterStart.png" Stretch="Uniform" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="HighQuality"/>
    </Border>
 
    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,16,0">
-    <TextBlock Text="TagWriter." FontSize="33" FontWeight="SemiBold"/>
-    <TextBlock Text="소설 집필 프로젝트"
+    <TextBlock Text="TagWriter." FontSize="37" FontWeight="SemiBold"/>
+    <TextBlock Text="태그로 적는 소설"
                Margin="2,8,0,0"
-               FontSize="12"
+               FontSize="14"
                Foreground="{DynamicResource Muted}"/>
    </StackPanel>
 
@@ -72,8 +72,8 @@
            HorizontalAlignment="Right" VerticalAlignment="Center"
            Click="NewButton_Click">
     <StackPanel>
-     <TextBlock Text="새 소설 작성"
-                FontSize="17" FontWeight="SemiBold"
+     <TextBlock Text="New Novel."
+                FontSize="18" FontWeight="SemiBold"
                 HorizontalAlignment="Center"/>
      <TextBlock Text="새 프로젝트 시작"
                 FontSize="10"
@@ -97,12 +97,27 @@
             BorderThickness="0,0,0,1"
             Padding="14,0">
      <Grid>
-      <TextBlock Text="최근 문서"
+      <Grid.ColumnDefinitions>
+       <ColumnDefinition Width="Auto"/>
+       <ColumnDefinition Width="Auto"/>
+       <ColumnDefinition Width="*"/>
+       <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <TextBlock Grid.Column="0"
+                 Text="최근 문서"
                  FontSize="13"
                  FontWeight="SemiBold"
                  VerticalAlignment="Center"/>
+      <Button Grid.Column="1"
+              Content="전체 삭제"
+              Click="ClearRecent_Click"
+              Margin="10,0,0,0"
+              Padding="8,2"
+              FontSize="10"
+              VerticalAlignment="Center"
+              ToolTip="최근 문서 목록만 삭제합니다. 실제 파일은 삭제하지 않습니다."/>
       <TextBlock x:Name="RecentCountText"
-                 HorizontalAlignment="Right"
+                 Grid.Column="3"
                  VerticalAlignment="Center"
                  FontSize="10"
                  Foreground="{DynamicResource Muted}"/>
