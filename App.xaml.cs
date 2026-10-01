@@ -26,7 +26,7 @@ public partial class App : Application
             var dir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "TagWriter",
-                "Logs");
+                "Crash");
             Directory.CreateDirectory(dir);
             return Path.Combine(dir, "TagWriter_crash.log");
         }

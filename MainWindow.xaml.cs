@@ -139,7 +139,55 @@ public partial class MainWindow:Window {
  string GetEditorText(){var text=new TextRange(Editor.Document.ContentStart,Editor.Document.ContentEnd).Text.Replace("\r\n","\n").Replace('\r','\n');if(text.EndsWith("\n",StringComparison.Ordinal))text=text[..^1];return text;}
  void SetEditorText(string? text){Editor.Document.Blocks.Clear();var p=new Paragraph{Margin=new Thickness(0),LineHeight=Math.Max(Editor.FontSize*1.7,Editor.FontSize+6)};p.Inlines.Add(new Run(text??""));Editor.Document.Blocks.Add(p);Editor.Document.FontFamily=Editor.FontFamily;Editor.Document.FontSize=Editor.FontSize;Editor.Document.PagePadding=new Thickness(0);}
  int GetEditorCaretOffset(){var text=new TextRange(Editor.Document.ContentStart,Editor.CaretPosition).Text.Replace("\r\n","\n").Replace('\r','\n');return Math.Min(text.Length,GetEditorText().Length);}
- TextPointer GetEditorPointerAtOffset(int offset){offset=Math.Max(0,offset);var p=Editor.Document.ContentStart;var count=0;while(p!=null&&p.CompareTo(Editor.Document.ContentEnd)<0){var context=p.GetPointerContext(LogicalDirection.Forward);if(context==TextPointerContext.Text){var run=p.GetTextInRun(LogicalDirection.Forward);if(count+run.Length>=offset)return p.GetPositionAtOffset(offset-count,LogicalDirection.Forward)??p;count+=run.Length;p=p.GetPositionAtOffset(run.Length,LogicalDirection.Forward)??p.GetNextContextPosition(LogicalDirection.Forward);continue;}p=p.GetNextContextPosition(LogicalDirection.Forward);}return Editor.Document.ContentEnd.GetInsertionPosition(LogicalDirection.Backward)??Editor.Document.ContentEnd;}
+
+ static int NormalizedRunLength(string raw)
+ {
+  var length=0;
+  for(var i=0;i<raw.Length;i++)
+  {
+   if(raw[i]=='\r'&&i+1<raw.Length&&raw[i+1]=='\n')i++;
+   length++;
+  }
+  return length;
+ }
+ static int RawIndexForNormalizedOffset(string raw,int normalizedOffset)
+ {
+  if(normalizedOffset<=0)return 0;
+  var normalized=0;
+  var rawIndex=0;
+  while(rawIndex<raw.Length&&normalized<normalizedOffset)
+  {
+   if(raw[rawIndex]=='\r'&&rawIndex+1<raw.Length&&raw[rawIndex+1]=='\n')rawIndex+=2;
+   else rawIndex++;
+   normalized++;
+  }
+  return rawIndex;
+ }
+ TextPointer GetEditorPointerAtOffset(int offset)
+ {
+  offset=Math.Clamp(offset,0,GetEditorText().Length);
+  var p=Editor.Document.ContentStart;
+  var count=0;
+  while(p!=null&&p.CompareTo(Editor.Document.ContentEnd)<0)
+  {
+   var context=p.GetPointerContext(LogicalDirection.Forward);
+   if(context==TextPointerContext.Text)
+   {
+    var run=p.GetTextInRun(LogicalDirection.Forward);
+    var normalizedLength=NormalizedRunLength(run);
+    if(count+normalizedLength>=offset)
+    {
+     var rawOffset=RawIndexForNormalizedOffset(run,offset-count);
+     return p.GetPositionAtOffset(rawOffset,LogicalDirection.Forward)??p;
+    }
+    count+=normalizedLength;
+    p=p.GetPositionAtOffset(run.Length,LogicalDirection.Forward)??p.GetNextContextPosition(LogicalDirection.Forward);
+    continue;
+   }
+   p=p.GetNextContextPosition(LogicalDirection.Forward);
+  }
+  return Editor.Document.ContentEnd.GetInsertionPosition(LogicalDirection.Backward)??Editor.Document.ContentEnd;
+ }
  int GetEditorOffsetFromPointer(TextPointer position){var text=new TextRange(Editor.Document.ContentStart,position).Text.Replace("\r\n","\n").Replace('\r','\n');return Math.Min(text.Length,GetEditorText().Length);}
  void Editor_TextChanged(object s,TextChangedEventArgs e){if(_loading||_formattingTags||_scene==null)return;_scene.Content=GetEditorText();UpdateStatus();if(_card!=null)RefreshOccurrences(_card);ScheduleTagFormatting();}
  void ScheduleTagFormatting(){if(_paperMode||_scene==null||_tagFormatTimer==null)return;_tagFormatTimer.Stop();_tagFormatTimer.Start();}
