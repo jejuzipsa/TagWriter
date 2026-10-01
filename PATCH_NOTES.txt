@@ -1,5 +1,15 @@
 TagWriter cumulative patch notes
 
+0.0.5.1
+- Added printer button at the bottom of the left activity rail.
+- Added Ctrl+P shortcut.
+- Ctrl+P / printer button first asks for output type: 전체 원고 or 원고지.
+- Added an in-app print preview window with page-style preview, Cancel, and Print actions.
+- Added standard WPF PrintDialog after preview so printer selection and normal Windows printer settings are available.
+- 전체 원고 preview/print uses chapter blocks with the novel title centered; removed dependence on a text-line separator for chapter separation.
+- 원고지 preview/print renders a 20×10 grid per 200 characters and includes page numbers.
+- Bumped version to 0.0.5.1.
+
 0.0.5.0
 - 전체 원고 읽기 화면을 일반 TextBox와 분리된 RichTextBox/FlowDocument 뷰어로 변경. 소설 제목 문단만 실제 중앙 정렬되고 Chapter 제목/본문은 왼쪽 정렬.
 - 전체 원고 제목은 현재 편집 글꼴을 따르며 본문보다 약간 크게 표시.
