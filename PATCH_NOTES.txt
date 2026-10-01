@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.5.4
+- Fixed print mode selection inversion: 전체 원고 now opens the normal manuscript preview, and 원고지 opens the manuscript-paper preview.
+- Applied TagWriter Dark/Light native title-bar theming to both the print-format selection dialog and the print-preview window.
+- Bumped version to 0.0.5.4.
+
 0.0.5.3
 - Hotfix: corrected the final two invalid two-argument Thickness constructors in the print format dialog (Cancel/Next button padding).
 - Audited MainWindow.xaml.cs and confirmed no remaining two-argument Thickness constructor calls.
