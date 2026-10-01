@@ -1,5 +1,10 @@
 TagWriter cumulative patch notes
 
+0.0.5.9
+- Hotfix: added the missing System.IO import to TypewriterSoundFactory so Path, Directory, File, FileInfo, and BinaryWriter resolve during build.
+- No functional changes to the typewriter sound feature.
+- Bumped version to 0.0.5.9.
+
 0.0.5.8
 - Added a global typewriter-sound control to the empty top-right toolbar area: [타자기] switch, volume icon, and volume slider.
 - Typewriter sound works in both normal manuscript mode and manuscript-paper mode.
