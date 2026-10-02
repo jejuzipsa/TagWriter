@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.9.7
+NEXT CHAT HANDOFF — TagWriter 0.0.9.8
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,14 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.9.8
+- Fixed editor-paper backgrounds leaking into the 전체 원고 read-only view.
+- Root cause: the notebook background was a separate visual layer behind both the scene editor and FullManuscriptReader, so hiding the editor did not hide the paper layer.
+- The paper-background layer is now visible only while an actual Scene is open in normal editing mode.
+- 전체 원고, 원고지 mode, and non-scene views now hide the notebook background entirely.
+- Returning to a Scene restores the previously selected 줄공책 / 점공책 / 점선줄 / 무지 style.
+- Bumped version to 0.0.9.8.
 
 0.0.9.7
 - Adjusted normal-editor ruled-paper alignment.
