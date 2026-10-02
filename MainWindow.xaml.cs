@@ -3,12 +3,12 @@ namespace TagWriter;
 public partial class MainWindow:Window {
  readonly AppSettings _appSettings=AppSettingsStore.Load();
  ProjectDocument _document=ProjectDocument.CreateSample(); string? _path; Scene? _scene; EntityCard? _card; Idea? _idea; bool _loading; bool _ideaMemoContextVisible; bool _dark=true; bool _leftCollapsed=false,_rightCollapsed=false; double _leftWidth=250,_rightWidth=310; bool _paperMode=false,_paperFit=true; Button? _activeActivityButton; Scene? _lastScene; double _paperZoom=1.0; const double PaperCell=34,PaperMargin=42;
- readonly List<ManuscriptPaperSurface> _paperSurfaces=new(); readonly Dictionary<string,TextBox> _cardEditFields=new(); readonly List<EditorTagSpan> _editorTagSpans=new(); double _editorVerticalScrollOffset; EditorTagSpan? _hoveredEditorTagSpan; readonly Dictionary<string,FontFamily> _editorFontFamilies=new(StringComparer.OrdinalIgnoreCase); readonly HashSet<string> _pendingRelationshipSceneIds=new(); readonly Dictionary<string,DateTimeOffset> _pendingSceneFinalizeAt=new(); readonly Dictionary<string,Dictionary<(string A,string B),int>> _sceneAutoPairs=new(); DispatcherTimer? _paperRenderTimer; DispatcherTimer? _tagFormatTimer; DispatcherTimer? _relationshipIdleTimer; DispatcherTimer? _autoSaveTimer; DateTimeOffset _lastEditorInputAt=DateTimeOffset.MinValue; DateTimeOffset _lastAutoSaveAt=DateTimeOffset.Now; bool _saveInProgress; bool _formattingTags; bool _paperDragging; int _paperDragAnchorText; int? _paperKeyboardSelectionAnchor; bool _treeEditMode; Point _treeDragStart; object? _treeDragItem; Point _mapDragStart; string? _mapDragCardId; string? _relationshipAnchorCardId; TreeViewItem? _dropIndicatorItem; readonly HashSet<object> _treeEditSelection=new(); readonly Stack<Action> _treeUndo=new(); readonly Dictionary<string,MediaPlayer[]> _typingSoundPlayers=new(); readonly Dictionary<string,int> _typingSoundPlayerCursor=new(); MediaPlayer? _typewriterEnterPlayer; bool _typewriterEnterPlaying; bool _typingSoundsLoaded; sealed record TreeDeleteSnapshot(List<(Chapter chapter,int index)> Chapters,List<(Scene scene,Chapter chapter,int index)> Scenes,List<(EntityCard card,int index)> Cards,List<(Idea idea,int index)> Ideas,List<MapNode> Nodes,List<MapEdge> Edges); sealed record EditorFontChoice(string Name,FontFamily Family){public override string ToString()=>Name;} sealed record EditorTagSpan(int Start,int Length,string CardId); sealed record TagHit(int Start,int Length,EntityCard Card); sealed record OccurrenceHit(Chapter Chapter,Scene Scene,int Offset,int Length,int LineNumber,string LineText); enum PrintMode{Normal,Paper};
- public MainWindow(){InitializeComponent();ApplyWindowSettings();Closing+=MainWindow_Closing;PreviewKeyDown+=MainWindow_PreviewKeyDown;SourceInitialized+=(_,_)=>ApplyWindowChromeTheme();Loaded+=(_,_)=>{InitializeBuildInfo();InitializeEditorPreferences();InitializeEditorPaperPreferences();InitializeTypingSoundPreferences();InitializeAutoSavePreferences();ApplyPanelSettings();_paperZoom=Math.Clamp(_appSettings.PaperZoom,.35,2.5);_paperFit=_appSettings.PaperFit;_paperRenderTimer=new DispatcherTimer(DispatcherPriority.Render){Interval=TimeSpan.FromMilliseconds(16)};_paperRenderTimer.Tick+=(_,_)=>{_paperRenderTimer.Stop();RenderManuscriptPaper();};_tagFormatTimer=new DispatcherTimer(DispatcherPriority.Background){Interval=TimeSpan.FromMilliseconds(180)};_tagFormatTimer.Tick+=(_,_)=>{_tagFormatTimer.Stop();ApplyEditorTagFormatting();};_relationshipIdleTimer=new DispatcherTimer(DispatcherPriority.Background){Interval=TimeSpan.FromSeconds(1)};_relationshipIdleTimer.Tick+=RelationshipIdleTimer_Tick;_relationshipIdleTimer.Start();_autoSaveTimer=new DispatcherTimer(DispatcherPriority.Background){Interval=TimeSpan.FromSeconds(10)};_autoSaveTimer.Tick+=AutoSaveTimer_Tick;_autoSaveTimer.Start();if(_appSettings.PaperMode)PaperMode_Click(this,new RoutedEventArgs());else ApplyEditorTagFormatting();};RefreshAll();InitializeRelationshipSnapshots();SelectFirstScene();ApplyTheme(_appSettings.Theme!="light");}
+ readonly List<ManuscriptPaperSurface> _paperSurfaces=new(); readonly Dictionary<string,TextBox> _cardEditFields=new(); readonly List<EditorTagSpan> _editorTagSpans=new(); double _editorVerticalScrollOffset; EditorTagSpan? _hoveredEditorTagSpan; readonly Dictionary<string,FontFamily> _editorFontFamilies=new(StringComparer.OrdinalIgnoreCase); readonly HashSet<string> _pendingRelationshipSceneIds=new(); readonly Dictionary<string,DateTimeOffset> _pendingSceneFinalizeAt=new(); readonly Dictionary<string,Dictionary<(string A,string B),int>> _sceneAutoPairs=new(); DispatcherTimer? _paperRenderTimer; DispatcherTimer? _tagFormatTimer; DispatcherTimer? _relationshipIdleTimer; DispatcherTimer? _autoSaveTimer; DateTimeOffset _lastEditorInputAt=DateTimeOffset.MinValue; DateTimeOffset _lastAutoSaveAt=DateTimeOffset.Now; bool _saveInProgress; bool _formattingTags; bool _paperDragging; int _paperDragAnchorText; int? _paperKeyboardSelectionAnchor; bool _treeEditMode; Point _treeDragStart; object? _treeDragItem; Point _mapDragStart; string? _mapDragCardId; string? _relationshipAnchorCardId; double _mindMapZoom=1.0; const double MinMindMapZoom=.25,MaxMindMapZoom=2.0; TreeViewItem? _dropIndicatorItem; readonly HashSet<object> _treeEditSelection=new(); readonly Stack<Action> _treeUndo=new(); readonly Dictionary<string,MediaPlayer[]> _typingSoundPlayers=new(); readonly Dictionary<string,int> _typingSoundPlayerCursor=new(); MediaPlayer? _typewriterEnterPlayer; bool _typewriterEnterPlaying; bool _typingSoundsLoaded; sealed record TreeDeleteSnapshot(List<(Chapter chapter,int index)> Chapters,List<(Scene scene,Chapter chapter,int index)> Scenes,List<(EntityCard card,int index)> Cards,List<(Idea idea,int index)> Ideas,List<MapNode> Nodes,List<MapEdge> Edges); sealed record EditorFontChoice(string Name,FontFamily Family){public override string ToString()=>Name;} sealed record EditorTagSpan(int Start,int Length,string CardId); sealed record TagHit(int Start,int Length,EntityCard Card); sealed record OccurrenceHit(Chapter Chapter,Scene Scene,int Offset,int Length,int LineNumber,string LineText); enum PrintMode{Normal,Paper};
+ public MainWindow(){InitializeComponent();ApplyWindowSettings();Closing+=MainWindow_Closing;PreviewKeyDown+=MainWindow_PreviewKeyDown;SourceInitialized+=(_,_)=>ApplyWindowChromeTheme();Loaded+=(_,_)=>{InitializeBuildInfo();InitializeEditorPreferences();InitializeEditorPaperPreferences();InitializeTypingSoundPreferences();InitializeAutoSavePreferences();ApplyPanelSettings();_paperZoom=Math.Clamp(_appSettings.PaperZoom,.35,2.5);_paperFit=_appSettings.PaperFit;_mindMapZoom=Math.Clamp(_appSettings.MindMapZoom,MinMindMapZoom,MaxMindMapZoom);ApplyMindMapZoomVisual();_paperRenderTimer=new DispatcherTimer(DispatcherPriority.Render){Interval=TimeSpan.FromMilliseconds(16)};_paperRenderTimer.Tick+=(_,_)=>{_paperRenderTimer.Stop();RenderManuscriptPaper();};_tagFormatTimer=new DispatcherTimer(DispatcherPriority.Background){Interval=TimeSpan.FromMilliseconds(180)};_tagFormatTimer.Tick+=(_,_)=>{_tagFormatTimer.Stop();ApplyEditorTagFormatting();};_relationshipIdleTimer=new DispatcherTimer(DispatcherPriority.Background){Interval=TimeSpan.FromSeconds(1)};_relationshipIdleTimer.Tick+=RelationshipIdleTimer_Tick;_relationshipIdleTimer.Start();_autoSaveTimer=new DispatcherTimer(DispatcherPriority.Background){Interval=TimeSpan.FromSeconds(10)};_autoSaveTimer.Tick+=AutoSaveTimer_Tick;_autoSaveTimer.Start();if(_appSettings.PaperMode)PaperMode_Click(this,new RoutedEventArgs());else ApplyEditorTagFormatting();};RefreshAll();InitializeRelationshipSnapshots();SelectFirstScene();ApplyTheme(_appSettings.Theme!="light");}
  void ApplyWindowSettings(){Width=Math.Max(MinWidth,_appSettings.WindowWidth);Height=Math.Max(MinHeight,_appSettings.WindowHeight);if(_appSettings.WindowLeft is double left&&_appSettings.WindowTop is double top&&double.IsFinite(left)&&double.IsFinite(top)){WindowStartupLocation=WindowStartupLocation.Manual;Left=left;Top=top;}if(_appSettings.WindowMaximized)WindowState=WindowState.Maximized;}
  void ApplyPanelSettings(){_leftWidth=Math.Max(_appSettings.LeftPanelWidth,210);_rightWidth=Math.Max(_appSettings.RightPanelWidth,260);if(_appSettings.LeftPanelCollapsed){LeftPanelColumn.MinWidth=0;LeftPanelColumn.Width=new GridLength(0);LeftSplitterColumn.Width=new GridLength(0);LeftSplitter.Visibility=Visibility.Collapsed;ProjectTree.Visibility=Visibility.Collapsed;LeftPanelLabel.Visibility=Visibility.Collapsed;LeftPanelToggle.Visibility=Visibility.Collapsed;LeftPanelCollapsedToggle.Visibility=Visibility.Visible;_leftCollapsed=true;}else{LeftPanelColumn.MinWidth=210;LeftPanelColumn.Width=new GridLength(_leftWidth);LeftSplitterColumn.Width=new GridLength(4);LeftSplitter.Visibility=Visibility.Visible;ProjectTree.Visibility=Visibility.Visible;LeftPanelLabel.Visibility=Visibility.Visible;LeftPanelToggle.Visibility=Visibility.Visible;LeftPanelCollapsedToggle.Visibility=Visibility.Collapsed;_leftCollapsed=false;}if(_appSettings.RightPanelCollapsed){RightPanelColumn.MinWidth=0;RightPanelColumn.Width=new GridLength(0);RightSplitterColumn.Width=new GridLength(0);RightSplitter.Visibility=Visibility.Collapsed;ContextTabs.Visibility=Visibility.Collapsed;RightPanelLabel.Visibility=Visibility.Collapsed;RightPanelToggle.Visibility=Visibility.Collapsed;RightPanelCollapsedToggle.Visibility=Visibility.Visible;_rightCollapsed=true;}else{RightPanelColumn.MinWidth=260;RightPanelColumn.Width=new GridLength(_rightWidth);RightSplitterColumn.Width=new GridLength(4);RightSplitter.Visibility=Visibility.Visible;ContextTabs.Visibility=Visibility.Visible;RightPanelLabel.Visibility=Visibility.Visible;RightPanelToggle.Visibility=Visibility.Visible;RightPanelCollapsedToggle.Visibility=Visibility.Collapsed;_rightCollapsed=false;}}
  void MainWindow_Closing(object? sender,System.ComponentModel.CancelEventArgs e){CaptureAppSettings();AppSettingsStore.Save(_appSettings);}
- void CaptureAppSettings(){_appSettings.Theme=_dark?"dark":"light";_appSettings.EditorFontFamily=Editor.FontFamily.Source;_appSettings.EditorFontSize=Editor.FontSize;_appSettings.PaperMode=_paperMode;_appSettings.PaperZoom=_paperZoom;_appSettings.PaperFit=_paperFit;_appSettings.LeftPanelCollapsed=_leftCollapsed;_appSettings.RightPanelCollapsed=_rightCollapsed;if(!_leftCollapsed)_leftWidth=Math.Max(LeftPanelColumn.ActualWidth,210);if(!_rightCollapsed)_rightWidth=Math.Max(RightPanelColumn.ActualWidth,260);_appSettings.LeftPanelWidth=_leftWidth;_appSettings.RightPanelWidth=_rightWidth;var bounds=WindowState==WindowState.Normal?new Rect(Left,Top,ActualWidth,ActualHeight):RestoreBounds;if(bounds.Width>0&&bounds.Height>0){_appSettings.WindowLeft=bounds.Left;_appSettings.WindowTop=bounds.Top;_appSettings.WindowWidth=Math.Max(MinWidth,bounds.Width);_appSettings.WindowHeight=Math.Max(MinHeight,bounds.Height);}_appSettings.WindowMaximized=WindowState==WindowState.Maximized;_appSettings.AutoSaveMinutes=Math.Clamp(_appSettings.AutoSaveMinutes,1,10);}
+ void CaptureAppSettings(){_appSettings.Theme=_dark?"dark":"light";_appSettings.EditorFontFamily=Editor.FontFamily.Source;_appSettings.EditorFontSize=Editor.FontSize;_appSettings.PaperMode=_paperMode;_appSettings.PaperZoom=_paperZoom;_appSettings.PaperFit=_paperFit;_appSettings.MindMapZoom=_mindMapZoom;_appSettings.LeftPanelCollapsed=_leftCollapsed;_appSettings.RightPanelCollapsed=_rightCollapsed;if(!_leftCollapsed)_leftWidth=Math.Max(LeftPanelColumn.ActualWidth,210);if(!_rightCollapsed)_rightWidth=Math.Max(RightPanelColumn.ActualWidth,260);_appSettings.LeftPanelWidth=_leftWidth;_appSettings.RightPanelWidth=_rightWidth;var bounds=WindowState==WindowState.Normal?new Rect(Left,Top,ActualWidth,ActualHeight):RestoreBounds;if(bounds.Width>0&&bounds.Height>0){_appSettings.WindowLeft=bounds.Left;_appSettings.WindowTop=bounds.Top;_appSettings.WindowWidth=Math.Max(MinWidth,bounds.Width);_appSettings.WindowHeight=Math.Max(MinHeight,bounds.Height);}_appSettings.WindowMaximized=WindowState==WindowState.Maximized;_appSettings.AutoSaveMinutes=Math.Clamp(_appSettings.AutoSaveMinutes,1,10);}
  void MainWindow_PreviewKeyDown(object s,KeyEventArgs e){if(e.Key==Key.P&&Keyboard.Modifiers==ModifierKeys.Control){Print_Click(s,e);e.Handled=true;}}
  async void Export_Click(object s,RoutedEventArgs e){
   PersistEditor();
@@ -555,18 +555,133 @@ public partial class MainWindow:Window {
  void ProjectMode_Click(object s,RoutedEventArgs e)=>ShowAll_Click(s,e);
  void ManuscriptMode_Click(object s,RoutedEventArgs e){EditorView.Visibility=Visibility.Visible;MindMapView.Visibility=Visibility.Collapsed;var target=_scene??(_lastScene!=null&&_document.Chapters.Any(ch=>ch.Scenes.Contains(_lastScene))?_lastScene:null);if(target!=null)ShowScene(target);else SelectFirstScene();Editor.Focus();}
  void ShowMindMap_Click(object s,RoutedEventArgs e)=>ShowMindMap();
- void ShowMindMap(){SetActivityButton(MindMapModeButton);PersistEditor();Editor.IsReadOnly=false;EditorView.Visibility=Visibility.Collapsed;MindMapView.Visibility=Visibility.Visible;DrawMindMap();}
+ void ShowMindMap(){SetActivityButton(MindMapModeButton);PersistEditor();Editor.IsReadOnly=false;EditorView.Visibility=Visibility.Collapsed;MindMapView.Visibility=Visibility.Visible;ApplyMindMapZoomVisual();DrawMindMap();}
  void EnsureMapNodes(){var valid=_document.Cards.Select(c=>c.Id).ToHashSet();_document.MindMap.Nodes.RemoveAll(n=>!valid.Contains(n.CardId));foreach(var card in _document.Cards)if(!_document.MindMap.Nodes.Any(n=>n.CardId==card.Id))_document.MindMap.Nodes.Add(new MapNode{CardId=card.Id,Placed=false});}
  double GetMapNodeSize(string cardId){var unique=_document.MindMap.Edges.Where(e=>e.From==cardId||e.To==cardId).Select(e=>e.From==cardId?e.To:e.From).Distinct().Count();return Math.Min(125,70+unique*8);}
  double GetMapNodeHeight(string cardId)=>Math.Max(46,GetMapNodeSize(cardId)*.62);
- void DrawMindMap(){
-  EnsureMapNodes();MindCanvas.Children.Clear();UnplacedNodeHost.Children.Clear();
-  foreach(var node in _document.MindMap.Nodes.Where(n=>!n.Placed)){var card=_document.Cards.FirstOrDefault(c=>c.Id==node.CardId);if(card==null)continue;var b=CreateMapNodeButton(card,true);b.Margin=new Thickness(0,0,0,7);b.HorizontalAlignment=HorizontalAlignment.Stretch;UnplacedNodeHost.Children.Add(b);}
-  foreach(var edge in _document.MindMap.Edges){var a=_document.MindMap.Nodes.FirstOrDefault(n=>n.CardId==edge.From&&n.Placed);var b=_document.MindMap.Nodes.FirstOrDefault(n=>n.CardId==edge.To&&n.Placed);if(a==null||b==null)continue;double aw=GetMapNodeSize(a.CardId),ah=GetMapNodeHeight(a.CardId),bw=GetMapNodeSize(b.CardId),bh=GetMapNodeHeight(b.CardId);var manual=!string.Equals(edge.Source,"auto",StringComparison.OrdinalIgnoreCase);var thickness=manual?2.4:1.2+Math.Min(1.8,Math.Log2(Math.Max(1,edge.Strength)+1)*.35);var line=new Line{X1=a.X+aw/2,Y1=a.Y+ah/2,X2=b.X+bw/2,Y2=b.Y+bh/2,Stroke=RelationshipBrush(edge.Source),StrokeThickness=thickness,Opacity=manual?.95:Math.Min(.9,.48+Math.Log2(Math.Max(1,edge.Strength)+1)*.08)};MindCanvas.Children.Add(line);if(!string.IsNullOrWhiteSpace(edge.Label)){var l=new TextBlock{Text=edge.Label,Foreground=RelationshipBrush(edge.Source),FontSize=11,Background=(Brush)FindResource("EditorBg"),Padding=new Thickness(3,1,3,1)};Canvas.SetLeft(l,(line.X1+line.X2)/2);Canvas.SetTop(l,(line.Y1+line.Y2)/2);MindCanvas.Children.Add(l);}}
-  foreach(var node in _document.MindMap.Nodes.Where(n=>n.Placed)){var card=_document.Cards.FirstOrDefault(c=>c.Id==node.CardId);if(card==null)continue;var b=CreateMapNodeButton(card,false);Canvas.SetLeft(b,node.X);Canvas.SetTop(b,node.Y);MindCanvas.Children.Add(b);}
+ void UpdateMindMapCanvasExtent(){
+  if(MindCanvas==null||MindMapScroll==null)return;
+  double maxX=0,maxY=0;
+  foreach(var node in _document.MindMap.Nodes.Where(n=>n.Placed)){
+   maxX=Math.Max(maxX,node.X+GetMapNodeSize(node.CardId));
+   maxY=Math.Max(maxY,node.Y+GetMapNodeHeight(node.CardId));
+  }
+  var viewportWidth=MindMapScroll.ViewportWidth>0?MindMapScroll.ViewportWidth:MindMapScroll.ActualWidth;
+  var viewportHeight=MindMapScroll.ViewportHeight>0?MindMapScroll.ViewportHeight:MindMapScroll.ActualHeight;
+  var logicalViewportWidth=viewportWidth>0?viewportWidth/Math.Max(MinMindMapZoom,_mindMapZoom):900;
+  var logicalViewportHeight=viewportHeight>0?viewportHeight/Math.Max(MinMindMapZoom,_mindMapZoom):650;
+  MindCanvas.Width=Math.Max(logicalViewportWidth,Math.Max(900,maxX+160));
+  MindCanvas.Height=Math.Max(logicalViewportHeight,Math.Max(650,maxY+160));
  }
- Button CreateMapNodeButton(EntityCard card,bool tray){var size=GetMapNodeSize(card.Id);var selected=_relationshipAnchorCardId==card.Id;var b=new Button{Tag=card,Content=new TextBlock{Text=card.Name,TextWrapping=TextWrapping.Wrap,TextAlignment=TextAlignment.Center,HorizontalAlignment=HorizontalAlignment.Center},MinWidth=tray?145:0,Width=tray?double.NaN:size,Height=tray?38:GetMapNodeHeight(card.Id),Padding=new Thickness(7,4,7,4),Background=(Brush)FindResource("Panel2"),Foreground=CardTypeBrush(card.Type),BorderBrush=selected?RelationshipBrush("manual"):CardTypeBrush(card.Type),BorderThickness=selected?new Thickness(2.5):new Thickness(1),Cursor=Cursors.Hand,ToolTip=selected?"연결 기준 노드 · Ctrl+다른 노드 클릭으로 연결/해제":tray?"관계맵으로 끌어 배치 · 클릭 후 Ctrl+다른 노드 클릭으로 연결/해제":"드래그해서 위치 이동 · 클릭 후 Ctrl+다른 노드 클릭으로 연결/해제"};b.Click+=(_,e)=>MapNode_Click(card,e);b.PreviewMouseLeftButtonDown+=MapNode_PreviewMouseLeftButtonDown;b.PreviewMouseMove+=MapNode_PreviewMouseMove;return b;}
- void MapNode_Click(EntityCard card,RoutedEventArgs e){
+ void DrawMindMap(){
+  EnsureMapNodes();MindMapHoverPopup.IsOpen=false;MindCanvas.Children.Clear();UnplacedNodeHost.Children.Clear();
+  foreach(var node in _document.MindMap.Nodes.Where(n=>!n.Placed)){var card=_document.Cards.FirstOrDefault(c=>c.Id==node.CardId);if(card==null)continue;var b=CreateMapNodeButton(card,true);b.Margin=new Thickness(0,0,0,7);b.HorizontalAlignment=HorizontalAlignment.Stretch;UnplacedNodeHost.Children.Add(b);}
+  foreach(var edge in _document.MindMap.Edges){
+   var a=_document.MindMap.Nodes.FirstOrDefault(n=>n.CardId==edge.From&&n.Placed);var b=_document.MindMap.Nodes.FirstOrDefault(n=>n.CardId==edge.To&&n.Placed);if(a==null||b==null)continue;
+   double aw=GetMapNodeSize(a.CardId),ah=GetMapNodeHeight(a.CardId),bw=GetMapNodeSize(b.CardId),bh=GetMapNodeHeight(b.CardId);
+   var manual=!string.Equals(edge.Source,"auto",StringComparison.OrdinalIgnoreCase);
+   var thickness=manual?2.4:1.2+Math.Min(1.8,Math.Log2(Math.Max(1,edge.Strength)+1)*.35);
+   var line=new Line{X1=a.X+aw/2,Y1=a.Y+ah/2,X2=b.X+bw/2,Y2=b.Y+bh/2,Stroke=RelationshipBrush(edge.Source),StrokeThickness=thickness,Opacity=manual?.95:Math.Min(.9,.48+Math.Log2(Math.Max(1,edge.Strength)+1)*.08)};
+   MindCanvas.Children.Add(line);
+   if(!string.IsNullOrWhiteSpace(edge.Label)){var l=new TextBlock{Text=edge.Label,Foreground=RelationshipBrush(edge.Source),FontSize=11,Background=(Brush)FindResource("EditorBg"),Padding=new Thickness(3,1,3,1)};Canvas.SetLeft(l,(line.X1+line.X2)/2);Canvas.SetTop(l,(line.Y1+line.Y2)/2);MindCanvas.Children.Add(l);}
+  }
+  foreach(var node in _document.MindMap.Nodes.Where(n=>n.Placed)){var card=_document.Cards.FirstOrDefault(c=>c.Id==node.CardId);if(card==null)continue;var b=CreateMapNodeButton(card,false);Canvas.SetLeft(b,node.X);Canvas.SetTop(b,node.Y);MindCanvas.Children.Add(b);}
+  UpdateMindMapCanvasExtent();
+ }
+ Button CreateMapNodeButton(EntityCard card,bool tray){
+  var size=GetMapNodeSize(card.Id);var height=tray?38:GetMapNodeHeight(card.Id);var selected=_relationshipAnchorCardId==card.Id;
+  var b=new Button{
+   Tag=card,Style=(Style)FindResource("MapNodeButtonStyle"),MinWidth=tray?145:0,Width=tray?double.NaN:size,Height=height,
+   Content=CreateMapNodeVisual(card,size,height,selected,tray),
+   ToolTip=selected?"연결 기준 노드 · Ctrl+다른 노드 클릭으로 연결/해제":tray?"관계맵으로 끌어 배치 · 클릭 후 Ctrl+다른 노드 클릭으로 연결/해제":"드래그해서 위치 이동 · 클릭 후 Ctrl+다른 노드 클릭으로 연결/해제"
+  };
+  b.Click+=(_,e)=>MapNode_Click(card,e);b.PreviewMouseLeftButtonDown+=MapNode_PreviewMouseLeftButtonDown;b.PreviewMouseMove+=MapNode_PreviewMouseMove;
+  if(!tray){b.MouseEnter+=MapNode_MouseEnter;b.MouseLeave+=MapNode_MouseLeave;}
+  return b;
+ }
+ FrameworkElement CreateMapNodeVisual(EntityCard card,double width,double height,bool selected,bool stretchWidth=false){
+  var grid=new Grid{Height=height,SnapsToDevicePixels=true};
+  if(stretchWidth)grid.MinWidth=145;else grid.Width=width;
+  var typeBrush=CardTypeBrush(card.Type);
+  var outline=selected?RelationshipBrush("manual"):typeBrush;
+  var stroke=selected?2.5:1.2;
+  if(card.Type==CardType.Item){
+   grid.Children.Add(new Path{
+    Data=Geometry.Parse("M10,0 L90,0 L100,10 L100,90 L90,100 L10,100 L0,90 L0,10 Z"),
+    Stretch=Stretch.Fill,Fill=(Brush)FindResource("Panel2"),Stroke=outline,StrokeThickness=stroke,SnapsToDevicePixels=true
+   });
+  }else{
+   grid.Children.Add(new Border{
+    Background=(Brush)FindResource("Panel2"),BorderBrush=outline,BorderThickness=new Thickness(stroke),
+    CornerRadius=card.Type==CardType.Location?new CornerRadius(10):new CornerRadius(0)
+   });
+  }
+  var label=new TextBlock{
+   Text=card.Name,TextWrapping=TextWrapping.Wrap,TextAlignment=TextAlignment.Center,
+   HorizontalAlignment=HorizontalAlignment.Center,VerticalAlignment=VerticalAlignment.Center,
+   Foreground=typeBrush,FontWeight=FontWeights.SemiBold,
+   Margin=card.Type==CardType.Event?new Thickness(8,5,19,5):new Thickness(8,5,8,5)
+  };
+  grid.Children.Add(label);
+  if(card.Type==CardType.Event)grid.Children.Add(new TextBlock{
+   Text="★",Foreground=typeBrush,FontSize=11,FontWeight=FontWeights.Bold,
+   HorizontalAlignment=HorizontalAlignment.Right,VerticalAlignment=VerticalAlignment.Top,Margin=new Thickness(0,3,5,0),
+   IsHitTestVisible=false
+  });
+  return grid;
+ }
+ void MapNode_MouseEnter(object s,MouseEventArgs e){
+  if(_mindMapZoom>=.85||s is not Button button||button.Tag is not EntityCard card)return;
+  var width=Math.Max(150,GetMapNodeSize(card.Id)*1.35);var height=Math.Max(70,GetMapNodeHeight(card.Id)*1.35);
+  var stack=new StackPanel();
+  stack.Children.Add(CreateMapNodeVisual(card,width,height,false));
+  stack.Children.Add(new TextBlock{Text=TypeName(card.Type),Foreground=(Brush)FindResource("Muted"),FontSize=10,Margin=new Thickness(4,5,4,0),HorizontalAlignment=HorizontalAlignment.Center});
+  MindMapHoverPopup.Child=new Border{
+   Background=(Brush)FindResource("Surface"),BorderBrush=(Brush)FindResource("Border"),BorderThickness=new Thickness(1),
+   CornerRadius=new CornerRadius(7),Padding=new Thickness(7),Child=stack
+  };
+  MindMapHoverPopup.PlacementTarget=button;MindMapHoverPopup.IsOpen=true;
+ }
+ void MapNode_MouseLeave(object s,MouseEventArgs e){MindMapHoverPopup.IsOpen=false;}
+ void ApplyMindMapZoomVisual(){
+  if(MindMapScaleTransform==null)return;
+  _mindMapZoom=Math.Clamp(_mindMapZoom,MinMindMapZoom,MaxMindMapZoom);
+  MindMapScaleTransform.ScaleX=_mindMapZoom;MindMapScaleTransform.ScaleY=_mindMapZoom;
+  if(MindMapZoomText!=null)MindMapZoomText.Text=$"{_mindMapZoom*100:0}%";
+  if(MindCanvas!=null)UpdateMindMapCanvasExtent();
+ }
+ void SetMindMapZoom(double value,Point? focus=null){
+  var oldZoom=Math.Max(MinMindMapZoom,_mindMapZoom);
+  var next=Math.Clamp(value,MinMindMapZoom,MaxMindMapZoom);
+  if(Math.Abs(next-oldZoom)<.0001)return;
+  var viewportWidth=MindMapScroll.ViewportWidth>0?MindMapScroll.ViewportWidth:MindMapScroll.ActualWidth;
+  var viewportHeight=MindMapScroll.ViewportHeight>0?MindMapScroll.ViewportHeight:MindMapScroll.ActualHeight;
+  var anchor=focus??new Point(Math.Max(0,viewportWidth/2),Math.Max(0,viewportHeight/2));
+  var logicalX=(MindMapScroll.HorizontalOffset+anchor.X)/oldZoom;
+  var logicalY=(MindMapScroll.VerticalOffset+anchor.Y)/oldZoom;
+  _mindMapZoom=next;_appSettings.MindMapZoom=next;MindMapHoverPopup.IsOpen=false;
+  ApplyMindMapZoomVisual();MindMapScroll.UpdateLayout();
+  MindMapScroll.ScrollToHorizontalOffset(Math.Max(0,logicalX*next-anchor.X));
+  MindMapScroll.ScrollToVerticalOffset(Math.Max(0,logicalY*next-anchor.Y));
+ }
+ void MindMapZoomOut_Click(object s,RoutedEventArgs e)=>SetMindMapZoom(_mindMapZoom-.1);
+ void MindMapZoomIn_Click(object s,RoutedEventArgs e)=>SetMindMapZoom(_mindMapZoom+.1);
+ void MindMapZoom100_Click(object s,RoutedEventArgs e)=>SetMindMapZoom(1.0);
+ void MindMapFit_Click(object s,RoutedEventArgs e){
+  var placed=_document.MindMap.Nodes.Where(n=>n.Placed).ToList();
+  if(placed.Count==0){SetMindMapZoom(1.0);MindMapScroll.ScrollToHome();MindMapScroll.ScrollToLeftEnd();return;}
+  double maxX=0,maxY=0;
+  foreach(var node in placed){maxX=Math.Max(maxX,node.X+GetMapNodeSize(node.CardId));maxY=Math.Max(maxY,node.Y+GetMapNodeHeight(node.CardId));}
+  var viewportWidth=Math.Max(1,MindMapScroll.ViewportWidth);var viewportHeight=Math.Max(1,MindMapScroll.ViewportHeight);
+  var target=Math.Min(viewportWidth/Math.Max(1,maxX+90),viewportHeight/Math.Max(1,maxY+90))*.96;
+  SetMindMapZoom(target);MindMapScroll.UpdateLayout();MindMapScroll.ScrollToHorizontalOffset(0);MindMapScroll.ScrollToVerticalOffset(0);
+ }
+ void MindMapScroll_PreviewMouseWheel(object s,MouseWheelEventArgs e){
+  if((Keyboard.Modifiers&ModifierKeys.Control)==0)return;
+  var step=e.Delta>0?.1:-.1;SetMindMapZoom(_mindMapZoom+step,e.GetPosition(MindMapScroll));e.Handled=true;
+ }
+ void MindMapScroll_SizeChanged(object s,SizeChangedEventArgs e){if(MindMapView.Visibility==Visibility.Visible)UpdateMindMapCanvasExtent();}
+  void MapNode_Click(EntityCard card,RoutedEventArgs e){
   var ctrl=(Keyboard.Modifiers&ModifierKeys.Control)!=0;
   if(ctrl&&_relationshipAnchorCardId!=null&&_relationshipAnchorCardId!=card.Id){
    ToggleManualRelationship(_relationshipAnchorCardId,card.Id);
