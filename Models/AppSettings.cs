@@ -13,6 +13,7 @@ public sealed class AppSettings {
  [JsonPropertyName("typingVolume")] public double TypingVolume {get;set;}=35;
  [JsonPropertyName("typingSoundMode")] public string TypingSoundMode {get;set;}="typewriter";
  [JsonPropertyName("autoSaveMinutes")] public int AutoSaveMinutes {get;set;}=10;
+ [JsonPropertyName("editorPaperStyle")] public string EditorPaperStyle {get;set;}="blank";
  [JsonPropertyName("recentProjectPath")] public string RecentProjectPath {get;set;}="";
  [JsonPropertyName("recentProjectPaths")] public List<string> RecentProjectPaths {get;set;}=[];
  [JsonPropertyName("windowLeft")] public double? WindowLeft {get;set;}
