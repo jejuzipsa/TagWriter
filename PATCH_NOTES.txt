@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.1.0.2
+NEXT CHAT HANDOFF — TagWriter 0.1.0.3
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,16 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.1.0.3
+- Connected the repository-level Fonts folder to the actual editor font picker.
+- TagWriter now scans the runtime Fonts directory with WPF Fonts.GetFontFamilies and merges successfully loaded private TTF/OTF families into the existing preferred system-font list.
+- Added private-font selection/persistence by family display name so Fonts-folder fonts can be reused after restart without installing them into Windows.
+- TagWriter.csproj now copies Fonts/**/*.ttf, Fonts/**/*.otf, and Fonts/README.txt into the build output.
+- Rebalanced 줄공책 / 점선줄 again: removed the excessive -3 px lift and set a narrower 9–11 px font-scaled lift, placing the notebook rule between the previously too-low and too-high positions.
+- Replaced the hard-coded bottom-right 'TagWriter 0.0.9.3' label with the executing assembly version, so the UI version now follows the build automatically.
+- The bottom-right JSON label now follows ProjectDocument.FormatVersion instead of the stale hard-coded JSON v1 label.
+- Bumped version to 0.1.0.3.
 
 0.1.0.2
 - Fine-tuned normal-editor ruled-paper position by moving the background rule exactly 3 px upward.
