@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.1.0.0
+NEXT CHAT HANDOFF — TagWriter 0.1.0.1
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,12 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.1.0.1
+- Rebalanced 줄공책 / 점선줄 vertical alignment after the previous adjustment placed the notebook rule too high into the text body.
+- Reduced the baseline lift to a narrower middle range so the notebook rule sits below the text and immediately beneath the inline tag underline.
+- The ruled line offset now uses a clamped 10–12 px lift scaled from editor font size, avoiding both the earlier too-low position and the later too-high overlap.
+- Bumped version to 0.1.0.1.
 
 0.1.0.0
 - Added visible mouse-hover feedback for inline Character/Location tags in the normal manuscript editor.
