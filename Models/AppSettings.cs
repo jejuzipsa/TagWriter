@@ -6,6 +6,8 @@ public sealed class AppSettings {
  [JsonPropertyName("theme")] public string Theme {get;set;}="dark";
  [JsonPropertyName("editorFontFamily")] public string EditorFontFamily {get;set;}="Malgun Gothic";
  [JsonPropertyName("editorFontSize")] public double EditorFontSize {get;set;}=17;
+ [JsonPropertyName("editorLineSpacing")] public double EditorLineSpacing {get;set;}=1.7;
+ [JsonPropertyName("editorVerticalAlign")] public string EditorVerticalAlign {get;set;}="center";
  [JsonPropertyName("paperMode")] public bool PaperMode {get;set;}=false;
  [JsonPropertyName("paperZoom")] public double PaperZoom {get;set;}=1.0;
  [JsonPropertyName("paperFit")] public bool PaperFit {get;set;}=true;
