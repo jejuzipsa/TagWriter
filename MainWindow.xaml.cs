@@ -91,7 +91,7 @@ public partial class MainWindow:Window {
    if(style=="dashed")pen.DashStyle=new DashStyle(new double[]{3,4},0);
    // Keep the notebook rule just beneath the text/tag underline.
    // The tag underline is rendered above this background layer, so near-overlap is intentional.
-   var baselineLift=Math.Max(13,Math.Min(18,_appSettings.EditorFontSize*0.95));
+   var baselineLift=Math.Max(10,Math.Min(12,_appSettings.EditorFontSize*0.7));
    var lineY=Math.Max(1,tile-baselineLift);
    group.Children.Add(new GeometryDrawing(null,pen,new LineGeometry(new Point(0,lineY),new Point(tile,lineY))));
   }
