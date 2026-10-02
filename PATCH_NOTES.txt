@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.1.0.9
+NEXT CHAT HANDOFF — TagWriter 0.1.1.0
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,20 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.1.1.0
+- Added type-specific relationship-map node silhouettes so categories remain readable even without relying only on color.
+- Character nodes use sharp rectangular corners.
+- Location/building nodes use rounded corners.
+- Item nodes use a chamfered eight-sided rectangle.
+- Event nodes keep a rectangular body and add a star badge at the upper-right corner.
+- Added relationship-map zoom from 25% to 200% with -, +, 100%, and fit-to-view controls.
+- Ctrl+mouse-wheel zooms around the pointer position so the inspected area stays under the cursor.
+- Added a scrollable zoom viewport while preserving existing logical node coordinates, drag/drop behavior, edge geometry, and project JSON layout data.
+- Added fit-to-view for placed nodes.
+- When the map is zoomed below 85%, hovering a placed node opens an unscaled enlarged preview showing the node shape, name, and card type without disturbing the graph layout.
+- Mind-map zoom level is stored in app settings.
+- Bumped version to 0.1.1.0.
 
 0.1.0.9
 - Reworked normal-editor ruled-paper alignment around a simpler row model.
