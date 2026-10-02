@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.1.0.5
+NEXT CHAT HANDOFF — TagWriter 0.1.0.6
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,17 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.1.0.6
+- Added normal-editor line-spacing control with presets 1.2 / 1.4 / 1.6 / 1.7 / 1.8 / 2.0 / 2.2; default remains 1.7.
+- Added compact top / center / bottom vertical-alignment icon controls beside line spacing; the selection is persisted in global app settings.
+- Fixed the root cause of font-size changes desynchronizing manuscript text and notebook backgrounds: Paragraph instances no longer keep the line height captured when the scene was first loaded.
+- Introduced a single shared editor line-height calculation (font size × selected line spacing) used by both RichTextBox paragraph layout and 줄공책 / 점선줄 background tiles.
+- RichTextBox blocks now use LineStackingStrategy.BlockLineHeight so fonts with unusually tall intrinsic metrics cannot silently expand row height independently of the notebook background.
+- Newly created paragraphs while typing are immediately normalized to the current shared line height.
+- Notebook rule placement continues to use the active font's baseline/underline metrics, with top/center/bottom selection adjusting the vertical placement within available leading.
+- Font-size and line-spacing changes are persisted immediately.
+- Bumped version to 0.1.0.6.
 
 0.1.0.5
 - Reworked normal-editor notebook-line alignment to follow the selected font instead of a fixed pixel offset.
