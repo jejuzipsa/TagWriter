@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.9.4
+NEXT CHAT HANDOFF — TagWriter 0.0.9.5
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,13 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.9.5
+- Fixed the concrete DOCX OpenXML validation failure reported by the new 0.0.9.4 validator.
+- Root cause: w:b (Bold) was appended after w:sz / w:szCs inside w:rPr. WordprocessingML requires run-property child elements in schema order, so Word rejected the generated package as invalid.
+- DOCX run properties now emit w:rFonts, then optional w:b, then w:sz / w:szCs in valid schema order.
+- Retained the post-export OpenXmlValidator added in 0.0.9.4 so future structural DOCX errors are caught before a bad file is reported as successfully exported.
+- Bumped version to 0.0.9.5.
 
 0.0.9.4
 - Hardened DOCX export after reports that Word still rejected exported files as invalid.
