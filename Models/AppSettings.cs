@@ -11,6 +11,7 @@ public sealed class AppSettings {
  [JsonPropertyName("paperMode")] public bool PaperMode {get;set;}=false;
  [JsonPropertyName("paperZoom")] public double PaperZoom {get;set;}=1.0;
  [JsonPropertyName("paperFit")] public bool PaperFit {get;set;}=true;
+ [JsonPropertyName("mindMapZoom")] public double MindMapZoom {get;set;}=1.0;
  [JsonPropertyName("typingSoundEnabled")] public bool TypingSoundEnabled {get;set;}=false;
  [JsonPropertyName("typingVolume")] public double TypingVolume {get;set;}=35;
  [JsonPropertyName("typingSoundMode")] public string TypingSoundMode {get;set;}="typewriter";
