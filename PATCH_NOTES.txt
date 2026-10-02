@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.9.8
+NEXT CHAT HANDOFF — TagWriter 0.0.9.9
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,12 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.9.9
+- Fine-tuned 줄공책 / 점선줄 vertical alignment again after visual testing.
+- The notebook rule is now lifted further so it sits immediately beneath the text/tag underline instead of noticeably below the writing.
+- Tag underline remains visually above the notebook rule; near-overlap is intentional and safe because the notebook rule is only a background layer.
+- Bumped version to 0.0.9.9.
 
 0.0.9.8
 - Fixed editor-paper backgrounds leaking into the 전체 원고 read-only view.
