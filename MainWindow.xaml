@@ -127,7 +127,62 @@
   </Viewbox>
  </ToggleButton>
 </StackPanel></StackPanel></StackPanel><StackPanel x:Name="PaperZoomControls" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="Collapsed"><TextBlock x:Name="PaperPageText" Text="0매" Foreground="{DynamicResource Muted}" VerticalAlignment="Center" Margin="0,0,12,0"/><Button Content="−" Width="28" Padding="0,3" Click="PaperZoomOut_Click"/><TextBlock x:Name="PaperZoomText" Text="100%" Width="48" TextAlignment="Center" VerticalAlignment="Center"/><Button Content="+" Width="28" Padding="0,3" Click="PaperZoomIn_Click"/><Button Content="100%" Margin="8,0,0,0" Padding="8,3" Click="PaperZoom100_Click"/><Button Content="화면 맞춤" Margin="4,0,0,0" Padding="8,3" Click="PaperFit_Click"/></StackPanel></Grid></Border></Grid></Grid>
-<Grid x:Name="MindMapView" Visibility="Collapsed"><Grid.RowDefinitions><RowDefinition Height="54"/><RowDefinition Height="*"/></Grid.RowDefinitions><Border BorderBrush="{DynamicResource Border}" BorderThickness="0,0,0,1"><Grid Margin="24,0"><TextBlock Text="관계 맵" FontSize="17" FontWeight="SemiBold" VerticalAlignment="Center"/><TextBlock Text="카드 기반 그래프" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource Muted}" FontSize="11"/></Grid></Border><Grid Grid.Row="1"><Grid.ColumnDefinitions><ColumnDefinition Width="190"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><Border x:Name="UnplacedDropZone" Grid.Column="0" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Border}" BorderThickness="0,0,1,0" AllowDrop="True" DragOver="UnplacedDropZone_DragOver" Drop="UnplacedDropZone_Drop"><DockPanel><Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Border}" BorderThickness="0,0,0,1" Padding="12,10"><StackPanel><TextBlock Text="미배치 노드" FontWeight="SemiBold" FontSize="12"/><TextBlock Text="지도 밖으로 보관된 카드" Foreground="{DynamicResource Muted}" FontSize="10" Margin="0,2,0,0"/></StackPanel></Border><ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel x:Name="UnplacedNodeHost" Margin="9"/></ScrollViewer></DockPanel></Border><Canvas x:Name="MindCanvas" Grid.Column="1" Background="{DynamicResource EditorBg}" AllowDrop="True" DragOver="MindCanvas_DragOver" Drop="MindCanvas_Drop"/></Grid></Grid>
+<Grid x:Name="MindMapView" Visibility="Collapsed">
+<Grid.Resources>
+ <Style x:Key="MapNodeButtonStyle" TargetType="{x:Type Button}">
+  <Setter Property="Background" Value="Transparent"/>
+  <Setter Property="BorderThickness" Value="0"/>
+  <Setter Property="Padding" Value="0"/>
+  <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+  <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+  <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+  <Setter Property="Cursor" Value="Hand"/>
+  <Setter Property="Template">
+   <Setter.Value>
+    <ControlTemplate TargetType="{x:Type Button}">
+     <Border Background="Transparent">
+      <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+     </Border>
+    </ControlTemplate>
+   </Setter.Value>
+  </Setter>
+ </Style>
+</Grid.Resources>
+<Grid.RowDefinitions><RowDefinition Height="54"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+<Border BorderBrush="{DynamicResource Border}" BorderThickness="0,0,0,1">
+ <Grid Margin="24,0">
+  <TextBlock Text="관계 맵" FontSize="17" FontWeight="SemiBold" VerticalAlignment="Center"/>
+  <TextBlock Text="카드 기반 그래프 · Ctrl+휠 확대/축소" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource Muted}" FontSize="11"/>
+ </Grid>
+</Border>
+<Grid Grid.Row="1">
+ <Grid.ColumnDefinitions><ColumnDefinition Width="190"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+ <Border x:Name="UnplacedDropZone" Grid.Column="0" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Border}" BorderThickness="0,0,1,0" AllowDrop="True" DragOver="UnplacedDropZone_DragOver" Drop="UnplacedDropZone_Drop">
+  <DockPanel>
+   <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Border}" BorderThickness="0,0,0,1" Padding="12,10">
+    <StackPanel><TextBlock Text="미배치 노드" FontWeight="SemiBold" FontSize="12"/><TextBlock Text="지도 밖으로 보관된 카드" Foreground="{DynamicResource Muted}" FontSize="10" Margin="0,2,0,0"/></StackPanel>
+   </Border>
+   <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel x:Name="UnplacedNodeHost" Margin="9"/></ScrollViewer>
+  </DockPanel>
+ </Border>
+ <Grid Grid.Column="1" Background="{DynamicResource EditorBg}">
+  <ScrollViewer x:Name="MindMapScroll" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="{DynamicResource EditorBg}" PreviewMouseWheel="MindMapScroll_PreviewMouseWheel" SizeChanged="MindMapScroll_SizeChanged">
+   <Canvas x:Name="MindCanvas" Background="{DynamicResource EditorBg}" AllowDrop="True" DragOver="MindCanvas_DragOver" Drop="MindCanvas_Drop">
+    <Canvas.LayoutTransform><ScaleTransform x:Name="MindMapScaleTransform" ScaleX="1" ScaleY="1"/></Canvas.LayoutTransform>
+   </Canvas>
+  </ScrollViewer>
+  <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,14,14" Padding="5" CornerRadius="6" Background="{DynamicResource Surface}" BorderBrush="{DynamicResource Border}" BorderThickness="1">
+   <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+    <Button Content="−" Width="27" Height="25" Padding="0" Click="MindMapZoomOut_Click" ToolTip="축소"/>
+    <TextBlock x:Name="MindMapZoomText" Text="100%" Width="50" TextAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource Text}" FontSize="11"/>
+    <Button Content="+" Width="27" Height="25" Padding="0" Click="MindMapZoomIn_Click" ToolTip="확대"/>
+    <Button Content="100%" Height="25" Padding="7,0" Margin="5,0,0,0" Click="MindMapZoom100_Click" ToolTip="100%"/>
+    <Button Content="맞춤" Height="25" Padding="8,0" Margin="4,0,0,0" Click="MindMapFit_Click" ToolTip="배치된 노드를 화면에 맞춤"/>
+   </StackPanel>
+  </Border>
+  <Popup x:Name="MindMapHoverPopup" AllowsTransparency="True" Placement="MousePoint" StaysOpen="True" IsHitTestVisible="False" HorizontalOffset="12" VerticalOffset="12"/>
+ </Grid>
+</Grid>
 </Grid><Button x:Name="RightPanelCollapsedToggle" Grid.Column="3" Content="◀" Width="26" Height="40" FontSize="15" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Center" Panel.ZIndex="20" Visibility="Collapsed" Click="RightPanelToggle_Click" ToolTip="컨텍스트 패널 확대"/><GridSplitter x:Name="RightSplitter" Grid.Column="4" Width="4" HorizontalAlignment="Stretch" Background="{DynamicResource Bg}"/>
 <Border Grid.Column="5" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Border}" BorderThickness="1,0,0,0"><Grid><DockPanel><Grid DockPanel.Dock="Top" Height="43" Margin="40,0,13,0"><TextBlock x:Name="RightPanelLabel" Margin="0" Text="CONTEXT" FontSize="10" FontWeight="SemiBold" Foreground="{DynamicResource Muted}" VerticalAlignment="Center"/></Grid><Grid><TabControl x:Name="ContextTabs" Style="{StaticResource ContextTabControlStyle}"><TabItem Header="등장"><ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel x:Name="OccurrenceHost" Margin="10"/></ScrollViewer></TabItem><TabItem x:Name="CardTab" Header="카드"><ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="14"><Grid Margin="0,2,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock x:Name="CardName" FontSize="19" FontWeight="SemiBold" VerticalAlignment="Center"/><Button x:Name="CardEditButton" Grid.Column="1" Content="수정" Padding="9,4" Click="CardEditButton_Click"/></Grid><TextBlock x:Name="CardTypeText" FontSize="11" Margin="0,0,0,18"/><StackPanel x:Name="CardDetailHost"/><StackPanel x:Name="CardEditHost" Visibility="Collapsed"/></StackPanel></ScrollViewer></TabItem></TabControl><ScrollViewer x:Name="IdeaMemoView" Visibility="Collapsed" VerticalScrollBarVisibility="Auto"><StackPanel Margin="14"><TextBlock x:Name="IdeaMemoTitle" Text="아이디어 메모" FontSize="19" FontWeight="SemiBold" Margin="0,2,0,18"/><TextBlock Text="메모" FontWeight="SemiBold" FontSize="11" Margin="0,0,0,6"/><TextBlock x:Name="IdeaMemoBody" TextWrapping="Wrap" Foreground="{DynamicResource Text}" FontSize="13" LineHeight="21"/></StackPanel></ScrollViewer></Grid></DockPanel><Button x:Name="RightPanelToggle" Content="▶" Width="28" Height="42" FontSize="16" Padding="0" Margin="0,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="RightPanelToggle_Click" ToolTip="컨텍스트 패널 축소 / 확대"/></Grid></Border>
 </Grid></DockPanel></Window>
