@@ -89,9 +89,9 @@ public partial class MainWindow:Window {
   }else{
    var pen=new Pen(new SolidColorBrush(lineColor),1);
    if(style=="dashed")pen.DashStyle=new DashStyle(new double[]{3,4},0);
-   // Lift ruled lines toward the text baseline so the manuscript sits on the line.
-   // The tag underline is drawn above this background layer, so overlap is intentional.
-   var baselineLift=Math.Max(7,Math.Min(11,_appSettings.EditorFontSize*0.55));
+   // Keep the notebook rule just beneath the text/tag underline.
+   // The tag underline is rendered above this background layer, so near-overlap is intentional.
+   var baselineLift=Math.Max(13,Math.Min(18,_appSettings.EditorFontSize*0.95));
    var lineY=Math.Max(1,tile-baselineLift);
    group.Children.Add(new GeometryDrawing(null,pen,new LineGeometry(new Point(0,lineY),new Point(tile,lineY))));
   }
