@@ -80,8 +80,8 @@ public partial class MainWindow:Window {
   }
   foreach(var name in preferred)if(installed.TryGetValue(name,out var family))AddFont(name,family);
   if(installed.TryGetValue(_appSettings.EditorFontFamily,out var currentSystem))AddFont(_appSettings.EditorFontFamily,currentSystem);
-  var fontDir=Path.Combine(AppContext.BaseDirectory,"Fonts");
-  if(Directory.Exists(fontDir)){
+  var fontDir=System.IO.Path.Combine(AppContext.BaseDirectory,"Fonts");
+  if(System.IO.Directory.Exists(fontDir)){
    try{
     foreach(var family in Fonts.GetFontFamilies(fontDir)){
      var name=EditorFontDisplayName(family);AddFont(name,family);
