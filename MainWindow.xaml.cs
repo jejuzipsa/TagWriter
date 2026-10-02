@@ -1,4 +1,4 @@
-using Microsoft.Win32; using System.Windows.Input; using System.Windows.Documents; using System.Windows.Markup; using System.Printing; using System.Windows.Xps; using System.Windows.Media; using System.Windows.Threading; using System.Runtime.InteropServices; using System.Text; using System.Text.RegularExpressions; using System.Diagnostics; using System.Windows; using System.Windows.Controls; using System.Windows.Interop; using System.Windows.Shapes; using TagWriter.Models; using TagWriter.Services;
+using Microsoft.Win32; using System.Windows.Input; using System.Windows.Documents; using System.Windows.Markup; using System.Printing; using System.Windows.Xps; using System.Windows.Media; using System.Windows.Threading; using System.Runtime.InteropServices; using System.Text; using System.Text.RegularExpressions; using System.Diagnostics; using System.Windows; using System.Windows.Controls; using System.Windows.Controls.Primitives; using System.Windows.Interop; using System.Windows.Shapes; using TagWriter.Models; using TagWriter.Services;
 namespace TagWriter;
 public partial class MainWindow:Window {
  readonly AppSettings _appSettings=AppSettingsStore.Load();
