@@ -80,7 +80,34 @@ public static class DocumentExportService
             new W.PageMargin { Top = 1440, Right = 1440, Bottom = 1440, Left = 1440, Header = 720, Footer = 720, Gutter = 0 }));
 
         main.Document.Save();
+        word.Dispose();
+
+        ValidateDocxPackage(path);
         return Task.CompletedTask;
+    }
+
+    static void ValidateDocxPackage(string path)
+    {
+        if (!File.Exists(path) || new FileInfo(path).Length == 0)
+            throw new InvalidDataException("DOCX 파일이 생성되지 않았습니다.");
+
+        using var package = WordprocessingDocument.Open(path, false);
+        var main = package.MainDocumentPart
+            ?? throw new InvalidDataException("DOCX main document part가 없습니다.");
+        var document = main.Document
+            ?? throw new InvalidDataException("DOCX document.xml을 읽을 수 없습니다.");
+        if (document.Body is null)
+            throw new InvalidDataException("DOCX document body가 없습니다.");
+
+        var errors = new DocumentFormat.OpenXml.Validation.OpenXmlValidator()
+            .Validate(package)
+            .Take(10)
+            .Select(x => x.Description)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .ToList();
+
+        if (errors.Count > 0)
+            throw new InvalidDataException("DOCX OpenXML 검증 실패: " + string.Join(" | ", errors));
     }
 
     public static async Task ExportHwpxAsync(string path, ProjectDocument document)
