@@ -92,7 +92,7 @@ public partial class MainWindow:Window {
    // Keep the notebook rule just beneath the text/tag underline.
    // The tag underline is rendered above this background layer, so near-overlap is intentional.
    var baselineLift=Math.Max(10,Math.Min(12,_appSettings.EditorFontSize*0.7));
-   var lineY=Math.Max(1,tile-baselineLift);
+   var lineY=Math.Max(1,tile-baselineLift-3);
    group.Children.Add(new GeometryDrawing(null,pen,new LineGeometry(new Point(0,lineY),new Point(tile,lineY))));
   }
   EditorPaperBackground.Background=new DrawingBrush(group){TileMode=TileMode.Tile,ViewportUnits=BrushMappingMode.Absolute,Viewport=new Rect(0,0,tile,tile),ViewboxUnits=BrushMappingMode.Absolute,Viewbox=new Rect(0,0,tile,tile),Stretch=Stretch.None};
