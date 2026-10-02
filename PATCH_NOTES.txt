@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.9.9
+NEXT CHAT HANDOFF — TagWriter 0.0.10.0
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,13 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.10.0
+- Added visible mouse-hover feedback for inline Character/Location tags in the normal manuscript editor.
+- Hovering a clickable tag now strengthens its existing category-tinted background while preserving the tag text color, semi-bold weight, underline, and hand cursor.
+- Moving to ordinary text or leaving the editor restores the tag's normal subtle background immediately.
+- Hover styling is presentation-only and does not change manuscript text, tag data, cards, relationships, or exports.
+- Bumped version to 0.0.10.0.
 
 0.0.9.9
 - Fine-tuned 줄공책 / 점선줄 vertical alignment again after visual testing.
