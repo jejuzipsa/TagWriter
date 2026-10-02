@@ -3,7 +3,7 @@ namespace TagWriter;
 public partial class MainWindow:Window {
  readonly AppSettings _appSettings=AppSettingsStore.Load();
  ProjectDocument _document=ProjectDocument.CreateSample(); string? _path; Scene? _scene; EntityCard? _card; Idea? _idea; bool _loading; bool _ideaMemoContextVisible; bool _dark=true; bool _leftCollapsed=false,_rightCollapsed=false; double _leftWidth=250,_rightWidth=310; bool _paperMode=false,_paperFit=true; Button? _activeActivityButton; Scene? _lastScene; double _paperZoom=1.0; const double PaperCell=34,PaperMargin=42;
- readonly List<ManuscriptPaperSurface> _paperSurfaces=new(); readonly Dictionary<string,TextBox> _cardEditFields=new(); readonly List<EditorTagSpan> _editorTagSpans=new(); EditorTagSpan? _hoveredEditorTagSpan; readonly Dictionary<string,FontFamily> _editorFontFamilies=new(StringComparer.OrdinalIgnoreCase); readonly HashSet<string> _pendingRelationshipSceneIds=new(); readonly Dictionary<string,DateTimeOffset> _pendingSceneFinalizeAt=new(); readonly Dictionary<string,Dictionary<(string A,string B),int>> _sceneAutoPairs=new(); DispatcherTimer? _paperRenderTimer; DispatcherTimer? _tagFormatTimer; DispatcherTimer? _relationshipIdleTimer; DispatcherTimer? _autoSaveTimer; DateTimeOffset _lastEditorInputAt=DateTimeOffset.MinValue; DateTimeOffset _lastAutoSaveAt=DateTimeOffset.Now; bool _saveInProgress; bool _formattingTags; bool _paperDragging; int _paperDragAnchorText; int? _paperKeyboardSelectionAnchor; bool _treeEditMode; Point _treeDragStart; object? _treeDragItem; Point _mapDragStart; string? _mapDragCardId; string? _relationshipAnchorCardId; TreeViewItem? _dropIndicatorItem; readonly HashSet<object> _treeEditSelection=new(); readonly Stack<Action> _treeUndo=new(); readonly Dictionary<string,MediaPlayer[]> _typingSoundPlayers=new(); readonly Dictionary<string,int> _typingSoundPlayerCursor=new(); MediaPlayer? _typewriterEnterPlayer; bool _typewriterEnterPlaying; bool _typingSoundsLoaded; sealed record TreeDeleteSnapshot(List<(Chapter chapter,int index)> Chapters,List<(Scene scene,Chapter chapter,int index)> Scenes,List<(EntityCard card,int index)> Cards,List<(Idea idea,int index)> Ideas,List<MapNode> Nodes,List<MapEdge> Edges); sealed record EditorFontChoice(string Name,FontFamily Family){public override string ToString()=>Name;} sealed record EditorTagSpan(int Start,int Length,string CardId); sealed record TagHit(int Start,int Length,EntityCard Card); sealed record OccurrenceHit(Chapter Chapter,Scene Scene,int Offset,int Length,int LineNumber,string LineText); enum PrintMode{Normal,Paper};
+ readonly List<ManuscriptPaperSurface> _paperSurfaces=new(); readonly Dictionary<string,TextBox> _cardEditFields=new(); readonly List<EditorTagSpan> _editorTagSpans=new(); double _editorVerticalScrollOffset; EditorTagSpan? _hoveredEditorTagSpan; readonly Dictionary<string,FontFamily> _editorFontFamilies=new(StringComparer.OrdinalIgnoreCase); readonly HashSet<string> _pendingRelationshipSceneIds=new(); readonly Dictionary<string,DateTimeOffset> _pendingSceneFinalizeAt=new(); readonly Dictionary<string,Dictionary<(string A,string B),int>> _sceneAutoPairs=new(); DispatcherTimer? _paperRenderTimer; DispatcherTimer? _tagFormatTimer; DispatcherTimer? _relationshipIdleTimer; DispatcherTimer? _autoSaveTimer; DateTimeOffset _lastEditorInputAt=DateTimeOffset.MinValue; DateTimeOffset _lastAutoSaveAt=DateTimeOffset.Now; bool _saveInProgress; bool _formattingTags; bool _paperDragging; int _paperDragAnchorText; int? _paperKeyboardSelectionAnchor; bool _treeEditMode; Point _treeDragStart; object? _treeDragItem; Point _mapDragStart; string? _mapDragCardId; string? _relationshipAnchorCardId; TreeViewItem? _dropIndicatorItem; readonly HashSet<object> _treeEditSelection=new(); readonly Stack<Action> _treeUndo=new(); readonly Dictionary<string,MediaPlayer[]> _typingSoundPlayers=new(); readonly Dictionary<string,int> _typingSoundPlayerCursor=new(); MediaPlayer? _typewriterEnterPlayer; bool _typewriterEnterPlaying; bool _typingSoundsLoaded; sealed record TreeDeleteSnapshot(List<(Chapter chapter,int index)> Chapters,List<(Scene scene,Chapter chapter,int index)> Scenes,List<(EntityCard card,int index)> Cards,List<(Idea idea,int index)> Ideas,List<MapNode> Nodes,List<MapEdge> Edges); sealed record EditorFontChoice(string Name,FontFamily Family){public override string ToString()=>Name;} sealed record EditorTagSpan(int Start,int Length,string CardId); sealed record TagHit(int Start,int Length,EntityCard Card); sealed record OccurrenceHit(Chapter Chapter,Scene Scene,int Offset,int Length,int LineNumber,string LineText); enum PrintMode{Normal,Paper};
  public MainWindow(){InitializeComponent();ApplyWindowSettings();Closing+=MainWindow_Closing;PreviewKeyDown+=MainWindow_PreviewKeyDown;SourceInitialized+=(_,_)=>ApplyWindowChromeTheme();Loaded+=(_,_)=>{InitializeBuildInfo();InitializeEditorPreferences();InitializeEditorPaperPreferences();InitializeTypingSoundPreferences();InitializeAutoSavePreferences();ApplyPanelSettings();_paperZoom=Math.Clamp(_appSettings.PaperZoom,.35,2.5);_paperFit=_appSettings.PaperFit;_paperRenderTimer=new DispatcherTimer(DispatcherPriority.Render){Interval=TimeSpan.FromMilliseconds(16)};_paperRenderTimer.Tick+=(_,_)=>{_paperRenderTimer.Stop();RenderManuscriptPaper();};_tagFormatTimer=new DispatcherTimer(DispatcherPriority.Background){Interval=TimeSpan.FromMilliseconds(180)};_tagFormatTimer.Tick+=(_,_)=>{_tagFormatTimer.Stop();ApplyEditorTagFormatting();};_relationshipIdleTimer=new DispatcherTimer(DispatcherPriority.Background){Interval=TimeSpan.FromSeconds(1)};_relationshipIdleTimer.Tick+=RelationshipIdleTimer_Tick;_relationshipIdleTimer.Start();_autoSaveTimer=new DispatcherTimer(DispatcherPriority.Background){Interval=TimeSpan.FromSeconds(10)};_autoSaveTimer.Tick+=AutoSaveTimer_Tick;_autoSaveTimer.Start();if(_appSettings.PaperMode)PaperMode_Click(this,new RoutedEventArgs());else ApplyEditorTagFormatting();};RefreshAll();InitializeRelationshipSnapshots();SelectFirstScene();ApplyTheme(_appSettings.Theme!="light");}
  void ApplyWindowSettings(){Width=Math.Max(MinWidth,_appSettings.WindowWidth);Height=Math.Max(MinHeight,_appSettings.WindowHeight);if(_appSettings.WindowLeft is double left&&_appSettings.WindowTop is double top&&double.IsFinite(left)&&double.IsFinite(top)){WindowStartupLocation=WindowStartupLocation.Manual;Left=left;Top=top;}if(_appSettings.WindowMaximized)WindowState=WindowState.Maximized;}
  void ApplyPanelSettings(){_leftWidth=Math.Max(_appSettings.LeftPanelWidth,210);_rightWidth=Math.Max(_appSettings.RightPanelWidth,260);if(_appSettings.LeftPanelCollapsed){LeftPanelColumn.MinWidth=0;LeftPanelColumn.Width=new GridLength(0);LeftSplitterColumn.Width=new GridLength(0);LeftSplitter.Visibility=Visibility.Collapsed;ProjectTree.Visibility=Visibility.Collapsed;LeftPanelLabel.Visibility=Visibility.Collapsed;LeftPanelToggle.Visibility=Visibility.Collapsed;LeftPanelCollapsedToggle.Visibility=Visibility.Visible;_leftCollapsed=true;}else{LeftPanelColumn.MinWidth=210;LeftPanelColumn.Width=new GridLength(_leftWidth);LeftSplitterColumn.Width=new GridLength(4);LeftSplitter.Visibility=Visibility.Visible;ProjectTree.Visibility=Visibility.Visible;LeftPanelLabel.Visibility=Visibility.Visible;LeftPanelToggle.Visibility=Visibility.Visible;LeftPanelCollapsedToggle.Visibility=Visibility.Collapsed;_leftCollapsed=false;}if(_appSettings.RightPanelCollapsed){RightPanelColumn.MinWidth=0;RightPanelColumn.Width=new GridLength(0);RightSplitterColumn.Width=new GridLength(0);RightSplitter.Visibility=Visibility.Collapsed;ContextTabs.Visibility=Visibility.Collapsed;RightPanelLabel.Visibility=Visibility.Collapsed;RightPanelToggle.Visibility=Visibility.Collapsed;RightPanelCollapsedToggle.Visibility=Visibility.Visible;_rightCollapsed=true;}else{RightPanelColumn.MinWidth=260;RightPanelColumn.Width=new GridLength(_rightWidth);RightSplitterColumn.Width=new GridLength(4);RightSplitter.Visibility=Visibility.Visible;ContextTabs.Visibility=Visibility.Visible;RightPanelLabel.Visibility=Visibility.Visible;RightPanelToggle.Visibility=Visibility.Visible;RightPanelCollapsedToggle.Visibility=Visibility.Collapsed;_rightCollapsed=false;}}
@@ -127,6 +127,25 @@ public partial class MainWindow:Window {
    block.SetValue(Block.LineStackingStrategyProperty,LineStackingStrategy.BlockLineHeight);
    if(block is Paragraph paragraph)paragraph.Margin=new Thickness(0);
   }
+  ApplyEditorInlineVerticalAlignment();
+ }
+ BaselineAlignment GetEditorBaselineAlignment()=>_appSettings.EditorVerticalAlign switch{
+  "top"=>BaselineAlignment.Top,
+  "bottom"=>BaselineAlignment.Bottom,
+  _=>BaselineAlignment.Center
+ };
+ void ApplyEditorInlineVerticalAlignment(){
+  if(Editor?.Document==null)return;
+  var alignment=GetEditorBaselineAlignment();
+  foreach(var block in Editor.Document.Blocks)
+   if(block is Paragraph paragraph)
+    ApplyInlineVerticalAlignment(paragraph.Inlines,alignment);
+ }
+ static void ApplyInlineVerticalAlignment(InlineCollection inlines,BaselineAlignment alignment){
+  foreach(var inline in inlines.ToList()){
+   inline.BaselineAlignment=alignment;
+   if(inline is Span span)ApplyInlineVerticalAlignment(span.Inlines,alignment);
+  }
  }
  void UpdateEditorVerticalAlignButtons(){
   if(VerticalTopButton==null||VerticalCenterButton==null||VerticalBottomButton==null)return;
@@ -161,34 +180,33 @@ public partial class MainWindow:Window {
   }else{
    var pen=new Pen(new SolidColorBrush(lineColor),1);
    if(style=="dashed")pen.DashStyle=new DashStyle(new double[]{3,4},0);
-   var lineY=GetEditorNotebookRuleY(tile);
+   // Notebook rules belong to the row, not to the font. Keep them fixed at each row bottom.
+   var lineY=Math.Max(1,tile-1);
    group.Children.Add(new GeometryDrawing(null,pen,new LineGeometry(new Point(0,lineY),new Point(tile,lineY))));
   }
-  EditorPaperBackground.Background=new DrawingBrush(group){TileMode=TileMode.Tile,ViewportUnits=BrushMappingMode.Absolute,Viewport=new Rect(0,0,tile,tile),ViewboxUnits=BrushMappingMode.Absolute,Viewbox=new Rect(0,0,tile,tile),Stretch=Stretch.None};
- }
- double GetEditorNotebookRuleY(double lineHeight){
-  var family=Editor.FontFamily??new FontFamily("Malgun Gothic");
-  var em=Math.Max(9,Editor.FontSize);
-  var naturalLine=Math.Max(em,family.LineSpacing*em);
-  var extraLeading=Math.Max(0,lineHeight-naturalLine);
-  var placement=_appSettings.EditorVerticalAlign switch{"top"=>0.20,"bottom"=>0.80,_=>0.50};
-  var baseline=(extraLeading*placement)+(family.Baseline*em);
-  var ruleY=baseline+Math.Max(2,em*0.10);
-  try{
-   var typeface=new Typeface(family,FontStyles.Normal,FontWeights.SemiBold,FontStretches.Normal);
-   if(typeface.TryGetGlyphTypeface(out var glyph)){
-    // UnderlinePosition is normally negative below the baseline.
-    var underlineCenter=baseline-(glyph.UnderlinePosition*em);
-    var underlineBottom=underlineCenter+Math.Max(.5,glyph.UnderlineThickness*em/2);
-    ruleY=underlineBottom+1.25;
-   }
-  }catch{}
-  return Math.Clamp(ruleY,1,lineHeight-1);
+  var brush=new DrawingBrush(group){TileMode=TileMode.Tile,ViewportUnits=BrushMappingMode.Absolute,Viewport=new Rect(0,0,tile,tile),ViewboxUnits=BrushMappingMode.Absolute,Viewbox=new Rect(0,0,tile,tile),Stretch=Stretch.None};
+  var scrollPhase=tile>0?_editorVerticalScrollOffset%tile:0;
+  brush.Transform=new TranslateTransform(0,-scrollPhase);
+  EditorPaperBackground.Background=brush;
  }
  void FontFamilyBox_SelectionChanged(object s,SelectionChangedEventArgs e){if(FontFamilyBox.SelectedItem is EditorFontChoice f){_appSettings.EditorFontFamily=f.Name;ApplyEditorPreferences();if(IsLoaded)AppSettingsStore.Save(_appSettings);}}
  void FontSizeBox_SelectionChanged(object s,SelectionChangedEventArgs e){if(FontSizeBox.SelectedItem is double size){_appSettings.EditorFontSize=size;ApplyEditorPreferences();if(IsLoaded)AppSettingsStore.Save(_appSettings);}}
  void LineSpacingBox_SelectionChanged(object s,SelectionChangedEventArgs e){if(LineSpacingBox.SelectedItem is double spacing){_appSettings.EditorLineSpacing=spacing;ApplyEditorPreferences();if(IsLoaded)AppSettingsStore.Save(_appSettings);}}
- void EditorVerticalAlign_Click(object s,RoutedEventArgs e){if(s is not ToggleButton button)return;var value=button.Tag?.ToString()??"center";_appSettings.EditorVerticalAlign=value;UpdateEditorVerticalAlignButtons();ApplyEditorPaperStyle();if(IsLoaded)AppSettingsStore.Save(_appSettings);}
+ void EditorVerticalAlign_Click(object s,RoutedEventArgs e){
+  if(s is not ToggleButton button)return;
+  var value=button.Tag?.ToString()??"center";
+  _appSettings.EditorVerticalAlign=value;
+  UpdateEditorVerticalAlignButtons();
+  var previousFormatting=_formattingTags;_formattingTags=true;
+  try{ApplyEditorInlineVerticalAlignment();}finally{_formattingTags=previousFormatting;}
+  ApplyEditorPaperStyle();
+  if(IsLoaded)AppSettingsStore.Save(_appSettings);
+ }
+ void Editor_ScrollChanged(object s,ScrollChangedEventArgs e){
+  if(e.VerticalChange==0&&e.ExtentHeightChange==0)return;
+  _editorVerticalScrollOffset=e.VerticalOffset;
+  if((_appSettings.EditorPaperStyle??"blank")!="blank")ApplyEditorPaperStyle();
+ }
  void RefreshAll(){RefreshTree();UpdateStatus();Title=$"{_document.Project.Title} — TagWriter";}
  void RefreshTree(){
   ProjectTree.Items.Clear(); var manuscript=new TreeViewItem{Header=MakeManuscriptHeader(_document.Chapters.Count==0),IsExpanded=true,Tag="manuscript",FontWeight=FontWeights.Bold,FontSize=15};
@@ -316,7 +334,12 @@ public partial class MainWindow:Window {
   return Editor.Document.ContentEnd.GetInsertionPosition(LogicalDirection.Backward)??Editor.Document.ContentEnd;
  }
  int GetEditorOffsetFromPointer(TextPointer position){var text=NormalizeRichText(new TextRange(Editor.Document.ContentStart,position).Text);return Math.Min(text.Length,GetEditorText().Length);}
- void Editor_TextChanged(object s,TextChangedEventArgs e){if(_loading||_formattingTags||_scene==null)return;ApplyEditorDocumentLayout();_scene.Content=GetEditorText();MarkSceneRelationshipDirty(_scene);UpdateStatus();if(_card!=null)RefreshOccurrences(_card);ScheduleTagFormatting();}
+ void Editor_TextChanged(object s,TextChangedEventArgs e){
+  if(_loading||_formattingTags||_scene==null)return;
+  _formattingTags=true;
+  try{ApplyEditorDocumentLayout();}finally{_formattingTags=false;}
+  _scene.Content=GetEditorText();MarkSceneRelationshipDirty(_scene);UpdateStatus();if(_card!=null)RefreshOccurrences(_card);ScheduleTagFormatting();
+ }
  void ScheduleTagFormatting(){if(_paperMode||_scene==null||_tagFormatTimer==null)return;_tagFormatTimer.Stop();_tagFormatTimer.Start();}
  static bool IsSentenceTerminator(char ch)=>ch=='.'||ch=='?'||ch=='!'||ch=='…';
  static List<(int Start,int Length)> GetCompletedSentenceSpans(string text){
@@ -343,6 +366,7 @@ public partial class MainWindow:Window {
   try{
    _hoveredEditorTagSpan=null;_editorTagSpans.Clear();var all=new TextRange(Editor.Document.ContentStart,Editor.Document.ContentEnd);all.ApplyPropertyValue(TextElement.ForegroundProperty,(Brush)FindResource("Text"));all.ApplyPropertyValue(TextElement.FontWeightProperty,FontWeights.Normal);all.ApplyPropertyValue(Inline.TextDecorationsProperty,null);all.ApplyPropertyValue(TextElement.BackgroundProperty,Brushes.Transparent);
    var text=GetEditorText();foreach(var hit in FindTagHits(text)){var start=GetEditorPointerAtOffset(hit.Start);var end=GetEditorPointerAtOffset(hit.Start+hit.Length);var range=new TextRange(start,end);var fg=InlineTagBrush(hit.Card.Type);range.ApplyPropertyValue(TextElement.ForegroundProperty,fg);range.ApplyPropertyValue(TextElement.FontWeightProperty,FontWeights.SemiBold);range.ApplyPropertyValue(Inline.TextDecorationsProperty,TextDecorations.Underline);if(fg is SolidColorBrush sb)range.ApplyPropertyValue(TextElement.BackgroundProperty,new SolidColorBrush(Color.FromArgb(_dark?(byte)10:(byte)7,sb.Color.R,sb.Color.G,sb.Color.B)));_editorTagSpans.Add(new EditorTagSpan(hit.Start,hit.Length,hit.Card.Id));}
+   ApplyEditorInlineVerticalAlignment();
   }finally{_formattingTags=false;}
  }
  void Editor_PreviewMouseLeftButtonUp(object s,MouseButtonEventArgs e){if(_paperMode||_scene==null)return;var pointer=Editor.GetPositionFromPoint(e.GetPosition(Editor),true);if(pointer==null)return;var offset=GetEditorOffsetFromPointer(pointer);var span=_editorTagSpans.FirstOrDefault(x=>offset>=x.Start&&offset<x.Start+x.Length);if(span==null)return;var card=_document.Cards.FirstOrDefault(c=>c.Id==span.CardId);if(card==null)return;ShowCard(card);SelectCardInTree(card);e.Handled=true;}
