@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.9.5
+NEXT CHAT HANDOFF — TagWriter 0.0.9.6
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,16 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.9.6
+- Added an editor-paper background selector to the top toolbar between Auto Save and Typewriter.
+- Added four normal-editor background styles: 줄공책 (solid horizontal ruled lines), 점공책 (dot grid), 점선줄 (dashed horizontal ruled lines), and 무지 (plain background).
+- Added a small document-shaped icon beside the selector.
+- The paper background is presentation-only: manuscript text, tag detection/highlighting, project JSON, DOCX/HWPX/PDF export, and relationship data are unchanged.
+- The selection is stored in global app settings as editorPaperStyle and restored on restart; default is 무지 to preserve the existing appearance.
+- Paper backgrounds follow dark/light theme colors and ruled-line spacing follows the configured editor font size.
+- Manuscript-paper mode remains unchanged; the selector affects the normal editor view.
+- Bumped version to 0.0.9.6.
 
 0.0.9.5
 - Fixed the concrete DOCX OpenXML validation failure reported by the new 0.0.9.4 validator.
