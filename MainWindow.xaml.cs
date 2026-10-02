@@ -82,7 +82,11 @@ public partial class MainWindow:Window {
   }else{
    var pen=new Pen(new SolidColorBrush(lineColor),1);
    if(style=="dashed")pen.DashStyle=new DashStyle(new double[]{3,4},0);
-   group.Children.Add(new GeometryDrawing(null,pen,new LineGeometry(new Point(0,tile-.5),new Point(tile,tile-.5))));
+   // Lift ruled lines toward the text baseline so the manuscript sits on the line.
+   // The tag underline is drawn above this background layer, so overlap is intentional.
+   var baselineLift=Math.Max(7,Math.Min(11,_appSettings.EditorFontSize*0.55));
+   var lineY=Math.Max(1,tile-baselineLift);
+   group.Children.Add(new GeometryDrawing(null,pen,new LineGeometry(new Point(0,lineY),new Point(tile,lineY))));
   }
   EditorPaperBackground.Background=new DrawingBrush(group){TileMode=TileMode.Tile,ViewportUnits=BrushMappingMode.Absolute,Viewport=new Rect(0,0,tile,tile),ViewboxUnits=BrushMappingMode.Absolute,Viewbox=new Rect(0,0,tile,tile),Stretch=Stretch.None};
  }
