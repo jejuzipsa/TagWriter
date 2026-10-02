@@ -83,7 +83,9 @@ public partial class MainWindow:Window {
   var fontDir=System.IO.Path.Combine(AppContext.BaseDirectory,"Fonts");
   if(System.IO.Directory.Exists(fontDir)){
    try{
-    foreach(var family in Fonts.GetFontFamilies(fontDir)){
+    var fullFontDir=System.IO.Path.GetFullPath(fontDir).TrimEnd(System.IO.Path.DirectorySeparatorChar,System.IO.Path.AltDirectorySeparatorChar)+System.IO.Path.DirectorySeparatorChar;
+    var fontDirUri=new Uri(fullFontDir,UriKind.Absolute);
+    foreach(var family in Fonts.GetFontFamilies(fontDirUri)){
      var name=EditorFontDisplayName(family);AddFont(name,family);
     }
    }catch{}
@@ -133,13 +135,28 @@ public partial class MainWindow:Window {
   }else{
    var pen=new Pen(new SolidColorBrush(lineColor),1);
    if(style=="dashed")pen.DashStyle=new DashStyle(new double[]{3,4},0);
-   // Keep the notebook rule just beneath the text/tag underline.
-   // The tag underline is rendered above this background layer, so near-overlap is intentional.
-   var baselineLift=Math.Max(9,Math.Min(11,_appSettings.EditorFontSize*0.6));
-   var lineY=Math.Max(1,tile-baselineLift);
+   var lineY=GetEditorNotebookRuleY(tile);
    group.Children.Add(new GeometryDrawing(null,pen,new LineGeometry(new Point(0,lineY),new Point(tile,lineY))));
   }
   EditorPaperBackground.Background=new DrawingBrush(group){TileMode=TileMode.Tile,ViewportUnits=BrushMappingMode.Absolute,Viewport=new Rect(0,0,tile,tile),ViewboxUnits=BrushMappingMode.Absolute,Viewbox=new Rect(0,0,tile,tile),Stretch=Stretch.None};
+ }
+ double GetEditorNotebookRuleY(double lineHeight){
+  var family=Editor.FontFamily??new FontFamily("Malgun Gothic");
+  var em=Math.Max(9,Editor.FontSize);
+  var naturalLine=Math.Max(em,family.LineSpacing*em);
+  var extraLeading=Math.Max(0,lineHeight-naturalLine);
+  var baseline=extraLeading/2+(family.Baseline*em);
+  var ruleY=baseline+Math.Max(2,em*0.10);
+  try{
+   var typeface=new Typeface(family,FontStyles.Normal,FontWeights.SemiBold,FontStretches.Normal);
+   if(typeface.TryGetGlyphTypeface(out var glyph)){
+    // UnderlinePosition is normally negative below the baseline.
+    var underlineCenter=baseline-(glyph.UnderlinePosition*em);
+    var underlineBottom=underlineCenter+Math.Max(.5,glyph.UnderlineThickness*em/2);
+    ruleY=underlineBottom+1.25;
+   }
+  }catch{}
+  return Math.Clamp(ruleY,1,lineHeight-1);
  }
  void FontFamilyBox_SelectionChanged(object s,SelectionChangedEventArgs e){if(FontFamilyBox.SelectedItem is EditorFontChoice f){_appSettings.EditorFontFamily=f.Name;ApplyEditorPreferences();if(IsLoaded)AppSettingsStore.Save(_appSettings);}}
  void FontSizeBox_SelectionChanged(object s,SelectionChangedEventArgs e){if(FontSizeBox.SelectedItem is double size){_appSettings.EditorFontSize=size;ApplyEditorPreferences();}}
