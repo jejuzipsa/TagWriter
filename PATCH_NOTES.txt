@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.1.0.3
+NEXT CHAT HANDOFF — TagWriter 0.1.0.4
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,13 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.1.0.4
+- Fixed a Windows build failure introduced by the 0.1.0.3 private-font loader.
+- Root cause: System.Windows.Shapes.Path shadowed System.IO.Path in MainWindow.xaml.cs, and Directory was referenced without an explicit System.IO namespace.
+- Fonts-folder discovery now uses System.IO.Path.Combine and System.IO.Directory.Exists explicitly.
+- No behavior change beyond restoring successful compilation of the 0.1.0.3 font/version/paper fixes.
+- Bumped version to 0.1.0.4.
 
 0.1.0.3
 - Connected the repository-level Fonts folder to the actual editor font picker.
