@@ -64,11 +64,15 @@ public static class DocumentExportService
                     Ascii = "Malgun Gothic",
                     HighAnsi = "Malgun Gothic",
                     EastAsia = "맑은 고딕"
-                },
+                });
+
+            // WordprocessingML requires run-property children in schema order.
+            // w:b must appear before w:sz / w:szCs.
+            if (item.Bold) runProps.Append(new W.Bold());
+
+            runProps.Append(
                 new W.FontSize { Val = item.Level == 0 ? "32" : item.Level == 1 ? "27" : "22" },
                 new W.FontSizeComplexScript { Val = item.Level == 0 ? "32" : item.Level == 1 ? "27" : "22" });
-
-            if (item.Bold) runProps.Append(new W.Bold());
 
             var run = new W.Run(runProps, new W.Text(item.Text ?? "") { Space = SpaceProcessingModeValues.Preserve });
             paragraph.Append(run);
