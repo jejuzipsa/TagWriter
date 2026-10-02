@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.1.0.7
+NEXT CHAT HANDOFF — TagWriter 0.1.0.8
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,14 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.1.0.8
+- Restyled the normal-editor vertical alignment controls to match familiar spreadsheet-style top / middle / bottom alignment icons.
+- Replaced the old boxed single-bar glyphs with three horizontal-line glyphs grouped toward the top, center, or bottom.
+- Removed the default ToggleButton chrome so the controls are transparent at rest.
+- A thin rounded border is shown only while the mouse is hovering over an alignment control.
+- The active alignment is indicated by the icon stroke changing to the Accent color instead of leaving a persistent border/background.
+- Bumped version to 0.1.0.8.
 
 0.1.0.7
 - Fixed compile failure introduced by the 0.1.0.6 vertical-alignment controls.
