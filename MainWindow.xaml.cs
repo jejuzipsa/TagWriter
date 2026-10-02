@@ -95,6 +95,12 @@ public partial class MainWindow:Window {
   if(FontFamilyBox.SelectedItem is EditorFontChoice selected)_appSettings.EditorFontFamily=selected.Name;
   FontSizeBox.ItemsSource=new double[]{10,11,12,13,14,15,16,17,18,20,22,24,26,28,32};
   FontSizeBox.SelectedItem=FontSizeBox.Items.Cast<double>().OrderBy(v=>Math.Abs(v-_appSettings.EditorFontSize)).First();
+  var spacings=new double[]{1.2,1.4,1.6,1.7,1.8,2.0,2.2};
+  if(!spacings.Contains(_appSettings.EditorLineSpacing))_appSettings.EditorLineSpacing=1.7;
+  LineSpacingBox.ItemsSource=spacings;
+  LineSpacingBox.SelectedItem=spacings.OrderBy(v=>Math.Abs(v-_appSettings.EditorLineSpacing)).First();
+  if(_appSettings.EditorVerticalAlign is not ("top" or "center" or "bottom"))_appSettings.EditorVerticalAlign="center";
+  UpdateEditorVerticalAlignButtons();
   ApplyEditorPreferences();
  }
  void ApplyEditorPreferences(){
@@ -105,8 +111,28 @@ public partial class MainWindow:Window {
   Editor.FontFamily=family;FullManuscriptReader.FontFamily=family;
   Editor.FontSize=Math.Clamp(_appSettings.EditorFontSize,9,48);FullManuscriptReader.FontSize=Editor.FontSize;
   Editor.Document.FontFamily=Editor.FontFamily;Editor.Document.FontSize=Editor.FontSize;Editor.Document.PagePadding=new Thickness(0);
-  Editor.Document.SetValue(Block.LineHeightProperty,Math.Max(Editor.FontSize*1.7,Editor.FontSize+6));
+  ApplyEditorDocumentLayout();
   ApplyEditorPaperStyle();ScheduleTagFormatting();
+ }
+ double GetEditorLineHeight(){
+  var em=Math.Clamp(_appSettings.EditorFontSize,9,48);
+  var spacing=Math.Clamp(_appSettings.EditorLineSpacing,1.0,3.0);
+  return Math.Max(em+4,Math.Round(em*spacing,2));
+ }
+ void ApplyEditorDocumentLayout(){
+  if(Editor?.Document==null)return;
+  var lineHeight=GetEditorLineHeight();
+  foreach(var block in Editor.Document.Blocks){
+   block.SetValue(Block.LineHeightProperty,lineHeight);
+   block.SetValue(Block.LineStackingStrategyProperty,LineStackingStrategy.BlockLineHeight);
+   if(block is Paragraph paragraph)paragraph.Margin=new Thickness(0);
+  }
+ }
+ void UpdateEditorVerticalAlignButtons(){
+  if(VerticalTopButton==null||VerticalCenterButton==null||VerticalBottomButton==null)return;
+  VerticalTopButton.IsChecked=_appSettings.EditorVerticalAlign=="top";
+  VerticalCenterButton.IsChecked=_appSettings.EditorVerticalAlign=="center";
+  VerticalBottomButton.IsChecked=_appSettings.EditorVerticalAlign=="bottom";
  }
  void InitializeEditorPaperPreferences(){
   var allowed=new[]{"lined","dots","dashed","blank"};if(!allowed.Contains(_appSettings.EditorPaperStyle))_appSettings.EditorPaperStyle="blank";
@@ -127,7 +153,7 @@ public partial class MainWindow:Window {
   var style=_appSettings.EditorPaperStyle??"blank";if(style=="blank"){EditorPaperBackground.Background=null;return;}
   var lineColor=_dark?Color.FromArgb(82,92,105,121):Color.FromArgb(76,142,153,168);
   var dotColor=_dark?Color.FromArgb(100,112,126,144):Color.FromArgb(92,130,143,160);
-  double spacing=Math.Max(24,Math.Round(_appSettings.EditorFontSize*1.7));
+  double spacing=GetEditorLineHeight();
   double tile=style=="dots"?24:spacing;
   var group=new DrawingGroup();
   if(style=="dots"){
@@ -145,7 +171,8 @@ public partial class MainWindow:Window {
   var em=Math.Max(9,Editor.FontSize);
   var naturalLine=Math.Max(em,family.LineSpacing*em);
   var extraLeading=Math.Max(0,lineHeight-naturalLine);
-  var baseline=extraLeading/2+(family.Baseline*em);
+  var placement=_appSettings.EditorVerticalAlign switch{"top"=>0.20,"bottom"=>0.80,_=>0.50};
+  var baseline=(extraLeading*placement)+(family.Baseline*em);
   var ruleY=baseline+Math.Max(2,em*0.10);
   try{
    var typeface=new Typeface(family,FontStyles.Normal,FontWeights.SemiBold,FontStretches.Normal);
@@ -159,7 +186,9 @@ public partial class MainWindow:Window {
   return Math.Clamp(ruleY,1,lineHeight-1);
  }
  void FontFamilyBox_SelectionChanged(object s,SelectionChangedEventArgs e){if(FontFamilyBox.SelectedItem is EditorFontChoice f){_appSettings.EditorFontFamily=f.Name;ApplyEditorPreferences();if(IsLoaded)AppSettingsStore.Save(_appSettings);}}
- void FontSizeBox_SelectionChanged(object s,SelectionChangedEventArgs e){if(FontSizeBox.SelectedItem is double size){_appSettings.EditorFontSize=size;ApplyEditorPreferences();}}
+ void FontSizeBox_SelectionChanged(object s,SelectionChangedEventArgs e){if(FontSizeBox.SelectedItem is double size){_appSettings.EditorFontSize=size;ApplyEditorPreferences();if(IsLoaded)AppSettingsStore.Save(_appSettings);}}
+ void LineSpacingBox_SelectionChanged(object s,SelectionChangedEventArgs e){if(LineSpacingBox.SelectedItem is double spacing){_appSettings.EditorLineSpacing=spacing;ApplyEditorPreferences();if(IsLoaded)AppSettingsStore.Save(_appSettings);}}
+ void EditorVerticalAlign_Click(object s,RoutedEventArgs e){if(s is not ToggleButton button)return;var value=button.Tag?.ToString()??"center";_appSettings.EditorVerticalAlign=value;UpdateEditorVerticalAlignButtons();ApplyEditorPaperStyle();if(IsLoaded)AppSettingsStore.Save(_appSettings);}
  void RefreshAll(){RefreshTree();UpdateStatus();Title=$"{_document.Project.Title} — TagWriter";}
  void RefreshTree(){
   ProjectTree.Items.Clear(); var manuscript=new TreeViewItem{Header=MakeManuscriptHeader(_document.Chapters.Count==0),IsExpanded=true,Tag="manuscript",FontWeight=FontWeights.Bold,FontSize=15};
@@ -258,7 +287,7 @@ public partial class MainWindow:Window {
  void EnsureRightPanelVisible(){if(_rightCollapsed)RightPanelToggle_Click(this,new RoutedEventArgs());}
  void PersistEditor(){if(_scene!=null&&!_loading)_scene.Content=_paperMode?(PaperInput.Text??""):GetEditorText();}
  string GetEditorText(){var text=NormalizeRichText(new TextRange(Editor.Document.ContentStart,Editor.Document.ContentEnd).Text);if(text.EndsWith("\n",StringComparison.Ordinal))text=text[..^1];return text;}
- void SetEditorText(string? text){Editor.Document.Blocks.Clear();var p=new Paragraph{Margin=new Thickness(0),LineHeight=Math.Max(Editor.FontSize*1.7,Editor.FontSize+6)};p.Inlines.Add(new Run(text??""));Editor.Document.Blocks.Add(p);Editor.Document.FontFamily=Editor.FontFamily;Editor.Document.FontSize=Editor.FontSize;Editor.Document.PagePadding=new Thickness(0);}
+ void SetEditorText(string? text){Editor.Document.Blocks.Clear();var p=new Paragraph{Margin=new Thickness(0)};p.Inlines.Add(new Run(text??""));Editor.Document.Blocks.Add(p);Editor.Document.FontFamily=Editor.FontFamily;Editor.Document.FontSize=Editor.FontSize;Editor.Document.PagePadding=new Thickness(0);ApplyEditorDocumentLayout();}
  int GetEditorCaretOffset(){var text=NormalizeRichText(new TextRange(Editor.Document.ContentStart,Editor.CaretPosition).Text);return Math.Min(text.Length,GetEditorText().Length);}
 
 
@@ -287,7 +316,7 @@ public partial class MainWindow:Window {
   return Editor.Document.ContentEnd.GetInsertionPosition(LogicalDirection.Backward)??Editor.Document.ContentEnd;
  }
  int GetEditorOffsetFromPointer(TextPointer position){var text=NormalizeRichText(new TextRange(Editor.Document.ContentStart,position).Text);return Math.Min(text.Length,GetEditorText().Length);}
- void Editor_TextChanged(object s,TextChangedEventArgs e){if(_loading||_formattingTags||_scene==null)return;_scene.Content=GetEditorText();MarkSceneRelationshipDirty(_scene);UpdateStatus();if(_card!=null)RefreshOccurrences(_card);ScheduleTagFormatting();}
+ void Editor_TextChanged(object s,TextChangedEventArgs e){if(_loading||_formattingTags||_scene==null)return;ApplyEditorDocumentLayout();_scene.Content=GetEditorText();MarkSceneRelationshipDirty(_scene);UpdateStatus();if(_card!=null)RefreshOccurrences(_card);ScheduleTagFormatting();}
  void ScheduleTagFormatting(){if(_paperMode||_scene==null||_tagFormatTimer==null)return;_tagFormatTimer.Stop();_tagFormatTimer.Start();}
  static bool IsSentenceTerminator(char ch)=>ch=='.'||ch=='?'||ch=='!'||ch=='…';
  static List<(int Start,int Length)> GetCompletedSentenceSpans(string text){
