@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.1.0.4
+NEXT CHAT HANDOFF — TagWriter 0.1.0.5
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,14 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.1.0.5
+- Reworked normal-editor notebook-line alignment to follow the selected font instead of a fixed pixel offset.
+- 줄공책 / 점선줄 now derive the rule position from the active FontFamily Baseline and LineSpacing, and when available from GlyphTypeface UnderlinePosition / UnderlineThickness, placing the notebook rule immediately beneath the font's real underline position.
+- This specifically addresses the visible mismatch between Arial, Noto Sans KR, Batang, and other fonts at the same nominal size.
+- Fixed private Fonts-folder discovery again: WPF font enumeration now receives an absolute file URI for the runtime Fonts directory instead of a raw Windows filesystem path.
+- Existing TTF/OTF files copied beside the app are enumerated as private FontFamily objects without requiring Windows font installation.
+- Bumped version to 0.1.0.5.
 
 0.1.0.4
 - Fixed a Windows build failure introduced by the 0.1.0.3 private-font loader.
