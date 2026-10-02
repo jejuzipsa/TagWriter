@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.0.9.3
+NEXT CHAT HANDOFF — TagWriter 0.0.9.4
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,14 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.0.9.4
+- Hardened DOCX export after reports that Word still rejected exported files as invalid.
+- DOCX export now explicitly closes the OpenXML package before validation and before returning control to the UI.
+- Added post-export DOCX validation: reopen the generated package, verify the main document part/document/body, and run OpenXmlValidator.
+- Invalid DOCX packages now fail during export with a concrete validation error instead of silently reporting success and leaving Word to reject the file.
+- HWPX export is unchanged because its current export was verified working.
+- Bumped version to 0.0.9.4.
 
 0.0.9.3
 - Replaced the broken/cropped startup PNG resource with the full original 512x512 TagWriter book artwork.
