@@ -1,4 +1,4 @@
-NEXT CHAT HANDOFF — TagWriter 0.1.0.8
+NEXT CHAT HANDOFF — TagWriter 0.1.0.9
 ============================================================
 Purpose
 - The writing/editor foundation is considered largely complete for now. The next work is the setting-card/tag/relationship-map system.
@@ -227,6 +227,16 @@ RECOMMENDED NEXT DECISIONS
 2. Decide the automatic relationship weighting formula for sentence / paragraph / scene co-occurrence.
 
 ============================================================
+
+0.1.0.9
+- Reworked normal-editor ruled-paper alignment around a simpler row model.
+- Notebook rules are no longer positioned from font baseline / underline metrics. Each rule is now fixed at the bottom edge of the shared editor row.
+- Top / center / bottom controls now change the actual inline text BaselineAlignment instead of moving the notebook background rule.
+- Reapplies vertical alignment after tag formatting so tag-colored / underlined runs stay in the same row position as normal text.
+- Added RichTextBox scroll synchronization: the tiled notebook background now tracks the editor's vertical scroll phase, preventing text and rules from drifting apart after scrolling or line-spacing changes.
+- Line spacing still controls the single shared BlockLineHeight and notebook tile height.
+- Guarded layout normalization against recursive TextChanged formatting events.
+- Bumped version to 0.1.0.9.
 
 0.1.0.8
 - Restyled the normal-editor vertical alignment controls to match familiar spreadsheet-style top / middle / bottom alignment icons.
